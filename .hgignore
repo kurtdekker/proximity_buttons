@@ -1,0 +1,12 @@
+syntax: glob
+Library
+Temp
+*.unityproj
+*.pidb
+*.csproj
+*.userprefs
+*.sln
+*_dist.py
+*blend1*
+*blend2*
+x.x
