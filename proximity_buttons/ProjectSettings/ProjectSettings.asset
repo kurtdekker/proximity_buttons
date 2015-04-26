@@ -67,7 +67,7 @@ PlayerSettings:
     16:10: 1
     16:9: 1
     Others: 1
-  iPhoneBundleIdentifier: com.plbm.proximity_buttons
+  iPhoneBundleIdentifier: com.plbm.proximitybuttons
   metroEnableIndependentInputSource: 0
   metroEnableLowLatencyPresentationAPI: 0
   productGUID: 922cb47eafcea47259eacfbf9f6bb3bd

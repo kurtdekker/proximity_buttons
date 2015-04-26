@@ -28,25 +28,32 @@ public class demoscene : MonoBehaviour
 		AddIndicator (new Vector3 ( 3.0f, 1.0f));
 	}
 
-	int detectedW,detectedH;
+	int detectedW, detectedH;
 	void DetectReorientation()
 	{
+		if (Screen.width == detectedW && Screen.height == detectedH)
+		{
+			return;
+		}
+		detectedW = Screen.width;
+		detectedH = Screen.height;
+
 		if (pbsMove != null && pbsMove) Destroy ( pbsMove);
 		if (pbsFire != null && pbsFire) Destroy ( pbsFire);
-		
+
 		float size = Mathf.Min (Screen.width, Screen.height) * 0.18f;
 		
 		pbsMove = ProximityButtonSet.Create (size);
 		pbsFire = ProximityButtonSet.Create (size);
 
-		float xratio = 1.7f;
-		float yratio = 1.3f;
+		float xinset = 1.7f;
+		float yinset = 1.3f;
 
-		pbLeft = pbsMove.AddButton ("left", new Vector3 (size, Screen.height - size * yratio));
-		pbRight = pbsMove.AddButton ("right", new Vector3 (size * xratio, Screen.height - size));
+		pbLeft = pbsMove.AddButton ("left", new Vector3 (size, Screen.height - size * yinset));
+		pbRight = pbsMove.AddButton ("right", new Vector3 (size * xinset, Screen.height - size));
 		
-		pbMove = pbsMove.AddButton ("move", new Vector3 (Screen.width - size, Screen.height - size * yratio));
-		pbFire = pbsMove.AddButton ("fire", new Vector3 (Screen.width - size * xratio, Screen.height - size));
+		pbMove = pbsMove.AddButton ("move", new Vector3 (Screen.width - size * xinset, Screen.height - size));
+		pbFire = pbsMove.AddButton ("fire", new Vector3 (Screen.width - size, Screen.height - size * yinset));
 	}
 
 	void ApplyPBEffect( ProximityButtonSet.ProximityButton pb, GameObject box)
@@ -62,5 +69,14 @@ public class demoscene : MonoBehaviour
 		ApplyPBEffect (pbRight, indicators [1]);
 		ApplyPBEffect (pbMove, indicators [2]);
 		ApplyPBEffect (pbFire, indicators [3]);
+	}
+
+	void OnGUI()
+	{
+		Rect r = new Rect (Screen.width * 0.1f, Screen.height * 0.01f,
+		                  Screen.width * 0.8f, Screen.height * 0.30f);
+
+		GUI.Label ( r, "ProximityButtons demo. Works in landscape or protrait.",
+		           OurStyles.LABELCJ (14));
 	}
 }
