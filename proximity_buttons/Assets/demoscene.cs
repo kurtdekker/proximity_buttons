@@ -58,6 +58,13 @@ public class demoscene : MonoBehaviour
 
 	void ApplyPBEffect( ProximityButtonSet.ProximityButton pb, GameObject box)
 	{
+		Color color = Color.white;
+		if (pb.fingerDown && !pb.prevFingerDown)
+		{
+			color = Color.red;
+		}
+		Renderer rndrr = box.GetComponent<Renderer> ();
+		rndrr.material.color = color;
 		box.transform.localScale = Vector3.one * (pb.fingerDown ? 1.0f : 0.4f);
 	}
 
@@ -76,7 +83,13 @@ public class demoscene : MonoBehaviour
 		Rect r = new Rect (Screen.width * 0.1f, Screen.height * 0.01f,
 		                  Screen.width * 0.8f, Screen.height * 0.30f);
 
-		GUI.Label ( r, "ProximityButtons demo. Works in landscape or protrait.",
-		           OurStyles.LABELCJ (14));
+		if (GUI.Button ( r,
+		           "ProximityButtons demo.\n" +
+		           "http://www.plbm.com\n" +
+		           "Works in landscape or portrait.",
+		           OurStyles.LABELCJ (14)))
+		{
+			Application.OpenURL( "http:/www.plbm.com");
+		}
 	}
 }

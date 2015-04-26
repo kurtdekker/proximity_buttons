@@ -1,7 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-// Seal THIS class you OO bitches!!!
 public class MicroTouch
 {
 	public int fingerId;
