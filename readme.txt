@@ -6,7 +6,8 @@ boolean buttons.
 
 The demoscene scene will give you a simple use case.
 
-Uses a GUISkin for debug text drawing control.
+This demo has been tested on Unity 4.6.1 but probably
+works on most recent flavors of Unity. Try it out!!
 
 Follow me on twitter at http://www.twitter.com/kurtdekker
 
