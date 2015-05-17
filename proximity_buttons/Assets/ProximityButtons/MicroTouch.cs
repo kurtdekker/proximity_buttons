@@ -13,7 +13,7 @@ public class MicroTouch
 		if ((Application.platform == RuntimePlatform.WindowsEditor) ||
 		    (Application.platform == RuntimePlatform.OSXEditor))
 		{
-			if (Input.GetMouseButton(0))
+			if (Input.GetMouseButton(0) || Input.GetMouseButtonUp (0))
 			{
 				includeMouse = true;
 			}
@@ -32,8 +32,15 @@ public class MicroTouch
 			MicroTouch mt = new MicroTouch();
 			mt.fingerId = -99;
 			mt.position = Input.mousePosition;
-			mt.phase = Input.GetMouseButtonDown(0) ?
-				TouchPhase.Began : TouchPhase.Moved;
+			mt.phase = TouchPhase.Moved;
+			if (Input.GetMouseButtonDown(0))
+			{
+				mt.phase = TouchPhase.Began;
+			}
+			if (Input.GetMouseButtonUp(0))
+			{
+				mt.phase = TouchPhase.Ended;
+			}
 			mts[n++] = mt;
 		}
 		foreach (Touch t in Input.touches)
