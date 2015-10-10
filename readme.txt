@@ -4,10 +4,12 @@ Proximity Button Sets: this allows you to gracefully
 handle inaccurate finger-placement on touchscreen
 boolean buttons.
 
-The demoscene scene will give you a simple use case.
+The demo scene will give you a simple use case.
 
 This demo has been tested on Unity 4.6.1 but probably
 works on most recent flavors of Unity. Try it out!!
+
+Also adding in my MicroTouch and VAButton classes. Enjoy!
 
 Follow me on twitter at http://www.twitter.com/kurtdekker
 

@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class demoscene : MonoBehaviour
+public class DemoProximityButtons : MonoBehaviour
 {
 	ProximityButtonSet pbsMove, pbsFire;
 
