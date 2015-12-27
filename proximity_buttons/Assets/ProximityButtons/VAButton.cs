@@ -1,10 +1,11 @@
 /*
-    The following license supersedes all notices in the source
-    code.
+    The following license supersedes all notices in the source code.
 */
 
 /*
     Copyright (c) 2015 Kurt Dekker/PLBM Games All rights reserved.
+
+    http://www.twitter.com/kurtdekker
     
     Redistribution and use in source and binary forms, with or without
     modification, are permitted provided that the following conditions are
@@ -76,8 +77,8 @@ public class VAButton : MonoBehaviour
 			minMagnitude = 0.2f;
 		}
 
-		t2d_button_ring = Resources.Load(
-			"Textures/uibuttons/20130926_button_ring") as Texture2D;
+		t2d_button_ring = Resources.Load<Texture2D>(
+			"Textures/uibuttons/20130926_button_ring");
 		float sz = Screen.height * 0.2f;
 		r_button_ring = new Rect( 0, 0, sz, sz);
 		sz *= 0.7f;
