@@ -11,6 +11,8 @@ works on most recent flavors of Unity. Try it out!!
 
 Also adding in my MicroTouch and VAButton classes. Enjoy!
 
+Also adding in a TextLayer class for text-mode rendering.
+
 Follow me on twitter at http://www.twitter.com/kurtdekker
 
 Come see my games at http://www.plbm.com
