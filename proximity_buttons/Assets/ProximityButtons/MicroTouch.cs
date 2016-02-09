@@ -47,13 +47,19 @@ public class MicroTouch
 	public static MicroTouch[] GatherMicroTouches()
 	{
 		bool includeMouse = false;
-		if ((Application.platform == RuntimePlatform.WindowsEditor) ||
-		    (Application.platform == RuntimePlatform.OSXEditor))
+		switch (Application.platform)
 		{
+		case RuntimePlatform.WindowsEditor:
+		case RuntimePlatform.WindowsPlayer:
+		case RuntimePlatform.WindowsWebPlayer:
+		case RuntimePlatform.OSXEditor:
+		case RuntimePlatform.OSXPlayer:
+		case RuntimePlatform.OSXWebPlayer:
 			if (Input.GetMouseButton(0) || Input.GetMouseButtonUp (0))
 			{
 				includeMouse = true;
 			}
+			break;
 		}
 		
 		int numTouches = Input.touches.Length;
