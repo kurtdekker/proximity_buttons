@@ -1,4 +1,4 @@
-/*
+﻿/*
     The following license supersedes all notices in the source code.
 */
 
@@ -35,66 +35,47 @@
     SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
+#if false
+Sample usage:
+
+	// Plays "myAudioClip" three times, once per second, at location (0,0,0):
+	TimedCaller.Create( 
+ 		() => { AudioSource.PlaySoundAtLocation( myAudioClip, Vector3.zero); },
+		1.0f,
+		3);
+#endif
+
 using UnityEngine;
 using System.Collections;
 
-public class MicroTouch
+public class TimedCaller : MonoBehaviour
 {
-	public int fingerId;
-	public TouchPhase phase;
-	public Vector3 position;
+	System.Action action;
+	float interval;
+	int repeatCount;
 
-	public static MicroTouch[] GatherMicroTouches()
+	// Zero or less repeats indefinitely
+	public static TimedCaller Create( System.Action action, float interval, int repeatCount)
 	{
-		bool includeMouse = false;
-		switch (Application.platform)
+		TimedCaller tc = new GameObject ("TimedCaller.Create();").AddComponent<TimedCaller> ();
+		tc.action = action;
+		tc.interval = interval;
+		tc.repeatCount = repeatCount;
+		return tc;
+	}
+
+	IEnumerator Start()
+	{
+		while(true)
 		{
-		case RuntimePlatform.WindowsEditor:
-		case RuntimePlatform.WindowsPlayer:
-		case RuntimePlatform.WindowsWebPlayer:
-		case RuntimePlatform.OSXEditor:
-		case RuntimePlatform.OSXPlayer:
-		case RuntimePlatform.OSXWebPlayer:
-			if (Input.GetMouseButton(0) || Input.GetMouseButtonUp (0))
+			yield return new WaitForSeconds(interval);
+			action();
+			if (repeatCount > 0)
 			{
-				includeMouse = true;
+				repeatCount--;
+				if (repeatCount == 0) break;
 			}
-			break;
 		}
-		
-		int numTouches = Input.touches.Length;
-		if (includeMouse)
-		{
-			numTouches++;
-		}
-		MicroTouch[] mts = new MicroTouch[numTouches];
-		int n;
-		n = 0;
-		if (includeMouse)
-		{
-			MicroTouch mt = new MicroTouch();
-			mt.fingerId = -99;
-			mt.position = Input.mousePosition;
-			mt.phase = TouchPhase.Moved;
-			if (Input.GetMouseButtonDown(0))
-			{
-				mt.phase = TouchPhase.Began;
-			}
-			if (Input.GetMouseButtonUp(0))
-			{
-				mt.phase = TouchPhase.Ended;
-			}
-			mts[n++] = mt;
-		}
-		foreach (Touch t in Input.touches)
-		{
-			MicroTouch mt = new MicroTouch();
-			mt.fingerId = t.fingerId;
-			mt.position = t.position;
-			mt.phase = t.phase;
-			mts[n++] = mt;
-		}
-		
-		return mts;
+		Destroy (gameObject);
 	}
 }

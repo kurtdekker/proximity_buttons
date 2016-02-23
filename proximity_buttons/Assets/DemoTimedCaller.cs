@@ -1,4 +1,4 @@
-/*
+﻿/*
     The following license supersedes all notices in the source code.
 */
 
@@ -38,63 +38,14 @@
 using UnityEngine;
 using System.Collections;
 
-public class MicroTouch
+public class DemoTimedCaller : MonoBehaviour
 {
-	public int fingerId;
-	public TouchPhase phase;
-	public Vector3 position;
+	public AudioClip audioClip;
 
-	public static MicroTouch[] GatherMicroTouches()
+	void Start ()
 	{
-		bool includeMouse = false;
-		switch (Application.platform)
-		{
-		case RuntimePlatform.WindowsEditor:
-		case RuntimePlatform.WindowsPlayer:
-		case RuntimePlatform.WindowsWebPlayer:
-		case RuntimePlatform.OSXEditor:
-		case RuntimePlatform.OSXPlayer:
-		case RuntimePlatform.OSXWebPlayer:
-			if (Input.GetMouseButton(0) || Input.GetMouseButtonUp (0))
-			{
-				includeMouse = true;
-			}
-			break;
-		}
-		
-		int numTouches = Input.touches.Length;
-		if (includeMouse)
-		{
-			numTouches++;
-		}
-		MicroTouch[] mts = new MicroTouch[numTouches];
-		int n;
-		n = 0;
-		if (includeMouse)
-		{
-			MicroTouch mt = new MicroTouch();
-			mt.fingerId = -99;
-			mt.position = Input.mousePosition;
-			mt.phase = TouchPhase.Moved;
-			if (Input.GetMouseButtonDown(0))
-			{
-				mt.phase = TouchPhase.Began;
-			}
-			if (Input.GetMouseButtonUp(0))
-			{
-				mt.phase = TouchPhase.Ended;
-			}
-			mts[n++] = mt;
-		}
-		foreach (Touch t in Input.touches)
-		{
-			MicroTouch mt = new MicroTouch();
-			mt.fingerId = t.fingerId;
-			mt.position = t.position;
-			mt.phase = t.phase;
-			mts[n++] = mt;
-		}
-		
-		return mts;
+		TimedCaller.Create(
+			() => { AudioSource.PlayClipAtPoint( audioClip, Vector3.zero); },
+			1.0f, 3);
 	}
 }
