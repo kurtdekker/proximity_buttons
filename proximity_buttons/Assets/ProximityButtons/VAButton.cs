@@ -3,7 +3,7 @@
 */
 
 /*
-    Copyright (c) 2015 Kurt Dekker/PLBM Games All rights reserved.
+    Copyright (c) 2016 Kurt Dekker/PLBM Games All rights reserved.
 
     http://www.twitter.com/kurtdekker
     
@@ -47,9 +47,27 @@ public class VAButton : MonoBehaviour
 	public bool doClamp;
 	public bool doNormalize;
 
+	public Rect r_label;
 	public string label;
 	public Color labelColor;
-	public Rect r_downable;
+
+	Rect _r_downable;
+
+	// Primarily you set this, and it also sets r_label.
+	// But then you can also set r_label independently.
+	public Rect r_downable
+	{
+		get
+		{
+			return _r_downable;
+		}
+		set
+		{
+			_r_downable = value;
+			r_label = value;
+		}
+	}
+
 	public Vector3 outputRaw;	// pre-deadband
 	public Vector3 output;
 	public float minMagnitude;
@@ -216,7 +234,7 @@ public class VAButton : MonoBehaviour
 			if (label != null)
 			{
 				GUI.color = labelColor;
-				GUI.Label ( r_downable, label, OurStyles.LABELCJ(10));
+				GUI.Label ( r_label, label, OurStyles.LABELCJ(10));
 			}
 		}
 	}
