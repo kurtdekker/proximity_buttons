@@ -237,5 +237,9 @@ public class VAButton : MonoBehaviour
 				GUI.Label ( r_label, label, OurStyles.LABELCJ(10));
 			}
 		}
+
+// uncomment these lines to see the touchable rectangle
+//		GUI.color = new Color (1, 1, 1, 0.2f);
+//		GUI.DrawTexture (r_downable, LAZY.t2d_white32x32);
 	}
 }
