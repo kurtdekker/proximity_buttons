@@ -3,7 +3,7 @@
 */
 
 /*
-    Copyright (c) 2015 Kurt Dekker/PLBM Games All rights reserved.
+    Copyright (c) 2016 Kurt Dekker/PLBM Games All rights reserved.
 
     http://www.twitter.com/kurtdekker
     
@@ -87,8 +87,7 @@ public class ProximityButtonSet : MonoBehaviour
 
 		foreach (MicroTouch t in mts)
 		{
-			Vector2 pos;
-			pos = new Vector2( t.position.x, Screen.height - t.position.y);
+			Vector2 pos = new Vector2( t.position.x, Screen.height - t.position.y);
 		
 			ProximityButton pbClosest = null;
 			float distClosest = 0;
