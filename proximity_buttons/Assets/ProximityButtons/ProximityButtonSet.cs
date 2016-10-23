@@ -48,6 +48,17 @@ public class ProximityButtonSet : MonoBehaviour
 		public bool fingerDown;
 		public bool prevFingerDown;
 
+		// Warning: if you use this property, you should also
+		// enable manual updating and call it in a consistently
+		// orderly fashion, or else you may miss trigger events.
+		public bool trigger
+		{
+			get
+			{
+				return fingerDown && !prevFingerDown;
+			}
+		}
+
 		public ProximityButton( string label, Vector2 position)
 		{
 			this.label = label;
@@ -56,6 +67,8 @@ public class ProximityButtonSet : MonoBehaviour
 	}
 
 	List<ProximityButton> pbses;
+
+	public bool ManualUpdating;
 
 	float diameter;
 
@@ -74,8 +87,16 @@ public class ProximityButtonSet : MonoBehaviour
 		pbs.pbses = new List<ProximityButton> ();
 		return pbs;
 	}
+
+	void Update()
+	{
+		if (!ManualUpdating)
+		{
+			MyUpdate ();
+		}
+	}
 	
-	void Update ()
+	public void MyUpdate ()
 	{
 		MicroTouch[] mts = MicroTouch.GatherMicroTouches();
 
