@@ -33,3 +33,41 @@
     NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
     SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
+
+using UnityEngine;
+using System.Collections;
+
+public class EditorScreenshotTaker : MonoBehaviour
+{
+	static bool tried;
+
+	string prefix = "~/Desktop/";
+
+	string appName = "MyGame";
+
+	public static void PossiblyAttach( string appName)
+	{
+		if (tried) return;
+		tried = true;
+		if (Application.isEditor)
+		{
+			EditorScreenshotTaker est = new GameObject(
+				"EditorScreenshotTaker().PossiblyAttach();").
+				AddComponent<EditorScreenshotTaker>();
+			est.appName = appName;
+			DontDestroyOnLoad( est.gameObject);
+		}
+	}
+
+	void Update ()
+	{
+		if (Input.GetKeyDown( KeyCode.BackQuote))
+		{
+			string filename = System.String.Format(
+				"{0}Screenshot-{1}-{2}.png",
+					prefix, appName, System.DateTime.Now.ToFileTime());
+			Debug.Log ( filename);
+			Application.CaptureScreenshot( filename);
+		}
+	}
+}
