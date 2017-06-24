@@ -6,7 +6,7 @@ boolean buttons.
 
 The demo scene will give you a simple use case.
 
-This demo has been tested on Unity 4.6.1 but probably
+This demo has been tested on Unity 4.6.5 but probably
 works on most recent flavors of Unity. Try it out!!
 
 Also adding in my MicroTouch and VAButton classes. Enjoy!
