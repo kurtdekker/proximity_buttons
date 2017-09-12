@@ -40,6 +40,11 @@ using System.Collections;
 
 public class VAButton : MonoBehaviour
 {
+	// You can provide manual overlay of the
+	// standard Unity3D Input axes here.
+	public string InputAxisOverlayX { private get; set; }
+	public string InputAxisOverlayY { private get; set; }
+
 	Texture2D t2d_button_ring;
 	Rect r_button_ring;
 	Rect r_button_finger;
@@ -50,6 +55,7 @@ public class VAButton : MonoBehaviour
 	public Rect r_label;
 	public string label;
 	public Color labelColor;
+	public Color buttonColor;
 
 	Rect _r_downable;
 
@@ -86,6 +92,7 @@ public class VAButton : MonoBehaviour
 	void Awake()
 	{
 		labelColor = new Color (0.7f, 0.7f, 0.7f);
+		buttonColor = Color.white;
 	}
 
 	void Start ()
@@ -136,6 +143,22 @@ public class VAButton : MonoBehaviour
 		}
 	}
 
+	void OverlayStandardInputAxes()
+	{
+		if (InputAxisOverlayX != null)
+		{
+			float axisInput = Input.GetAxis ( InputAxisOverlayX);
+			outputRaw.x += axisInput;
+			output.x += axisInput;
+		}
+		if (InputAxisOverlayY != null)
+		{
+			float axisInput = Input.GetAxis ( InputAxisOverlayY);
+			outputRaw.y += axisInput;
+			output.y += axisInput;
+		}
+	}
+
 	void CheckConstraints()
 	{
 		if (constrainFingerCenterWithinRing)
@@ -165,10 +188,16 @@ public class VAButton : MonoBehaviour
 
 	void Update ()
 	{
+		output = Vector3.zero;
+		outputRaw = Vector3.zero;
+
+		if (Time.timeScale == 0)
+		{
+			return;
+		}
+
 		bool fingerDownNext = false;
 		
-		output = Vector3.zero;
-
 		MicroTouch[] mts = MicroTouch.GatherMicroTouches();
 
 		foreach (MicroTouch t in mts)
@@ -219,13 +248,21 @@ public class VAButton : MonoBehaviour
 			}
 		}
 		
+		OverlayStandardInputAxes ();
+		
 		fingerDown = fingerDownNext;
 	}
 	
 	void OnGUI()
 	{
+		if (Time.timeScale == 0)
+		{
+			return;
+		}
+
 		if (fingerDown)
 		{
+			GUI.color = buttonColor;
 			GUI.DrawTexture( r_button_ring, t2d_button_ring);
 			GUI.DrawTexture( r_button_finger, t2d_button_ring);
 		}
