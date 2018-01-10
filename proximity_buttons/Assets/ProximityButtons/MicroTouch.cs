@@ -66,8 +66,7 @@ public class MicroTouch
 			numTouches++;
 		}
 		MicroTouch[] mts = new MicroTouch[numTouches];
-		int n;
-		n = 0;
+		int n = 0;
 		if (includeMouse)
 		{
 			MicroTouch mt = new MicroTouch();
