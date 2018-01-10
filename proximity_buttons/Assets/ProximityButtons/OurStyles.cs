@@ -3,7 +3,7 @@
 */
 
 /*
-    Copyright (c) 2015 Kurt Dekker/PLBM Games All rights reserved.
+    Copyright (c) 2018 Kurt Dekker/PLBM Games All rights reserved.
 
     http://www.twitter.com/kurtdekker
     
