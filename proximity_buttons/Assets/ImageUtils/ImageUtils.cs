@@ -44,7 +44,7 @@ public static class ImageUtils
 {
 	const int FILL_STACKMAX = 10240;
 
-	public static void FloodFill( Texture2D readTexture, Texture2D writeTexture, Color IGNORED_sourceColor, Color targetColor, float tolerance, int x, int y)
+	public static void FloodFill( Texture2D readTexture, Texture2D writeTexture, Color targetColor, Color stopColor, float tolerance, int x, int y)
 	{
 		Color[] readColors = readTexture.GetPixels();
 		int stride = readTexture.width;
@@ -54,6 +54,10 @@ public static class ImageUtils
 		int fill_stackptr = 0;
 		int[] fill_stackx = new int[ FILL_STACKMAX];
 		int[] fill_stacky = new int[ FILL_STACKMAX];
+
+		System.Func<int,int,int> XYADDR = (xxx,yyy) => {
+			return xxx + stride * yyy;
+		};
 
 		System.Action<int,int> PUSH = (xxx,yyy) => {
 			fill_stackx[fill_stackptr] = xxx;
@@ -65,11 +69,16 @@ public static class ImageUtils
 			setxy( fill_stackx[fill_stackptr], fill_stacky[fill_stackptr]);
 		};
 
-		Color fill_prevcolor = readColors[ x + y * stride];
+		System.Func<int,int,Color> GETPIXEL = (xxx,yyy) => {
+			return readColors[ XYADDR( xxx, yyy)];
+		};
+
+		Color fill_prevcolor = readColors[ XYADDR( x, y)];
 		if (targetColor != fill_prevcolor)
 		{
 			while(true)
 			{
+				
 			}
 		}
 
