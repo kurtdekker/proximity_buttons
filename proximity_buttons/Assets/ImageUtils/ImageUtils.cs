@@ -51,7 +51,7 @@ public static class ImageUtils
 		int height = readTexture.height;
 		int stride = readTexture.width;
 
-//		Color[] writeColors = writeTexture.GetPixels();
+		Color[] writeColors = writeTexture.GetPixels();
 
 		int fill_stackptr = 0;
 		int[] fill_stackx = new int[ FILL_STACKMAX];
@@ -85,6 +85,7 @@ public static class ImageUtils
 			if (yyy < 0) return;
 			if (yyy >= height) return;
 			readColors[ XYADDR( xxx, yyy)] = fill_color;
+			writeColors[ XYADDR( xxx, yyy)] = fill_color;
 		};
 
 		float hardlimit = 1000;
@@ -153,7 +154,7 @@ public static class ImageUtils
 			}
 		}
 
-		writeTexture.SetPixels( readColors);
+		writeTexture.SetPixels( writeColors);
 		writeTexture.Apply();
 	}
 }
