@@ -44,12 +44,14 @@ public static class ImageUtils
 {
 	const int FILL_STACKMAX = 10240;
 
-	public static void FloodFill( Texture2D readTexture, Texture2D writeTexture, Color targetColor, Color stopColor, float tolerance, int x, int y)
+	public static void FloodFill( Texture2D readTexture, Texture2D writeTexture, Color fill_color, Color stopColor, int x, int y)
 	{
 		Color[] readColors = readTexture.GetPixels();
+		int width = readTexture.width;
+		int height = readTexture.height;
 		int stride = readTexture.width;
 
-		Color[] writeColors = writeTexture.GetPixels();
+//		Color[] writeColors = writeTexture.GetPixels();
 
 		int fill_stackptr = 0;
 		int[] fill_stackx = new int[ FILL_STACKMAX];
@@ -70,19 +72,88 @@ public static class ImageUtils
 		};
 
 		System.Func<int,int,Color> GETPIXEL = (xxx,yyy) => {
+			if (xxx < 0) return stopColor;
+			if (xxx >= width) return stopColor;
+			if (yyy < 0) return stopColor;
+			if (yyy >= height) return stopColor;
 			return readColors[ XYADDR( xxx, yyy)];
 		};
 
+		System.Action<int,int> SETPIXEL = (xxx,yyy) => {
+			if (xxx < 0) return;
+			if (xxx >= width) return;
+			if (yyy < 0) return;
+			if (yyy >= height) return;
+			readColors[ XYADDR( xxx, yyy)] = fill_color;
+		};
+
+		float hardlimit = 1000;
+
 		Color fill_prevcolor = readColors[ XYADDR( x, y)];
-		if (targetColor != fill_prevcolor)
+		if (fill_color != fill_prevcolor)
 		{
 			while(true)
 			{
-				
+				Color pixelBelow = GETPIXEL( x, y + 1);
+				if (pixelBelow != stopColor && pixelBelow != fill_color)
+				{
+					PUSH( x, y + 1);
+				}
+				Color pixelAbove = GETPIXEL( x, y - 1);
+				if (pixelAbove != stopColor && pixelAbove != fill_color)
+				{
+					PUSH( x, y - 1);
+				}
+
+				for (int leftright = 0; leftright < 2; leftright++)
+				{
+					int direction = leftright * 2 - 1;
+
+					int x1 = x;
+					int yAbove = y - 1;
+					int yBelow = y + 1;
+					Color colorAbove = fill_prevcolor;
+					Color colorBelow = fill_prevcolor;
+
+					do
+					{
+						if (GETPIXEL( x1, y) != stopColor)
+						{
+							SETPIXEL( x1, y);
+						}
+						if (colorAbove == stopColor)
+						{
+							if (GETPIXEL( x1, yAbove) != stopColor)
+							{
+								PUSH( x1, yAbove);
+							}
+						}
+						if (colorBelow == stopColor)
+						{
+							if (GETPIXEL( x1, yBelow) != stopColor)
+							{
+								PUSH( x1, yBelow);
+							}
+						}
+						colorAbove = GETPIXEL( x1, yAbove);
+						colorBelow = GETPIXEL( x1, yBelow);
+						x1 += direction;
+					}
+					while( GETPIXEL( x1, y) != stopColor);
+				}
+
+				if (fill_stackptr > 0)
+				{
+					POP( (xxx,yyy) => { x = xxx; y = yyy;});
+				}
+				else
+				{
+					break;
+				}
 			}
 		}
 
-		writeTexture.SetPixels( writeColors);
+		writeTexture.SetPixels( readColors);
 		writeTexture.Apply();
 	}
 }
