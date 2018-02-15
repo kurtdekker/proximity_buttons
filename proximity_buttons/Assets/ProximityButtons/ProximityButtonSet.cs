@@ -72,6 +72,11 @@ public class ProximityButtonSet : MonoBehaviour
 
 	float diameter;
 
+	public void SetDiameter( float newDiameter)
+	{
+		diameter = newDiameter;
+	}
+
 	public ProximityButton AddButton( string label, Vector2 position)
 	{
 		ProximityButton pb = new ProximityButton (label, position);
