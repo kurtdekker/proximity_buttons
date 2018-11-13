@@ -1,8 +1,6 @@
 ﻿/*
 	The following license supersedes all notices in the source code.
-*/
 
-/*
 	Copyright (c) 2018 Kurt Dekker/PLBM Games All rights reserved.
 
 	http://www.twitter.com/kurtdekker
@@ -41,8 +39,22 @@ using UnityEngine;
 
 public static class MR
 {
+	public static bool LS
+	{
+		get
+		{
+			return Screen.width > Screen.height;
+		}
+	}
+
+	public static float MINAXIS { get { return Mathf.Min( Screen.width, Screen.height); }}
+
 	public static Rect SR( float x, float y, float w, float h)
 	{
 		return new Rect( Screen.width * x, Screen.height * y, Screen.width * w, Screen.height * h);
+	}
+	public static Rect SR( Rect r)
+	{
+		return SR( r.x, r.y, r.width, r.height);
 	}
 }
