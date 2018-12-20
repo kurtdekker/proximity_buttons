@@ -116,12 +116,14 @@ public class DemoProximityButtonsOnGUI : MonoBehaviour
 	void OnGUI()
 	{
 		Rect r = new Rect (Screen.width * 0.1f, Screen.height * 0.01f,
-		                  Screen.width * 0.8f, Screen.height * 0.30f);
+		                  Screen.width * 0.8f, Screen.height * 0.40f);
 
 		if (GUI.Button ( r,
 		           "ProximityButtons demo.\n" +
 		           "http://www.plbm.com\n" +
-		           "Works in landscape or portrait.",
+		           "Works in landscape or portrait.\n" +
+			"<color=#ff0000>Deprecated; see other scene\n" + "" +
+			"called DemoProximityButtonsForUI!</color>",
 		           OurStyles.LABELCJ (14)))
 		{
 			Application.OpenURL( "http:/www.plbm.com");
