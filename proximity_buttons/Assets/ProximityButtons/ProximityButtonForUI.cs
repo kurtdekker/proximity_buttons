@@ -27,7 +27,7 @@ public class ProximityButtonForUI : MonoBehaviour
 		scaler = canvasRT.GetComponent<CanvasScaler>();
 	}
 
-	Vector2 ScreenPosToUIPos( Vector2 pos)
+	public Vector2 ScreenPosToUIPos( Vector2 pos)
 	{
 		switch( scaler.uiScaleMode)
 		{
@@ -47,58 +47,9 @@ public class ProximityButtonForUI : MonoBehaviour
 		return pos;
 	}
 
-	public RectTransform crosshairs;
-
 	public string[] GetButtonTouchedNames()
 	{
 		MicroTouch[] mts = MicroTouch.GatherMicroTouches();
-
-		if (mts.Length == 0)
-		{
-			int steps = (4 + 1 + ButtonSubRectangles.Length);
-
-			int corner = ((int)(Time.time * 5)) % steps;
-
-			// default is center of super rectangle
-			Vector3 pos = new Vector2( ContainingRectangle.rect.center.x, ContainingRectangle.rect.center.y);
-			pos += ContainingRectangle.position;
-			switch( corner)
-			{
-			case 0 :	// handled above
-				break;
-			case 1 :
-				pos = new Vector2( ContainingRectangle.rect.x, ContainingRectangle.rect.y);
-				pos += ContainingRectangle.position;
-				break;
-			case 2 :
-				pos = new Vector2( ContainingRectangle.rect.x + ContainingRectangle.rect.width, ContainingRectangle.rect.y);
-				pos += ContainingRectangle.position;
-				break;
-			case 3 :
-				pos = new Vector2( ContainingRectangle.rect.x + ContainingRectangle.rect.width, ContainingRectangle.rect.y + ContainingRectangle.rect.height);
-				pos += ContainingRectangle.position;
-				break;
-			case 4 :
-				pos = new Vector2( ContainingRectangle.rect.x, ContainingRectangle.rect.y + ContainingRectangle.rect.height);
-				pos += ContainingRectangle.position;
-				break;
-			default :
-				corner -= 5;		// now we index the remaining ButtonSubRectangles
-				pos = ButtonSubRectangles[corner].position;
-				break;
-			}
-
-			crosshairs.position = ScreenPosToUIPos(pos);
-
-			return null;
-		}
-
-		foreach( MicroTouch mt in mts)
-		{
-			Vector2 pos = ScreenPosToUIPos( mt.position);
-
-			crosshairs.position = pos;
-		}
 
 		string[] results = new string[ ButtonSubRectangles.Length];
 
