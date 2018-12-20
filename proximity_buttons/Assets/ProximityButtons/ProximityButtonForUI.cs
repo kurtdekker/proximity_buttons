@@ -27,17 +27,20 @@ public class ProximityButtonForUI : MonoBehaviour
 		scaler = canvasRT.GetComponent<CanvasScaler>();
 	}
 
-	public Vector2 ScreenPosToUIPos( Vector2 pos)
+	public Vector3 ScreenPosToUIPos( Vector3 pos)
 	{
 		switch( scaler.uiScaleMode)
 		{
 		case CanvasScaler.ScaleMode.ConstantPixelSize :
 			pos = (pos * canvasRT.rect.height) / Screen.height;
 			break;
-		case CanvasScaler.ScaleMode.ScaleWithScreenSize :
-			break;
-		case CanvasScaler.ScaleMode.ConstantPhysicalSize :
-			break;
+
+//		case CanvasScaler.ScaleMode.ScaleWithScreenSize :
+//			break;
+
+//		case CanvasScaler.ScaleMode.ConstantPhysicalSize :
+//			break;
+
 		default :
 			Debug.LogError( GetType() +
 				".GetButtonTouchedNames(): unhandled CanvasScaler ScaleMode: " +
