@@ -37,7 +37,7 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
-public class DemoProximityButtons : MonoBehaviour
+public class DemoProximityButtonsOnGUI : MonoBehaviour
 {
 	ProximityButtonSet pbsMove, pbsFire;
 

@@ -9,5 +9,5 @@ EditorBuildSettings:
     path: Assets/DemoProximityButtonsForUI.unity
     guid: 4ffe67ba48c074752ab0a9ae5678c23e
   - enabled: 1
-    path: Assets/DemoProximityButtons.unity
+    path: Assets/DemoProximityButtonsOnGUI.unity
     guid: bbc3cf5af19a14541ab8d403d41ff857
