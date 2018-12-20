@@ -143,7 +143,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.29700002, y: 0.080000006}
   m_AnchorMax: {x: 0.42283094, y: 0.245}
-  m_AnchoredPosition: {x: -8, y: 0.3}
+  m_AnchoredPosition: {x: -8, y: 0.30004883}
   m_SizeDelta: {x: 2.5, y: 0.5999999}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &146345394
@@ -252,7 +252,7 @@ GameObject:
   - component: {fileID: 569274215}
   - component: {fileID: 569274214}
   m_Layer: 5
-  m_Name: Image
+  m_Name: ArrowImage
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -405,10 +405,10 @@ RectTransform:
   m_Father: {fileID: 1477719426}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.45578885, y: 0.42855027}
-  m_AnchorMax: {x: 0.5452113, y: 0.57000005}
-  m_AnchoredPosition: {x: -0.50001144, y: 1}
-  m_SizeDelta: {x: 2.5, y: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: -0.0000019073486}
+  m_SizeDelta: {x: 73.5, y: 85}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &745479476
 MonoBehaviour:
@@ -487,7 +487,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0.43400002, y: 0.31800002}
-  m_AnchoredPosition: {x: -0.099975586, y: 0.1000061}
+  m_AnchoredPosition: {x: -0.100097656, y: 0.099975586}
   m_SizeDelta: {x: 0.5999985, y: 1.0999985}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &924999543
@@ -523,7 +523,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.03189695, y: 0.073562235}
   m_AnchorMax: {x: 0.16383094, y: 0.23856224}
-  m_AnchoredPosition: {x: -0.10000038, y: 1.469}
+  m_AnchoredPosition: {x: -0.100097656, y: 1.4689941}
   m_SizeDelta: {x: 0.5999985, y: 0.5999999}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &924999545
@@ -640,12 +640,12 @@ MonoBehaviour:
   m_Script: {fileID: 1980459831, guid: f5f67c52d1564df4a8936ccd202a3bd8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_UiScaleMode: 0
+  m_UiScaleMode: 2
   m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
   m_ReferenceResolution: {x: 800, y: 600}
   m_ScreenMatchMode: 0
-  m_MatchWidthOrHeight: 0
+  m_MatchWidthOrHeight: 1
   m_PhysicalUnit: 3
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
@@ -733,7 +733,7 @@ MonoBehaviour:
   ButtonSubRectangles:
   - {fileID: 924999544}
   - {fileID: 146345393}
-  SuperRectangle: {fileID: 829851939}
+  ContainingRectangle: {fileID: 829851939}
   crosshairs: {fileID: 745479475}
 --- !u!1 &1573116964
 GameObject:
@@ -746,7 +746,7 @@ GameObject:
   - component: {fileID: 1573116967}
   - component: {fileID: 1573116966}
   m_Layer: 5
-  m_Name: Image
+  m_Name: ArrowImage
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

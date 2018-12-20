@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class ProximityButtonForUI : MonoBehaviour
 {
@@ -10,7 +11,7 @@ public class ProximityButtonForUI : MonoBehaviour
 
 	[Tooltip("Popoulate this with a separate RectTransform that defines the area you want considered close enough " +
 		"for the individual RectTransforms inside. Also used to find the root canvas RectTransform.")]
-	public RectTransform SuperRectangle;
+	public RectTransform ContainingRectangle;
 
 	static Vector2 center
 	{
@@ -18,6 +19,16 @@ public class ProximityButtonForUI : MonoBehaviour
 		{
 			return new Vector2( Screen.width, Screen.height) / 2;
 		}
+	}
+
+	RectTransform canvasRT;
+	CanvasScaler scaler;
+
+	void Awake()
+	{
+		var canvas = ContainingRectangle.GetComponentInParent<Canvas>();
+		canvasRT = canvas.GetComponent<RectTransform>();
+		scaler = canvasRT.GetComponent<CanvasScaler>();
 	}
 
 	public RectTransform crosshairs;
@@ -28,14 +39,25 @@ public class ProximityButtonForUI : MonoBehaviour
 
 		if (mts.Length == 0) return null;
 
-		Canvas canvas = SuperRectangle.GetComponentInParent<Canvas>();
-		RectTransform canvasRT = canvas.GetComponent<RectTransform>();
-
-		float ratio = canvasRT.rect.height / Screen.height;
-
 		foreach( MicroTouch mt in mts)
 		{
-			Vector2 pos = mt.position * ratio;
+			Vector2 pos = mt.position;
+
+			switch( scaler.uiScaleMode)
+			{
+			case CanvasScaler.ScaleMode.ConstantPixelSize :
+				pos = (pos * canvasRT.rect.height) / Screen.height;
+				break;
+			case CanvasScaler.ScaleMode.ScaleWithScreenSize :
+				break;
+			case CanvasScaler.ScaleMode.ConstantPhysicalSize :
+				break;
+			default :
+				Debug.LogError( GetType() +
+					".GetButtonTouchedNames(): unhandled CanvasScaler ScaleMode: " +
+					scaler.uiScaleMode.ToString());
+				break;
+			}
 
 			crosshairs.position = pos;
 		}
