@@ -50,17 +50,58 @@ public class ProximityButtonForUI : MonoBehaviour
 		return pos;
 	}
 
+	// Returns a string array of the same length as the
+	// number of subrectangle areas in the enclosing box.
+	// Returns null if you aren't touching it, or the GameObject name if you are
 	public string[] GetButtonTouchedNames()
 	{
-		MicroTouch[] mts = MicroTouch.GatherMicroTouches();
+		MicroTouch[] allTouches = MicroTouch.GatherMicroTouches();
+
+		List<MicroTouch> withins = new List<MicroTouch>();
+
+		// Transform the screen touch coordinates into canvas UI coordinates
+		// If they are within the super rect, add them to our checked touches
+		for (int i = 0; i < allTouches.Length; i++)
+		{
+			var p = ScreenPosToUIPos( allTouches[i].position);
+			if (p.x >= ContainingRectangle.rect.x + ContainingRectangle.position.x)
+			{
+				if (p.x < ContainingRectangle.rect.x + ContainingRectangle.rect.width + ContainingRectangle.position.x)
+				{
+					if (p.y >= ContainingRectangle.rect.y + ContainingRectangle.position.y)
+					{
+						if (p.y < ContainingRectangle.rect.y + ContainingRectangle.rect.height + ContainingRectangle.position.y)
+						{
+							allTouches[i].position = p;
+							withins.Add( allTouches[i]);
+						}
+					}
+				}
+			}
+		}
 
 		string[] results = new string[ ButtonSubRectangles.Length];
 
-		return results;
-	}
+		for (int t = 0; t < withins.Count; t++)
+		{
+			float distance = 0;
+			int closestt = 0;
+			int closestb = 0;
 
-	void Update ()
-	{
-		GetButtonTouchedNames();
+			for (int b = 0; b < ButtonSubRectangles.Length; b++)
+			{
+				float d = Vector3.Distance( withins[t].position, ButtonSubRectangles[b].position);
+				if ( b == 0 || d < distance)
+				{
+					distance = d;
+					closestt = t;
+					closestb = b;
+				}
+			}
+
+			results[closestb] = ButtonSubRectangles[closestb].name;
+		}
+
+		return results;
 	}
 }
