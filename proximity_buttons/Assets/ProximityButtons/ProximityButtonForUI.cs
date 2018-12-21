@@ -85,7 +85,6 @@ public class ProximityButtonForUI : MonoBehaviour
 		for (int t = 0; t < withins.Count; t++)
 		{
 			float distance = 0;
-			int closestt = 0;
 			int closestb = 0;
 
 			for (int b = 0; b < ButtonSubRectangles.Length; b++)
@@ -94,7 +93,6 @@ public class ProximityButtonForUI : MonoBehaviour
 				if ( b == 0 || d < distance)
 				{
 					distance = d;
-					closestt = t;
 					closestb = b;
 				}
 			}

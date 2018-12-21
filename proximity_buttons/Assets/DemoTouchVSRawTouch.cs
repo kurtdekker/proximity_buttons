@@ -56,7 +56,7 @@ public class DemoTouchVSRawTouch : MonoBehaviour
 		crosshairsRaw.transform.rotation = Quaternion.Euler( 0, 0, -2);
 	}
 
-	void CastToWord( Transform tr, Vector3 tchpos)
+	void CastToWorld( Transform tr, Vector3 tchpos)
 	{
 		tchpos.z = 10;
 		tr.position = Camera.main.ScreenToWorldPoint( tchpos);
@@ -67,8 +67,8 @@ public class DemoTouchVSRawTouch : MonoBehaviour
 		#if UNITY_EDITOR
 		if (Input.GetMouseButton(0))
 		{
-			CastToWord( crosshairsTouch.transform, Input.mousePosition);
-			CastToWord( crosshairsRaw.transform, Input.mousePosition);
+			CastToWorld( crosshairsTouch.transform, Input.mousePosition);
+			CastToWorld( crosshairsRaw.transform, Input.mousePosition);
 		}
 		return;
 		#endif
@@ -80,8 +80,8 @@ public class DemoTouchVSRawTouch : MonoBehaviour
 
 			Touch t = Input.GetTouch( 0);
 
-			CastToWord( crosshairsTouch.transform, t.position);
-			CastToWord( crosshairsRaw.transform, t.rawPosition);
+			CastToWorld( crosshairsTouch.transform, t.position);
+			CastToWorld( crosshairsRaw.transform, t.rawPosition);
 		}
 		else
 		{

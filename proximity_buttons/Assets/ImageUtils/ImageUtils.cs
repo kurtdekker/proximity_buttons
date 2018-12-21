@@ -39,6 +39,9 @@ using UnityEngine;
 
 public static class ImageUtils
 {
+	// if your destination image has a lot of small areas that require
+	// lots of maneuvering to get into (ie., a massive amount of u-shaped
+	// areas in it), you may need to increase this number.
 	const int FILL_STACKMAX = 10240;
 
 	public static void FloodFill( Texture2D readTexture, Texture2D writeTexture, Color fill_color, Color stopColor, int x, int y)
@@ -84,8 +87,6 @@ public static class ImageUtils
 			readColors[ XYADDR( xxx, yyy)] = fill_color;
 			writeColors[ XYADDR( xxx, yyy)] = fill_color;
 		};
-
-		float hardlimit = 1000;
 
 		Color fill_prevcolor = readColors[ XYADDR( x, y)];
 		if (fill_color != fill_prevcolor)
