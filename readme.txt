@@ -1,3 +1,8 @@
+3:53 PM 1/5/2019
+
+Updated. There is a new ProximityButtonForUI class that
+works with Unity Canvas buttons (UnityEngine.UI).
+
 8:20 AM 4/26/2015
 
 Proximity Button Sets: this allows you to gracefully
