@@ -97,6 +97,11 @@ public class TwinStickPlayerController : MonoBehaviour
 			vabMove.outputRaw.y) * MoveSpeed;
 
 		transform.position += LastPlayerMotion * Time.deltaTime;
+
+		float angle = Mathf.Rad2Deg * Mathf.Atan2( LastPlayerMotion.x, LastPlayerMotion.z);
+		transform.rotation = Quaternion.Euler( 0, angle, 0);
+
+		TwinStickGameManager.PlayerPosition = transform.position;
 	}
 
 	Vector3 LastFireDirection = Vector3.forward;
