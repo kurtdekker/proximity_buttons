@@ -41,6 +41,8 @@ public class TwinStickGameManager : MonoBehaviour
 {
 	public static TwinStickGameManager I {get; private set;}
 
+	public GameObject EnemyExplosion;
+
 	void Awake()
 	{
 		I = this;
@@ -57,8 +59,6 @@ public class TwinStickGameManager : MonoBehaviour
 		GAMEOVER,
 	}
 
-	int wave;
-
 	float timer;
 	Phase phase;
 
@@ -66,8 +66,13 @@ public class TwinStickGameManager : MonoBehaviour
 
 	void Start()
 	{
+		EnemyExplosion.SetActive( false);
+
+		DSM.GameRunning.bValue = true;
+		DSM.Score.iValue = 0;
+		DSM.Wave.iValue = 0;
+
 		phase = Phase.PREWAVE;
-		wave = 0;
 
 		{
 			GameObject go = GameObject.Find( "EnemyPrefabs");
@@ -87,12 +92,17 @@ public class TwinStickGameManager : MonoBehaviour
 
 	List<GameObject> AllBullets;
 
+	public void AddBullet( GameObject bullet)
+	{
+		AllBullets.Add( bullet);
+	}
+
 	void SpawnEnemies(int enemyCount)
 	{
-		float minSpeed = 2.0f + wave * 0.5f;
-		float maxSpeed = 2.5f + wave * 0.6f;
+		float minSpeed = 2.0f + DSM.Wave.iValue * 0.5f;
+		float maxSpeed = 2.5f + DSM.Wave.iValue * 0.6f;
 
-		var what = EnemyPrefabs[ wave % EnemyPrefabs.Length];
+		var what = EnemyPrefabs[ DSM.Wave.iValue % EnemyPrefabs.Length];
 
 		for (int i = 0; i < enemyCount; i++)
 		{
@@ -131,6 +141,9 @@ public class TwinStickGameManager : MonoBehaviour
 
 			float chosenSpeed = Random.Range( minSpeed, maxSpeed);
 
+			// accelerant for late-wave added guys - get better get busy man!!
+			chosenSpeed += timer / 8;
+
 			Enemy1.Attach( e, chosenSpeed);
 
 			e.SetActive( true);
@@ -141,15 +154,15 @@ public class TwinStickGameManager : MonoBehaviour
 
 	public void GameOver()
 	{
-		// <WIP>
+		DSM.GameRunning.bValue = false;
 	}
 
 	float SideFeedInterval
 	{
 		get
 		{
-			if (wave > 0)
-				return 10.0f / wave;
+			if (DSM.Wave.iValue > 0)
+				return 10.0f / DSM.Wave.iValue;
 			return 10.0f;
 		}
 	}
@@ -169,6 +182,19 @@ public class TwinStickGameManager : MonoBehaviour
 					var e = AllEnemies[j];
 					if (e)
 					{
+						float d = (e.transform.position - b.transform.position).sqrMagnitude;
+						if (d < 1.5f)
+						{
+							var ex = Instantiate<GameObject>( EnemyExplosion);
+							ex.SetActive( false);
+							ex.transform.position = e.transform.position;
+							ex.SetActive( true);
+
+							DSM.Score.iValue += DSM.Wave.iValue;
+
+							Destroy(b);
+							Destroy(e);
+						}
 					}
 				}
 			}
@@ -210,18 +236,21 @@ public class TwinStickGameManager : MonoBehaviour
 			{
 				timer = 0;
 				phase++;
-				wave++;
+				DSM.Wave.iValue++;
 
-				SpawnEnemies( wave * 3 + 2);
+				// how many at start of wave
+				int enemyCount = DSM.Wave.iValue * 3 + 2;
+				SpawnEnemies( enemyCount);
 			}
 			break;
 
 		case Phase.PLAYING :
-			if (timer >= wave * 10 + 10)
+			if (timer >= DSM.Wave.iValue * 10 + 10)
 			{
 				timer -= SideFeedInterval;
 
-				SpawnEnemies( wave);
+				// how many to sidefeed if you linger
+				SpawnEnemies( DSM.Wave.iValue);
 			}
 
 			if (AllEnemies.Count <= 0)

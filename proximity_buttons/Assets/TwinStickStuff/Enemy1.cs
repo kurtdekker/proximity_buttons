@@ -52,6 +52,8 @@ public class Enemy1 : MonoBehaviour
 
 	void Update ()
 	{
+		if (!DSM.GameRunning.bValue) return;
+
 		Vector3 delta = TwinStickGameManager.I.PlayerPosition - transform.position;
 
 		if (delta.magnitude < 1.2f)

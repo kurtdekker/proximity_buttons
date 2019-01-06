@@ -140,12 +140,16 @@ public class TwinStickPlayerController : MonoBehaviour
 				Ballistic.Attach( Bullet, velocity);
 				TTL.Attach( Bullet, 1.0f);
 				Bullet.SetActive( true);
+
+				TwinStickGameManager.I.AddBullet( Bullet);
 			}
 		}
 	}
 
 	void Update()
 	{
+		if (!DSM.GameRunning.bValue) return;
+
 		UpdateMoving();
 
 		UpdateShooting();
