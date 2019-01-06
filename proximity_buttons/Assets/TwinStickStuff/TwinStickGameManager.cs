@@ -185,10 +185,10 @@ public class TwinStickGameManager : MonoBehaviour
 				for (int j = 0; j < AllEnemies.Count; j++)
 				{
 					var e = AllEnemies[j];
-					if (e)
+					if (b && e)
 					{
 						float d = (e.transform.position - b.transform.position).sqrMagnitude;
-						if (d < 1.5f)
+						if (d < 1.2f)
 						{
 							var ex = Instantiate<GameObject>( EnemyExplosion);
 							ex.SetActive( false);
