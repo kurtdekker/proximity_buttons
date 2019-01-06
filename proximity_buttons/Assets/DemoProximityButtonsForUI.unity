@@ -1359,7 +1359,10 @@ MonoBehaviour:
 
 
     Generally you would have a set of movement buttons on one side, a set of action
-    buttons on the other (for instance).'
+    buttons on the other (for instance).
+
+
+    See the DemoTwinStickShooter scene for a real game.'
 --- !u!222 &1896814764
 CanvasRenderer:
   m_ObjectHideFlags: 0

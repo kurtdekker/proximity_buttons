@@ -50,7 +50,7 @@ public class TwinStickPlayerController : MonoBehaviour
 	void Reset()
 	{
 		MoveSpeed = 5.0f;
-		ShootSpeed = 20.0f;
+		ShootSpeed = 40.0f;
 		ShootRate = 4;
 	}
 
@@ -91,17 +91,20 @@ public class TwinStickPlayerController : MonoBehaviour
 
 	void UpdateMoving()
 	{
-		LastPlayerMotion = new Vector3(
-			vabMove.outputRaw.x,
-			0,
-			vabMove.outputRaw.y) * MoveSpeed;
+		if (vabMove.fingerDown)
+		{
+			LastPlayerMotion = new Vector3(
+				vabMove.outputRaw.x,
+				0,
+				vabMove.outputRaw.y) * MoveSpeed;
 
-		transform.position += LastPlayerMotion * Time.deltaTime;
+			transform.position += LastPlayerMotion * Time.deltaTime;
 
-		float angle = Mathf.Rad2Deg * Mathf.Atan2( LastPlayerMotion.x, LastPlayerMotion.z);
-		transform.rotation = Quaternion.Euler( 0, angle, 0);
+			float angle = Mathf.Rad2Deg * Mathf.Atan2( LastPlayerMotion.x, LastPlayerMotion.z);
+			transform.rotation = Quaternion.Euler( 0, angle, 0);
+		}
 
-		TwinStickGameManager.PlayerPosition = transform.position;
+		TwinStickGameManager.I.PlayerPosition = transform.position;
 	}
 
 	Vector3 LastFireDirection = Vector3.forward;

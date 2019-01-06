@@ -8,3 +8,6 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/DemoProximityButtonsForUI.unity
     guid: 4ffe67ba48c074752ab0a9ae5678c23e
+  - enabled: 1
+    path: Assets/DemoTwinStickShooter.unity
+    guid: b652a9bfa26734125908e52b541b28d4
