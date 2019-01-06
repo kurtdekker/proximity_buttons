@@ -1,7 +1,7 @@
 ﻿/*
 	The following license supersedes all notices in the source code.
 
-	Copyright (c) 2018 Kurt Dekker/PLBM Games All rights reserved.
+	Copyright (c) 2019 Kurt Dekker/PLBM Games All rights reserved.
 
 	http://www.twitter.com/kurtdekker
 
@@ -64,14 +64,13 @@ public class DemoTouchVSRawTouch : MonoBehaviour
 
 	void Update ()
 	{
-		#if UNITY_EDITOR
+#if UNITY_EDITOR
 		if (Input.GetMouseButton(0))
 		{
 			CastToWorld( crosshairsTouch.transform, Input.mousePosition);
 			CastToWorld( crosshairsRaw.transform, Input.mousePosition);
 		}
-		return;
-		#endif
+#else
 
 		if (Input.touchCount > 0)
 		{
@@ -88,5 +87,6 @@ public class DemoTouchVSRawTouch : MonoBehaviour
 			crosshairsTouch.SetActive( false);
 			crosshairsRaw.SetActive( false);
 		}		
+#endif
 	}
 }
