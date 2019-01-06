@@ -1780,7 +1780,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 675545b5c667840e383b1975df5666b3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MoveSpeed: 5
+  BaseMoveSpeed: 5
+  WaveMoveSpeed: 0.5
   ShootSpeed: 40
   ShootRate: 4
   BulletPrefab: {fileID: 1812859318}

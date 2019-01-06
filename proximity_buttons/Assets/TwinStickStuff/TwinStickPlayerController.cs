@@ -39,7 +39,8 @@ using UnityEngine;
 
 public class TwinStickPlayerController : MonoBehaviour
 {
-	public float MoveSpeed;
+	public float BaseMoveSpeed;
+	public float WaveMoveSpeed;
 	public float ShootSpeed;
 	public float ShootRate;
 
@@ -49,7 +50,8 @@ public class TwinStickPlayerController : MonoBehaviour
 
 	void Reset()
 	{
-		MoveSpeed = 5.0f;
+		BaseMoveSpeed = 5.0f;
+		WaveMoveSpeed = 0.5f;
 		ShootSpeed = 40.0f;
 		ShootRate = 4;
 	}
@@ -91,12 +93,14 @@ public class TwinStickPlayerController : MonoBehaviour
 
 	void UpdateMoving()
 	{
-		if (vabMove.fingerDown)
+		if (bMove)
 		{
+			float currentSpeed = BaseMoveSpeed + DSM.Wave.iValue;
+
 			LastPlayerMotion = new Vector3(
-				vabMove.outputRaw.x,
+				v3Move.x,
 				0,
-				vabMove.outputRaw.y) * MoveSpeed;
+				v3Move.y) * currentSpeed;
 
 			transform.position += LastPlayerMotion * Time.deltaTime;
 
@@ -119,12 +123,12 @@ public class TwinStickPlayerController : MonoBehaviour
 			coolDown -= Time.deltaTime;
 		}
 
-		if (vabShoot.fingerDown)
+		if (bShoot)
 		{
-			if (vabShoot.outputRaw.magnitude > 0.2f)
+			if (v3Shoot.magnitude > 0.2f)
 			{
 				LastFireDirection = new Vector3(
-					vabShoot.outputRaw.x, 0, vabShoot.outputRaw.y).normalized;
+					v3Shoot.x, 0, v3Shoot.y).normalized;
 			}
 
 			if (coolDown <= 0)
@@ -134,7 +138,11 @@ public class TwinStickPlayerController : MonoBehaviour
 				var Bullet = Instantiate<GameObject>( BulletPrefab);
 				Bullet.SetActive( false);
 				Bullet.transform.position = transform.position;
-				Vector3 velocity = LastFireDirection * ShootSpeed + LastPlayerMotion * PlayerMotionFraction;
+				Vector3 velocity = LastFireDirection * ShootSpeed;
+				if (bMove)
+				{
+					velocity += LastPlayerMotion * PlayerMotionFraction;
+				}
 				float angle = Mathf.Rad2Deg * Mathf.Atan2( velocity.x, velocity.z);
 				Bullet.transform.rotation = Quaternion.Euler( 0, angle, 0);
 				Ballistic.Attach( Bullet, velocity);
@@ -148,6 +156,67 @@ public class TwinStickPlayerController : MonoBehaviour
 		}
 	}
 
+	bool bMove;
+	Vector3 v3Move;
+	bool bShoot;
+	Vector3 v3Shoot;
+
+	void UpdateGatherTouchInput()
+	{
+		bMove = vabMove.fingerDown;
+		v3Move = vabMove.outputRaw;
+
+		bShoot = vabShoot.fingerDown;
+		v3Shoot = vabShoot.outputRaw;
+	}
+
+	void UpdateGatherKeyboardInput()
+	{
+		// move
+		if (Input.GetKey(KeyCode.LeftArrow))
+		{
+			bMove = true;
+			v3Move.x = -1;
+		}
+		if (Input.GetKey(KeyCode.RightArrow))
+		{
+			bMove = true;
+			v3Move.x =  1;
+		}
+		if (Input.GetKey(KeyCode.UpArrow))
+		{
+			bMove = true;
+			v3Move.y = 1;
+		}
+		if (Input.GetKey(KeyCode.DownArrow))
+		{
+			bMove = true;
+			v3Move.y = -1;
+		}
+
+		// shoot
+		if (Input.GetKey(KeyCode.A))
+		{
+			bShoot = true;
+			v3Shoot.x = -1;
+		}
+		if (Input.GetKey(KeyCode.D))
+		{
+			bShoot = true;
+			v3Shoot.x =  1;
+		}
+		if (Input.GetKey(KeyCode.W))
+		{
+			bShoot = true;
+			v3Shoot.y = 1;
+		}
+		if (Input.GetKey(KeyCode.S))
+		{
+			bShoot = true;
+			v3Shoot.y = -1;
+		}
+	}
+
 	void Update()
 	{
 		if (!DSM.GameRunning.bValue)
@@ -155,6 +224,10 @@ public class TwinStickPlayerController : MonoBehaviour
 			Destroy( gameObject);
 			return;
 		}
+
+		UpdateGatherTouchInput();
+
+		UpdateGatherKeyboardInput();
 
 		UpdateMoving();
 
