@@ -141,8 +141,8 @@ public class TwinStickGameManager : MonoBehaviour
 
 			float chosenSpeed = Random.Range( minSpeed, maxSpeed);
 
-			// accelerant for late-wave added guys - get better get busy man!!
-			chosenSpeed += timer / 8;
+			// accelerant for later-wave added guys... better get busy man!!
+			chosenSpeed += timer / 20;
 
 			Enemy1.Attach( e, chosenSpeed);
 
@@ -154,7 +154,12 @@ public class TwinStickGameManager : MonoBehaviour
 
 	public void GameOver()
 	{
-		DSM.GameRunning.bValue = false;
+		if (DSM.GameRunning.bValue)
+		{
+			DSM.AudioDeath.Poke();
+
+			DSM.GameRunning.bValue = false;
+		}
 	}
 
 	float SideFeedInterval
@@ -191,6 +196,8 @@ public class TwinStickGameManager : MonoBehaviour
 							ex.SetActive( true);
 
 							DSM.Score.iValue += DSM.Wave.iValue;
+
+							DSM.AudioHit.Poke();
 
 							Destroy(b);
 							Destroy(e);
@@ -264,5 +271,24 @@ public class TwinStickGameManager : MonoBehaviour
 		case Phase.GAMEOVER :
 			break;
 		}
+	}
+
+	void OnUserIntent( Datasack ds)
+	{
+		switch( ds.Value)
+		{
+		case "ButtonAgain":
+			UnityEngine.SceneManagement.SceneManager.LoadScene(
+				UnityEngine.SceneManagement.SceneManager.GetActiveScene().name);
+			break;
+		}
+	}
+	void OnEnable()
+	{
+		DSM.UISack.OnChanged += OnUserIntent;
+	}
+	void OnDisable()
+	{
+		DSM.UISack.OnChanged -= OnUserIntent;
 	}
 }

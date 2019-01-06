@@ -142,13 +142,19 @@ public class TwinStickPlayerController : MonoBehaviour
 				Bullet.SetActive( true);
 
 				TwinStickGameManager.I.AddBullet( Bullet);
+
+				DSM.AudioShoot.Poke();
 			}
 		}
 	}
 
 	void Update()
 	{
-		if (!DSM.GameRunning.bValue) return;
+		if (!DSM.GameRunning.bValue)
+		{
+			Destroy( gameObject);
+			return;
+		}
 
 		UpdateMoving();
 
