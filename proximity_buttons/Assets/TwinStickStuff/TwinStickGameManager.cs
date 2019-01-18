@@ -285,10 +285,10 @@ public class TwinStickGameManager : MonoBehaviour
 	}
 	void OnEnable()
 	{
-		DSM.UISack.OnChanged += OnUserIntent;
+		DSM.UserIntent.OnChanged += OnUserIntent;
 	}
 	void OnDisable()
 	{
-		DSM.UISack.OnChanged -= OnUserIntent;
+		DSM.UserIntent.OnChanged -= OnUserIntent;
 	}
 }
