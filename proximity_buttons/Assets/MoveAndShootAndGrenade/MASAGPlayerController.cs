@@ -66,7 +66,7 @@ public class MASAGPlayerController : MonoBehaviour
 		Vector3 motion = Vector3.zero;
 		if (vab.fingerDown)
 		{
-			motion = new Vector3( vab.outputRaw.x, 0, vab.outputRaw.z);
+			motion = new Vector3( vab.outputRaw.x, 0, vab.outputRaw.y);
 		}
 
 #if UNITY_EDITOR
