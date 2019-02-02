@@ -8,8 +8,11 @@ public class DemoDetectGamePlayRequest : MonoBehaviour
 	{
 		switch( ds.Value)
 		{
-		case "ButtonPlayGame" :
+		case "ButtonPlayGame1" :
 			UnityEngine.SceneManagement.SceneManager.LoadScene( "DemoTwinStickShooter");
+			break;
+		case "ButtonPlayGame2" :
+			UnityEngine.SceneManagement.SceneManager.LoadScene( "DemoMoveAndShootAndGrenade");
 			break;
 		}
 	}
