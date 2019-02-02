@@ -11,3 +11,6 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/DemoTwinStickShooter.unity
     guid: b652a9bfa26734125908e52b541b28d4
+  - enabled: 1
+    path: Assets/DemoMoveAndShootAndGrenade.unity
+    guid: 08fcf729f9c1342648722152c6399a01
