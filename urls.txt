@@ -1,0 +1,7 @@
+proximity_buttons is presently hosted at these locations:
+
+https://bitbucket.org/kurtdekker/proximity_buttons
+
+https://github.com/kurtdekker/proximity_buttons
+
+https://gitlab.com/kurtdekker/proximity_buttons
