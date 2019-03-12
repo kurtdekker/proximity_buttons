@@ -8,7 +8,7 @@ public class TestRectTransforms : MonoBehaviour
 
 	string RTF( RectTransform rt)
 	{
-		return System.String.Format( "({0},{1},{2},{3}) -> ({4},{5})",
+		return System.String.Format( "RT.R: ({0},{1},{2},{3}) -> ({4},{5})",
 			(int)rt.rect.x,
 			(int)rt.rect.y,
 			(int)rt.rect.width,
@@ -17,14 +17,28 @@ public class TestRectTransforms : MonoBehaviour
 			(int)rt.position.y);
 	}
 
+	string VF( Vector3 v)
+	{
+		return System.String.Format( "V3: ({0},{1},{2})", (int)v.x, (int)v.y, (int)v.z);
+	}
+
 	Vector2 xxx;
+
+	Vector3[] four = new Vector3[4];
 
 	void Update ()
 	{
 		RectTransform rtCanvas = rtThingy.GetComponentInParent<Canvas>().GetComponent<RectTransform>();
 
 		string s = RTF( rtThingy) + "\n" +
-			RTF( rtCanvas);
+			RTF( rtCanvas) + "\n";
+
+		rtThingy.GetWorldCorners( four);
+
+		s += VF( four[0]) + "\n";
+		s += VF( four[1]) + "\n";
+		s += VF( four[2]) + "\n";
+		s += VF( four[3]) + "\n";
 
 		Vector3 pos = Input.mousePosition;
 
