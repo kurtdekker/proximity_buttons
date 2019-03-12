@@ -16,6 +16,7 @@ public partial class DSM
 	public static Datasack AudioShoot { get { return DSM.I.Get( "AudioShoot"); } }
 	public static Datasack GameRunning { get { return DSM.I.Get( "GameRunning"); } }
 	public static Datasack HighScore { get { return DSM.I.Get( "HighScore"); } }
+	public static Datasack Output { get { return DSM.I.Get( "Output"); } }
 	public static Datasack Score { get { return DSM.I.Get( "Score"); } }
 	public static Datasack Wave { get { return DSM.I.Get( "Wave"); } }
 }
