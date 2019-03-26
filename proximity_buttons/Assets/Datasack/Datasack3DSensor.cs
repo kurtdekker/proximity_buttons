@@ -1,7 +1,7 @@
 ﻿/*
 	The following license supersedes all notices in the source code.
 
-	Copyright (c) 2018 Kurt Dekker/PLBM Games All rights reserved.
+	Copyright (c) 2019 Kurt Dekker/PLBM Games All rights reserved.
 
 	http://www.twitter.com/kurtdekker
 
@@ -36,39 +36,30 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
-// TODO: This class is to replace the use of the following classes:
-//
-//	DSAudioPlay - oneshotter (poke to play)
-//	DSAudioVolume - volume control (offered by an optional Datasack)
-//	DSAudioPitch - pitch control (offered by optional Datasack)
-//
-// Additional controls:
-//
-//	Control Looping on/off
-//	Continuous volume control using tweening to different levels?
-//
-
-public class DSAudioControl : MonoBehaviour
+[RequireComponent(typeof(Collider))]
+public class Datasack3DSensor : MonoBehaviour, IDatasackTouchable
 {
-	[Header("WARNING - NOT IMPLEMENTED YET!")]
+	[Tooltip("Defaults to UISack datavar if none supplied.")]
+	public Datasack dsUI;
 
-	public	Datasack	DSControlVolume;
+	[Tooltip("Leave blank to set Button GameObject name")]
+	public string ValueToSet;
 
-	public	Datasack	DSControlPitch;
-
-	public	Datasack	DSControlLooping;
-
-	public	Datasack	DSVolumeChangeRate;
-
-	// <WIP> follow the AudioSource[] array methodology of
-	// DSAudioPlay, including the various play strategies.
-
-	// <WIP> non-supplied datavars should not
-	// modify the underlying AudioSource parameter.
-
-	void Awake()
+	public void Touched()
 	{
-		throw new System.NotImplementedException( "DSAudioControl.Awake();");
+		var ds = DSM.UserIntent;
+		if (dsUI) ds = dsUI;
+
+		string signalledOutput = gameObject.name;
+		if (ValueToSet != null && ValueToSet.Length > 0) signalledOutput = ValueToSet;
+
+		ds.Value = signalledOutput;
+	}
+
+	void OnEnable()
+	{
+		Datasack3DManager.Instance.ToString();
 	}
 }

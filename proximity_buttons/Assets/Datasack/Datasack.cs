@@ -1,7 +1,7 @@
 ﻿/*
 	The following license supersedes all notices in the source code.
 
-	Copyright (c) 2018 Kurt Dekker/PLBM Games All rights reserved.
+	Copyright (c) 2019 Kurt Dekker/PLBM Games All rights reserved.
 
 	http://www.twitter.com/kurtdekker
 
@@ -45,6 +45,7 @@ using UnityEditor;
 [CreateAssetMenu]
 public partial class Datasack : ScriptableObject
 {
+	[Multiline]
 	public	string	InitialValue;
 
 	public	bool	Save;
@@ -57,6 +58,13 @@ public partial class Datasack : ScriptableObject
 	[NonSerialized]
 	public	OnValueChangedDelegate	OnChangedOnceOnly;
 
+	// This name is the name of the Datasack object itself (.name) but
+	// also prefixed with the path location so it is unique. It must be
+	// unique for retrieval from the master dictionary, and for
+	// persistent saving/loading to PlayerPrefs.
+	[NonSerialized]
+	public	string		FullName;
+
 	void OnEnable()
 	{
 		bool holdBreak = DebugBreak;
@@ -67,14 +75,17 @@ public partial class Datasack : ScriptableObject
 
 		Value = InitialValue;
 
-		if (Save)
-		{
-			Value = PlayerPrefs.GetString (
-				DSM.s_PlayerPrefsPrefix + name.ToLower(), Value);
-		}
-
 		DebugBreak = holdBreak;
 		DebugLogging = holdLogging;
+	}
+
+	public void LoadPersistent()
+	{
+		if (Save)
+		{
+			string s_PrefsKey = DSM.s_PlayerPrefsPrefix + FullName;
+			Value = PlayerPrefs.GetString (s_PrefsKey, Value);
+		}
 	}
 
 	[NonSerialized] private	string	TheData;
@@ -94,6 +105,11 @@ public partial class Datasack : ScriptableObject
 		}
 	}
 
+	public	void	Clear()
+	{
+		Value = "";
+	}
+
 	public	string	Value
 	{
 		get
@@ -104,12 +120,12 @@ public partial class Datasack : ScriptableObject
 		{
 			if (DebugLogging)
 			{
-				Debug.Log( "Datasack " + name + " changed: '" + TheData + "' to '" + value + "'");
+				Debug.Log( "Datasack " + FullName + " changed: '" + TheData + "' to '" + value + "'");
 			}
 
 			if (DebugBreak)
 			{
-				Debug.LogWarning( "Datasack " + name + ": set to DebugBreak");
+				Debug.LogWarning( "Datasack " + FullName + ": set to DebugBreak");
 				Debug.Break();
 			}
 
@@ -123,6 +139,20 @@ public partial class Datasack : ScriptableObject
 				if (EditorApplication.isPlaying)
 				#endif
 					DSM.I.SetDirty();
+			}
+		}
+	}
+
+	// If you are constantly setting a .Value field, use this
+	// if you can tolerate signalling / breaking / saving to
+	// only perform action when the value is different.
+	public string ValueIfDifferent
+	{
+		set
+		{
+			if (TheData != value)
+			{
+				Value = value;
 			}
 		}
 	}
