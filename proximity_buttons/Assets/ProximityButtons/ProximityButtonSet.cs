@@ -46,6 +46,8 @@ public class ProximityButtonSet : MonoBehaviour
 		public bool fingerDown;
 		public bool prevFingerDown;
 
+		public Color labelColor = new Color( 0.7f, 0.7f, 0.7f, 0.7f);
+
 		// Warning: if you use this property, you should also
 		// enable manual updating and call it in a consistently
 		// orderly fashion, or else you may miss trigger events.
@@ -139,7 +141,7 @@ public class ProximityButtonSet : MonoBehaviour
 	{
 		foreach( ProximityButton pb in pbses)
 		{
-			GUI.color = new Color( 0.7f, 0.7f, 0.7f, 0.7f);
+			GUI.color = pb.labelColor;
 			Rect r = new Rect( 0, 0, Screen.width * 0.10f, Screen.height * 0.05f);
 			r.center = pb.position;
 			GUI.Label ( r, pb.label, OurStyles.LABELCJ(10));
