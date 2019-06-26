@@ -35,8 +35,8 @@ public class ProximityButtonForUI : MonoBehaviour
 			pos = (pos * canvasRT.rect.height) / Screen.height;
 			break;
 
-//		case CanvasScaler.ScaleMode.ScaleWithScreenSize :
-//			break;
+		case CanvasScaler.ScaleMode.ScaleWithScreenSize :
+			break;
 
 //		case CanvasScaler.ScaleMode.ConstantPhysicalSize :
 //			break;
