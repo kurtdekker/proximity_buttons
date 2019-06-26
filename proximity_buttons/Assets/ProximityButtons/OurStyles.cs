@@ -102,8 +102,27 @@ public class OurStyles
 		}
 		return _LABELURX[fontsize];
 	}
-	
-	private static Dictionary<int,GUIStyle> _LABELRJ;
+
+    private static Dictionary<int, GUIStyle> _LABELLRX;
+    public static GUIStyle LABELLRX(int fontsize)
+    {
+        if (_LABELLRX == null)
+        {
+            _LABELLRX = new Dictionary<int, GUIStyle>();
+        }
+        if (!_LABELLRX.ContainsKey(fontsize))
+        {
+            GUIStyle gst = new GUIStyle();
+            gst.alignment = TextAnchor.LowerRight;
+            gst.wordWrap = true;
+            gst.fontSize = (int)((fontsize * Screen.width) / NotionalPointWidth);
+            gst.normal.textColor = Color.white;
+            _LABELLRX[fontsize] = gst;
+        }
+        return _LABELLRX[fontsize];
+    }
+
+    private static Dictionary<int,GUIStyle> _LABELRJ;
 	public static GUIStyle LABELRJ( int fontsize)
 	{
 		if (_LABELRJ == null)
