@@ -1,7 +1,7 @@
 /*
 	The following license supersedes all notices in the source code.
 
-	Copyright (c) 2018 Kurt Dekker/PLBM Games All rights reserved.
+	Copyright (c) 2019 Kurt Dekker/PLBM Games All rights reserved.
 
 	http://www.twitter.com/kurtdekker
 
@@ -44,7 +44,9 @@ public class ProximityButtonSet : MonoBehaviour
 		public string label;
 		public Vector2 position;
 		public bool fingerDown;
+		public bool fingerTouched;
 		public bool prevFingerDown;
+		public bool enabled;
 
 		public Color labelColor = new Color( 0.7f, 0.7f, 0.7f, 0.7f);
 
@@ -61,6 +63,7 @@ public class ProximityButtonSet : MonoBehaviour
 
 		public ProximityButton( string label, Vector2 position)
 		{
+			this.enabled = true;
 			this.label = label;
 			this.position = position;
 		}
@@ -109,6 +112,7 @@ public class ProximityButtonSet : MonoBehaviour
 		{
 			pb.prevFingerDown = pb.fingerDown;
 			pb.fingerDown = false;
+			pb.fingerTouched = false;
 		}
 
 		foreach (MicroTouch t in mts)
@@ -132,7 +136,15 @@ public class ProximityButtonSet : MonoBehaviour
 			}
 			if (pbClosest != null)
 			{
-				pbClosest.fingerDown = true;
+				if (pbClosest.enabled)
+				{
+					pbClosest.fingerDown = true;
+
+					if (t.phase == TouchPhase.Began)
+					{
+						pbClosest.fingerTouched = true;
+					}
+				}
 			}
 		}
 	}
@@ -141,10 +153,13 @@ public class ProximityButtonSet : MonoBehaviour
 	{
 		foreach( ProximityButton pb in pbses)
 		{
-			GUI.color = pb.labelColor;
-			Rect r = new Rect( 0, 0, Screen.width * 0.10f, Screen.height * 0.05f);
-			r.center = pb.position;
-			GUI.Label ( r, pb.label, OurStyles.LABELCJ(10));
+			if (pb.enabled)
+			{
+				GUI.color = pb.labelColor;
+				Rect r = new Rect( 0, 0, Screen.width * 0.10f, Screen.height * 0.05f);
+				r.center = pb.position;
+				GUI.Label ( r, pb.label, OurStyles.LABELCJ(10));
+			}
 		}
 	}
 }
