@@ -33,113 +33,60 @@
 	SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-// Uncomment this #define if you want TextMeshPro support.
-//#define USING_TEXTMESHPRO
-
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-#if USING_TEXTMESHPRO
-	using TMPro;
-#endif
-
-// WARNING! Internal class: other Datasack scripts will add this as needed.
-
-public class DSTextAbstraction : MonoBehaviour
+public class DSTextSelectInt : MonoBehaviour
 {
-	private	Text	text;
+	public	Datasack	dataSack;
 
-#if USING_TEXTMESHPRO
-	private	TextMeshPro	tmptext;
-	private	TextMeshProUGUI	tmptextugui;
-#endif
+	public	string[]	TextTable;
 
-	// <WIP> observe and interoperate with other text-type objects here.
+	[Multiline]
+	public	string		FormatString;
 
-	public	static	DSTextAbstraction	Attach( MonoBehaviour script)
+	private DSTextAbstraction _textAbstraction;
+	private DSTextAbstraction textAbstraction
 	{
-		DSTextAbstraction ta = script.gameObject.GetComponent<DSTextAbstraction>();
-		if (!ta)
+		get
 		{
-			ta = script.gameObject.AddComponent<DSTextAbstraction>();
+			if (!_textAbstraction) _textAbstraction = DSTextAbstraction.Attach(this);
+			return _textAbstraction;
 		}
-		return ta;
 	}
 
-	void	LazyFinder()
+	void	Reset()
 	{
-		if (!text)
-		{
-			text = GetComponent<Text>();
-		}
-#if USING_TEXTMESHPRO
-		if (!tmptext)
-		{
-			tmptext = GetComponent<TextMeshPro>();
-		}
-		if (!tmptextugui)
-		{
-			tmptextugui = GetComponent<TextMeshProUGUI>();
-		}
-#endif
+		TextTable = new string[] { "Option 0", "Option 1" };
 	}
 
-	public	string	GetText()
+	void	OnChanged( Datasack ds)
 	{
-		if (!gameObject) return "";
+		int n = ds.iValue;
 
-		LazyFinder();
-
-		if (text)
+		string text = "";
+		if (n >= 0 && n < TextTable.Length)
 		{
-			return text.text;
+			text = TextTable[n];
 		}
 
-#if USING_TEXTMESHPRO
-		if (tmptext)
+		if (!System.String.IsNullOrEmpty(FormatString))
 		{
-			return tmptext.text;
+			textAbstraction.SetText( System.String.Format (FormatString, text));
+			return;
 		}
-
-		if (tmptextugui)
-		{
-			return tmptextugui.text;
-		}
-#endif
-
-		Debug.LogError( name + "." + GetType() + ".GetText(): no suitable text object found.");
-
-		return "";
+		textAbstraction.SetText( text);
 	}
 
-	public	void	SetText( string s)
+	void	OnEnable()
 	{
-		if (!gameObject) return;
-
-		LazyFinder();
-
-		if (text)
-		{
-			text.text = s;
-			return;
-		}
-
-#if USING_TEXTMESHPRO
-		if (tmptext)
-		{
-			tmptext.text = s;
-			return;
-		}
-
-		if (tmptextugui)
-		{
-			tmptextugui.text = s;
-			return;
-		}
-#endif
-
-		Debug.LogError( name + "." + GetType() + ".SetText(): no suitable text object found.");
+		dataSack.OnChanged += OnChanged;
+		OnChanged( dataSack);
+	}
+	void	OnDisable()
+	{
+		dataSack.OnChanged -= OnChanged;	
 	}
 }

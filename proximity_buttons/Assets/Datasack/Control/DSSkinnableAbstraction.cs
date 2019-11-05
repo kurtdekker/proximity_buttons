@@ -33,113 +33,86 @@
 	SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-// Uncomment this #define if you want TextMeshPro support.
-//#define USING_TEXTMESHPRO
-
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-#if USING_TEXTMESHPRO
-	using TMPro;
-#endif
-
 // WARNING! Internal class: other Datasack scripts will add this as needed.
 
-public class DSTextAbstraction : MonoBehaviour
+// NOTE: Presently there are no uses for this within Datasacks module since
+// the Datasacks do not support Texture2D or sprite storage.
+
+public class DSSkinnableAbstraction : MonoBehaviour
 {
-	private	Text	text;
+	private Image	image;
 
-#if USING_TEXTMESHPRO
-	private	TextMeshPro	tmptext;
-	private	TextMeshProUGUI	tmptextugui;
-#endif
+	// <WIP> observe and interoperate with other types of skinnable objects
 
-	// <WIP> observe and interoperate with other text-type objects here.
-
-	public	static	DSTextAbstraction	Attach( MonoBehaviour script)
+	public	static	DSSkinnableAbstraction	Attach( GameObject go)
 	{
-		DSTextAbstraction ta = script.gameObject.GetComponent<DSTextAbstraction>();
-		if (!ta)
-		{
-			ta = script.gameObject.AddComponent<DSTextAbstraction>();
-		}
-		return ta;
+		DSSkinnableAbstraction sa = go.AddComponent<DSSkinnableAbstraction>();
+		return sa;
+	}
+	public	static	DSSkinnableAbstraction	Attach( MonoBehaviour script)
+	{
+		return Attach( script.gameObject);
 	}
 
 	void	LazyFinder()
 	{
-		if (!text)
+		if (!image)
 		{
-			text = GetComponent<Text>();
+			image = GetComponent<Image>();
 		}
-#if USING_TEXTMESHPRO
-		if (!tmptext)
-		{
-			tmptext = GetComponent<TextMeshPro>();
-		}
-		if (!tmptextugui)
-		{
-			tmptextugui = GetComponent<TextMeshProUGUI>();
-		}
-#endif
 	}
 
-	public	string	GetText()
+	public void SetSprite( Sprite sprite)
 	{
-		if (!gameObject) return "";
+		if (!sprite)
+		{
+			SetEnabled(false);
+			return;
+		}
 
 		LazyFinder();
 
-		if (text)
+		bool good = false;
+
+		if (image)
 		{
-			return text.text;
+			image.sprite = sprite;
+			good = true;
 		}
 
-#if USING_TEXTMESHPRO
-		if (tmptext)
+		if (!good)
 		{
-			return tmptext.text;
+			Debug.LogError(GetType() + ".SetSprite(): no suitable skinnable object found.");
 		}
-
-		if (tmptextugui)
-		{
-			return tmptextugui.text;
-		}
-#endif
-
-		Debug.LogError( name + "." + GetType() + ".GetText(): no suitable text object found.");
-
-		return "";
 	}
 
-	public	void	SetText( string s)
+	public void SetTexture2D( Texture2D t2d)
 	{
-		if (!gameObject) return;
+		if (!t2d)
+		{
+			SetEnabled(false);
+			return;
+		}
 
+		Rect r = new Rect( 0, 0, t2d.width, t2d.height);
+
+		var sprite = Sprite.Create( t2d, r, Vector2.one * 0.5f);
+
+		SetSprite( sprite);
+	}
+
+	public void SetEnabled( bool ena)
+	{
 		LazyFinder();
 
-		if (text)
+		if (image)
 		{
-			text.text = s;
-			return;
+			image.enabled = ena;
 		}
-
-#if USING_TEXTMESHPRO
-		if (tmptext)
-		{
-			tmptext.text = s;
-			return;
-		}
-
-		if (tmptextugui)
-		{
-			tmptextugui.text = s;
-			return;
-		}
-#endif
-
-		Debug.LogError( name + "." + GetType() + ".SetText(): no suitable text object found.");
 	}
 }
