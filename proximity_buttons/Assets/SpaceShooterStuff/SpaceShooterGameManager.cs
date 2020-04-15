@@ -1,7 +1,7 @@
 ﻿/*
 	The following license supersedes all notices in the source code.
 
-	Copyright (c) 2019 Kurt Dekker/PLBM Games All rights reserved.
+	Copyright (c) 2020 Kurt Dekker/PLBM Games All rights reserved.
 
 	http://www.twitter.com/kurtdekker
 
@@ -37,9 +37,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TwinStickGameManager : MonoBehaviour
+public class SpaceShooterGameManager : MonoBehaviour
 {
-	public static TwinStickGameManager I {get; private set;}
+	public static SpaceShooterGameManager I {get; private set;}
 
 	public GameObject EnemyExplosion;
 
@@ -110,42 +110,17 @@ public class TwinStickGameManager : MonoBehaviour
 			var e = Instantiate<GameObject>( what);
 			e.SetActive( false);
 
-			// spawn "away" from the player
-			if (Mathf.Abs( PlayerPosition.x) > Mathf.Abs( PlayerPosition.z))
-			{
-				if (PlayerPosition.x < 0)
-				{
-					e.transform.position = new Vector3( PlayAreaSize / 2, 0,
-						Random.Range( -PlayAreaSize / 2, PlayAreaSize / 2));
-				}
-				else
-				{
-					e.transform.position = new Vector3( -PlayAreaSize / 2, 0,
-						Random.Range( -PlayAreaSize / 2, PlayAreaSize / 2));
-				}
-			}
-			else
-			{
-				if (PlayerPosition.z < 0)
-				{
-					e.transform.position = new Vector3(
-						Random.Range( -PlayAreaSize / 2, PlayAreaSize / 2),
-						0, PlayAreaSize / 2);
-				}
-				else
-				{
-					e.transform.position = new Vector3(
-						Random.Range( -PlayAreaSize / 2, PlayAreaSize / 2),
-						0, -PlayAreaSize / 2);
-				}
-			}
+			// spawn "always at the top" for space shooter
+			e.transform.position = new Vector3(
+				Random.Range( -PlayAreaSize / 2, PlayAreaSize / 2),
+				0, PlayAreaSize / 2);
 
 			float chosenSpeed = Random.Range( minSpeed, maxSpeed);
 
 			// accelerant for later-wave added guys... better get busy man!!
 			chosenSpeed += timer / 20;
 
-			Enemy1.Attach( e, chosenSpeed);
+			Enemy2.Attach( e, chosenSpeed);
 
 			e.SetActive( true);
 

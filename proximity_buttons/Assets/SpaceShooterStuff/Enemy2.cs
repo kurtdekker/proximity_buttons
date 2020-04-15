@@ -37,17 +37,17 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-// intended for use in the Twinsticker demo
+// intended for use in the space shooter demo
 
-public class Enemy1 : MonoBehaviour
-{
+public class Enemy2 : MonoBehaviour
+{ 
 	float speed;
 
-	public static Enemy1 Attach( GameObject go, float speed)
+	public static Enemy2 Attach( GameObject go, float speed)
 	{
-		var e1 = go.AddComponent<Enemy1>();
-		e1.speed = speed;
-		return e1;
+		var e2 = go.AddComponent<Enemy2>();
+		e2.speed = speed;
+		return e2;
 	}
 
 	int stutter;
@@ -56,11 +56,11 @@ public class Enemy1 : MonoBehaviour
 	{
 		if (!DSM.GameRunning.bValue) return;
 
-		Vector3 delta = TwinStickGameManager.I.PlayerPosition - transform.position;
+		Vector3 delta = SpaceShooterGameManager.I.PlayerPosition - transform.position;
 
 		if (delta.magnitude < 1.2f)
 		{
-			TwinStickGameManager.I.GameOver();
+			SpaceShooterGameManager.I.GameOver();
 		}
 
 		// continuously face the player
