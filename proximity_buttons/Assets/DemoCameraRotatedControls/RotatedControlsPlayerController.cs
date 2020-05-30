@@ -58,7 +58,8 @@ public class RotatedControlsPlayerController : MonoBehaviour
 
 	const float TurnToFaceRate = 500;       // degrees per second
 
-	const float CameraInfluence = 5.0f;
+	const float CameraInfluence = 10.0f;
+	const float VerticalCameraAttenuation = 0.1f;
 
 	void CreateVABs()
 	{
@@ -100,20 +101,28 @@ public class RotatedControlsPlayerController : MonoBehaviour
 		}
 	}
 
+	void AddKeyboardMovementControls(ref Vector3 raw)
+	{
+		raw.x += Input.GetAxis("Horizontal");
+		raw.z += Input.GetAxis("Vertical");
+	}
+
 	void HandlePlayerMovement()
 	{
-		Vector3 RawMoveInputs = Vector3.zero;
+		Vector3 RawMovementInputs = Vector3.zero;
 
 		if (vabMove.fingerDown)
 		{
-			RawMoveInputs = new Vector3(vabMove.outputRaw.x, 0, vabMove.outputRaw.y);
+			RawMovementInputs = new Vector3(vabMove.outputRaw.x, 0, vabMove.outputRaw.y);
 		}
+
+		AddKeyboardMovementControls(ref RawMovementInputs);
 
 		var cameraHeading = TheCamera.transform.eulerAngles.y;
 
 		var controlRotation = Quaternion.Euler(0, cameraHeading, 0);
 
-		var RotatedMoveInputs = controlRotation * RawMoveInputs;
+		var RotatedMoveInputs = controlRotation * RawMovementInputs;
 
 		var motion = RotatedMoveInputs * BaseMoveSpeed * Time.deltaTime;
 
@@ -139,27 +148,44 @@ public class RotatedControlsPlayerController : MonoBehaviour
 		}
 	}
 
+	void AddKeyboardCameraControls( ref Vector3 raw)
+	{
+		// keyboard overrides
+		if (Input.GetKey(KeyCode.Alpha1))
+		{
+			raw.x = -1;
+		}
+		if (Input.GetKey(KeyCode.Alpha2))
+		{
+			raw.x = 1;
+		}
+	}
+
 	void HandleCameraMovement()
 	{
 		if (pushable != null)
 		{
+			Vector3 RawCameraInputs = Vector3.zero;
+
 			if (vabCamera.fingerDown)
 			{
-				Vector3 RawMoveInputs = new Vector3(vabCamera.outputRaw.x, 0, vabCamera.outputRaw.y);
-
-				// drastically reduce up/down input; we want to encourage circling around
-				RawMoveInputs.y /= 4.0f;
-
-				var cameraHeading = TheCamera.transform.eulerAngles.y;
-
-				var controlRotation = Quaternion.Euler(0, cameraHeading, 0);
-
-				var RotatedMoveInputs = controlRotation * RawMoveInputs;
-
-				var motion = RotatedMoveInputs * CameraInfluence * Time.deltaTime;
-
-				pushable.Push(motion);
+				RawCameraInputs = new Vector3(vabCamera.outputRaw.x, 0, vabCamera.outputRaw.y);
 			}
+
+			// drastically reduce up/down input; we want to encourage circling around
+			RawCameraInputs.y *= VerticalCameraAttenuation;
+
+			AddKeyboardCameraControls(ref RawCameraInputs);
+
+			var cameraHeading = TheCamera.transform.eulerAngles.y;
+
+			var controlRotation = Quaternion.Euler(0, cameraHeading, 0);
+
+			var RotatedMoveInputs = controlRotation * RawCameraInputs;
+
+			var motion = RotatedMoveInputs * CameraInfluence * Time.deltaTime;
+
+			pushable.Push(motion);
 		}
 	}
 
