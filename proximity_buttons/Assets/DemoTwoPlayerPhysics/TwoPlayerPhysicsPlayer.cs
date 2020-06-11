@@ -41,6 +41,7 @@ public class TwoPlayerPhysicsPlayer : MonoBehaviour
 {
 	public float BaseMoveSpeed;
 
+	[Tooltip( "Just 0 or 1 for now...")]
 	public int PlayerIndex;
 
 	void Reset()
@@ -54,11 +55,21 @@ public class TwoPlayerPhysicsPlayer : MonoBehaviour
 	{
 		if (vabMove) Destroy( vabMove);
 
+		float sz = MR.MINAXIS * 0.5f;
+
 		vabMove = gameObject.AddComponent<VAButton>();
-		vabMove.r_downable = MR.SR( 0.00f, 0.20f, 0.50f, 0.80f);
+		// default left side
+		vabMove.r_downable = new Rect( 0, Screen.height - sz, sz, sz);
+		if (PlayerIndex == 1)
+		{
+			// move to right side
+			Rect r = vabMove.r_downable;
+			r.x = Screen.width - r.width;
+			vabMove.r_downable = r;
+		}
 		vabMove.doClamp = true;
 		vabMove.doNormalize = false;
-		vabMove.label = "MOVE";
+		vabMove.label = "MOVE " + PlayerIndex.ToString();
 	}
 
 	void Start ()
@@ -102,48 +113,59 @@ public class TwoPlayerPhysicsPlayer : MonoBehaviour
 
 	void UpdateGatherKeyboardInput()
 	{
-		// move
-		if (Input.GetKey(KeyCode.LeftArrow))
+		switch( PlayerIndex)
 		{
-			bMove = true;
-			v3Move.x = -1;
-		}
-		if (Input.GetKey(KeyCode.RightArrow))
-		{
-			bMove = true;
-			v3Move.x =  1;
-		}
-		if (Input.GetKey(KeyCode.UpArrow))
-		{
-			bMove = true;
-			v3Move.y = 1;
-		}
-		if (Input.GetKey(KeyCode.DownArrow))
-		{
-			bMove = true;
-			v3Move.y = -1;
-		}
+		default :
+			Debug.LogWarning( GetType() + "UpdateGatherKeyboardInput(): PlayerIndex must be 0 or 1!");
+			break;
 
-		// move
-		if (Input.GetKey(KeyCode.A))
-		{
-			bMove = true;
-			v3Move.x = -1;
-		}
-		if (Input.GetKey(KeyCode.D))
-		{
-			bMove = true;
-			v3Move.x =  1;
-		}
-		if (Input.GetKey(KeyCode.W))
-		{
-			bMove = true;
-			v3Move.y = 1;
-		}
-		if (Input.GetKey(KeyCode.S))
-		{
-			bMove = true;
-			v3Move.y = -1;
+		case 0 :
+			// move
+			if (Input.GetKey(KeyCode.A))
+			{
+				bMove = true;
+				v3Move.x = -1;
+			}
+			if (Input.GetKey(KeyCode.D))
+			{
+				bMove = true;
+				v3Move.x =  1;
+			}
+			if (Input.GetKey(KeyCode.W))
+			{
+				bMove = true;
+				v3Move.y = 1;
+			}
+			if (Input.GetKey(KeyCode.S))
+			{
+				bMove = true;
+				v3Move.y = -1;
+			}
+			break;
+
+		case 1 :
+			// move
+			if (Input.GetKey(KeyCode.LeftArrow))
+			{
+				bMove = true;
+				v3Move.x = -1;
+			}
+			if (Input.GetKey(KeyCode.RightArrow))
+			{
+				bMove = true;
+				v3Move.x =  1;
+			}
+			if (Input.GetKey(KeyCode.UpArrow))
+			{
+				bMove = true;
+				v3Move.y = 1;
+			}
+			if (Input.GetKey(KeyCode.DownArrow))
+			{
+				bMove = true;
+				v3Move.y = -1;
+			}
+			break;
 		}
 	}
 
