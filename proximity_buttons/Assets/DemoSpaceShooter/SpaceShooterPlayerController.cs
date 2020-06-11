@@ -113,8 +113,6 @@ public class SpaceShooterPlayerController : MonoBehaviour
 		SpaceShooterGameManager.I.PlayerPosition = transform.position;
 	}
 
-	Vector3 LastFireDirection = Vector3.forward;
-
 	// fraction of player motion to add to bullets
 	const float PlayerMotionFraction = 0.5f;
 

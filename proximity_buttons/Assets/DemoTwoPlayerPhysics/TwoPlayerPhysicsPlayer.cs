@@ -88,8 +88,6 @@ public class TwoPlayerPhysicsPlayer : MonoBehaviour
 		}
 	}
 
-	Vector3 LastFireDirection = Vector3.forward;
-
 	// fraction of player motion to add to bullets
 	const float PlayerMotionFraction = 0.5f;
 
