@@ -1,7 +1,7 @@
 ﻿/*
 	The following license supersedes all notices in the source code.
 
-	Copyright (c) 2018 Kurt Dekker/PLBM Games All rights reserved.
+	Copyright (c) 2020 Kurt Dekker/PLBM Games All rights reserved.
 
 	http://www.twitter.com/kurtdekker
 
@@ -37,7 +37,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public static class LAZY
+public static partial class LAZY
 {
 	static Texture2D _t2d_crosshairs;
 	public static Texture2D t2d_crosshairs
@@ -46,7 +46,7 @@ public static class LAZY
 		{
 			if (!_t2d_crosshairs)
 			{
-				_t2d_crosshairs = Resources.Load<Texture2D>( "Textures/plus9");
+				_t2d_crosshairs = Resources.Load<Texture2D>( "Textures/uibuttons/plus9");
 			}
 			return _t2d_crosshairs;
 		}
