@@ -38,9 +38,13 @@ Sample usage:
 
 	// Plays "myAudioClip" three times, once per second, at location (0,0,0):
 	TimedCaller.Create( 
- 		() => { AudioSource.PlaySoundAtLocation( myAudioClip, Vector3.zero); },
-		1.0f,
-		3);
+ 		action: () =>
+		{
+			// put more code in here to run it...
+			AudioSource.PlaySoundAtLocation( myAudioClip, Vector3.zero);
+		},
+		interval: 1.0f,
+		repeatCount: 3);
 #endif
 
 using UnityEngine;
