@@ -35,13 +35,25 @@
 
 using UnityEngine;
 
-// See also the GrippableManager; where you implement this interface you
-// are responsible for registering yourself with GrippableManager;
+// This is the interface for a handle, something you can grip.
+//
+// See also the GrippableManager; wherever you implement this interface,
+// you are responsible for registering yourself with GrippableManager;
 
 public interface IGrippable
 {
+	// returns the raw radius
 	float GetRadius();
+
+	// associated rigidbody
 	Rigidbody GetRigidbody();
+
+	// can a player grip this?
 	bool IsWithinReach( Transform player);
+
+	// tell this handle it is gripped or not
 	void SetGripped( bool gripped);
+
+	// check if this handle is gripped
+	bool IsGripped();
 }

@@ -37,49 +37,53 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-// Manages all the IGrippables; they are responsible for adding/removing
+// makes a Rigidbody frozen in place unless all handles are held.
 
-public class GrippableManager : MonoBehaviour
+public class ImmovableUnlessAllHandlesGripped : MonoBehaviour
 {
-	static GrippableManager _instance;
+	List<IGrippable> MyHandles;
 
-	public static GrippableManager Instance
+	void Start ()
 	{
-		get
+		MyHandles = new List<IGrippable>();
+
+		var allComponents = GetComponentsInChildren<MonoBehaviour>();
+		foreach( var component in allComponents)
 		{
-			if (!_instance)
+			var ig = component as IGrippable;
+			if (ig != null)
 			{
-				_instance = new GameObject( "GrippableManager.Instance").
-					AddComponent<GrippableManager>();
-			}
-			return _instance;
-		}
-	}
-
-	HashSet<IGrippable> TheRegistry = new HashSet<IGrippable>();
-
-	public void Register( IGrippable ig)
-	{
-		TheRegistry.Add( ig);
-	}
-
-	public void Unregister( IGrippable ig)
-	{
-		if (TheRegistry.Contains( ig))
-		{
-			TheRegistry.Remove( ig);
-		}
-	}
-
-	public	IGrippable	GetNearestGrippable( Transform player)
-	{
-		foreach( var ig in TheRegistry)
-		{
-			if (ig.IsWithinReach( player))
-			{
-				return ig;
+				MyHandles.Add( ig);
 			}
 		}
-		return null;
+
+		SetMovable( false);
+	}
+
+	void SetMovable( bool movable)
+	{
+		Rigidbody rb = GetComponent<Rigidbody>();
+		if (movable)
+		{
+			rb.constraints = RigidbodyConstraints.FreezeRotationX;
+			return;
+		}
+
+		rb.constraints = RigidbodyConstraints.FreezeAll;
+	}
+
+	void Update ()
+	{
+		var movable = true;
+
+		foreach( var ig in MyHandles)
+		{
+			if (!ig.IsGripped())
+			{
+				movable = false;
+			}
+		}
+
+		SetMovable( movable);
 	}
 }

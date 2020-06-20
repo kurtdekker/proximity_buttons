@@ -38,9 +38,17 @@ using System.Collections.Generic;
 using UnityEngine;
 
 // This is attached to a player when he starts to grip an IGrippable
+// This is the physics responsible for pulling the two parties together.
+// This has a lot of crazy constants in it you might need to tweak.
 
 public class GrippingBridge : MonoBehaviour
 {
+	// I imagine these random force variables probably should
+	// be tuned along with the mass of the objects and their drag.
+	const float ForcePlayerToAnchor = 100.0f;
+	const float AntiForceAnchorToPlayer = 50.0f;
+	const float ForceObjectToPlayer = 200.0f;
+
 	IGrippable ig;
 	Rigidbody rb1;
 
@@ -79,22 +87,23 @@ public class GrippingBridge : MonoBehaviour
 
 		Vector3 gripPosition = rb2.position;
 
-		Vector3 standPosition = rb2.position + rb2.transform.forward * radius;
+		Vector3 standPosition = rb2.position + rb2.transform.forward * halfRadius;
 
 		// control the player: if you get more than half a radius away from the
-		// optimal standpoint, really push you hard back there
+		// optimal standPosition, push you back there
 		Vector3 playerOffset = standPosition - rb1.position;
 		playerOffset.y = 0;
 		if (playerOffset.magnitude >= halfRadius)
 		{
-			rb1.AddForce( playerOffset * 100);
+			rb1.AddForce( playerOffset * ForcePlayerToAnchor);
+			rb2.AddForce( -playerOffset * AntiForceAnchorToPlayer);
 
-			// drive the object towards the player
+			// drive the object anchor towards the player
 			Vector3 objectOffset = rb1.position - gripPosition;
 			objectOffset.y = 0;
 			if (objectOffset.magnitude >= radius)
 			{
-				rb2.AddForce( objectOffset * 100);
+				rb2.AddForce( objectOffset * ForceObjectToPlayer);
 			}
 		}
 

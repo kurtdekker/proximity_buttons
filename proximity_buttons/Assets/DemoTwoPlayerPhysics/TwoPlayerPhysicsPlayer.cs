@@ -37,6 +37,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+// NOTE: this is intended for picking up objects cooperatively, but
+// I suppose you can use it for whatever you like.
+
 public class TwoPlayerPhysicsPlayer : MonoBehaviour
 {
 	public float BaseMoveSpeed;
@@ -191,7 +194,7 @@ public class TwoPlayerPhysicsPlayer : MonoBehaviour
 		// you're holding something; this command must be a drop!
 		if (bridge)
 		{
-			Destroy( bridge);
+			bridge.LetGo();
 			bridge = null;
 			return;
 		}
