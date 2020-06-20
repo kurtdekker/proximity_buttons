@@ -94,6 +94,8 @@ public class TwoPlayerPhysicsPlayer : MonoBehaviour
 
 	void UpdateMoving()
 	{
+		rb.velocity *= 0.9f;
+
 		if (bMove)
 		{
 			float currentSpeed = BaseMoveSpeed + DSM.Wave.iValue;
@@ -180,34 +182,30 @@ public class TwoPlayerPhysicsPlayer : MonoBehaviour
 		}
 	}
 
+	GrippingBridge bridge;			// the connection from you to the handle
+
 	IGrippable GrippableObject;		// what you might be able to grab
-	IGrippable GrippedObject;		// what you have grabbed onto
 
 	void OnButtonAction()
 	{
-		// this must be a "drop"
-		if (GrippedObject != null)
+		// you're holding something; this command must be a drop!
+		if (bridge)
 		{
-			var hj = gameObject.AddComponent<HingeJoint>();
-			if (hj)
-			{
-				Destroy(hj);
-			}
-
-			GrippedObject = null;
-
+			Destroy( bridge);
+			bridge = null;
 			return;
 		}
 
-		// this must be a "lift"
-		if (GrippedObject == null)
+		// you're empty-handed, this command must be a lift
+		if (!bridge)
 		{
 			if (GrippableObject != null)
 			{
-				GrippedObject = GrippableObject;
-
-				var hj = gameObject.AddComponent<HingeJoint>();
-				hj.connectedBody = GrippedObject.GetRigidbody();
+				bridge = GrippingBridge.Attach( rb, GrippableObject);
+			}
+			else
+			{
+				Debug.LogError( "Something called OnButtonAction() when there was nothing grippable...");
 			}
 
 			return;
@@ -216,10 +214,12 @@ public class TwoPlayerPhysicsPlayer : MonoBehaviour
 
 	void UpdateGripping()
 	{
-		if (GrippedObject == null)
+		// you are empty-handed
+		if (!bridge)
 		{
 			GrippableObject = GrippableManager.Instance.GetNearestGrippable(transform);
 
+			// enable/disable button based on grippable object nearby
 			if (GrippableObject != null)
 			{
 				controls.SetActionButtonActive(true);
@@ -233,10 +233,13 @@ public class TwoPlayerPhysicsPlayer : MonoBehaviour
 			return;
 		}
 
-		if (GrippedObject != null)
+		// you're gripping
+		if (bridge)
 		{
 			controls.SetActionButtonActive(true);
 			controls.SetText( "DROP");
+
+			bridge.MyUpdate();
 
 			return;
 		}

@@ -762,12 +762,12 @@ Rigidbody:
   m_GameObject: {fileID: 773975860}
   serializedVersion: 2
   m_Mass: 1
-  m_Drag: 0
-  m_AngularDrag: 0.05
+  m_Drag: 1
+  m_AngularDrag: 1
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 0
+  m_Constraints: 16
   m_CollisionDetection: 0
 --- !u!4 &773975862
 Transform:
@@ -1093,12 +1093,12 @@ Rigidbody:
   m_GameObject: {fileID: 1235785602}
   serializedVersion: 2
   m_Mass: 1
-  m_Drag: 0
-  m_AngularDrag: 0.05
-  m_UseGravity: 0
-  m_IsKinematic: 1
+  m_Drag: 2
+  m_AngularDrag: 1
+  m_UseGravity: 1
+  m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 0
+  m_Constraints: 80
   m_CollisionDetection: 0
 --- !u!1 &1266456718
 GameObject:
@@ -1214,6 +1214,7 @@ GameObject:
   - component: {fileID: 1385498645}
   - component: {fileID: 1385498647}
   - component: {fileID: 1385498646}
+  - component: {fileID: 1385498648}
   m_Layer: 0
   m_Name: Handle1
   m_TagString: Untagged
@@ -1227,13 +1228,13 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1385498644}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
   m_LocalPosition: {x: 2.5, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 773975862}
   m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
 --- !u!114 &1385498646
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1245,7 +1246,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ccad7246d9ea446a8b0bf29df4f2ba94, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  radius: 1
+  radius: 2
 --- !u!54 &1385498647
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -1261,6 +1262,17 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!138 &1385498648
+FixedJoint:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1385498644}
+  m_ConnectedBody: {fileID: 773975861}
+  m_BreakForce: Infinity
+  m_BreakTorque: Infinity
+  m_EnableCollision: 0
+  m_EnablePreprocessing: 1
 --- !u!1 &1475146010
 GameObject:
   m_ObjectHideFlags: 0
@@ -1388,12 +1400,12 @@ Rigidbody:
   m_GameObject: {fileID: 1482437609}
   serializedVersion: 2
   m_Mass: 1
-  m_Drag: 0
-  m_AngularDrag: 0.05
-  m_UseGravity: 0
-  m_IsKinematic: 1
+  m_Drag: 2
+  m_AngularDrag: 1
+  m_UseGravity: 1
+  m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 0
+  m_Constraints: 80
   m_CollisionDetection: 0
 --- !u!1 &1563593791
 GameObject:
@@ -1712,7 +1724,11 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: W A S D and Arrows for two players.
+  m_Text: 'W A S D and Arrows for two players.
+
+    Click the Lift/Drop buttons when available.
+
+    This is <b>VERY</b> unstable.'
 --- !u!222 &1881999453
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -1729,6 +1745,7 @@ GameObject:
   - component: {fileID: 1903208071}
   - component: {fileID: 1903208073}
   - component: {fileID: 1903208072}
+  - component: {fileID: 1903208074}
   m_Layer: 0
   m_Name: Handle2
   m_TagString: Untagged
@@ -1742,13 +1759,13 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1903208070}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: -0.7071068, z: 0, w: 0.7071068}
   m_LocalPosition: {x: -2.5, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 773975862}
   m_RootOrder: 2
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: -90, z: 0}
 --- !u!114 &1903208072
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1760,7 +1777,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ccad7246d9ea446a8b0bf29df4f2ba94, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  radius: 1
+  radius: 1.5
 --- !u!54 &1903208073
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -1776,6 +1793,17 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!138 &1903208074
+FixedJoint:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1903208070}
+  m_ConnectedBody: {fileID: 773975861}
+  m_BreakForce: Infinity
+  m_BreakTorque: Infinity
+  m_EnableCollision: 0
+  m_EnablePreprocessing: 1
 --- !u!1 &1965182832
 GameObject:
   m_ObjectHideFlags: 0

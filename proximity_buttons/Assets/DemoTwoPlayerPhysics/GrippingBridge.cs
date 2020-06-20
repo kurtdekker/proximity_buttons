@@ -37,47 +37,60 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(Rigidbody))]
-public class GrippableHandle : MonoBehaviour, IGrippable
+// This is attached to a player when he starts to grip an IGrippable
+
+public class GrippingBridge : MonoBehaviour
 {
-	public float radius = 1.5f;
+	IGrippable ig;
+	Rigidbody rb1;
 
-	void OnDrawGizmos()
+	public static GrippingBridge Attach( Rigidbody player, IGrippable ig)
 	{
-		Gizmos.DrawWireSphere( transform.position, radius);
-	}
+		var bridge = player.GetComponent<GrippingBridge>();
 
-	public float GetRadius ()
-	{
-		return radius;
-	}
-
-	public Rigidbody GetRigidbody ()
-	{
-		return GetComponent<Rigidbody>();
-	}
-
-	public bool IsWithinReach ( Transform player)
-	{
-		Vector3 delta = player.position - transform.position;
-		delta.y = 0;
-
-		return delta.magnitude < radius;
-	}
-
-	void OnEnable()
-	{
-		if (Application.isPlaying)
+		// if one is on here already, something has gone wrong, so complain
+		if (bridge)
 		{
-			GrippableManager.Instance.Register(this);
+			Debug.LogError( "ERROR: player '" + player.name + "' already had a GrippingBridge!");
+			return bridge;
 		}
+
+		bridge = player.gameObject.AddComponent<GrippingBridge>();
+
+		bridge.rb1 = player;
+		bridge.ig = ig;
+
+		return bridge;
 	}
 
-	void Disable()
+	public void MyUpdate ()
 	{
-		if (Application.isPlaying)
+		var rb2 = ig.GetRigidbody();
+		var radius = ig.GetRadius();
+		var halfRadius = radius / 2;
+
+		Vector3 gripPosition = rb2.position;
+
+		Vector3 standPosition = rb2.position + transform.forward * radius;
+
+		// control the player: if you get more than half a radius away from the
+		// optimal standpoint, really push you hard back there
+		Vector3 playerOffset = standPosition - rb1.position;
+		playerOffset.y = 0;
+		if (playerOffset.magnitude >= halfRadius)
 		{
-			GrippableManager.Instance.Unregister(this);
+			rb1.AddForce( playerOffset * 100);
+
+			// drive the object towards the player
+			Vector3 objectOffset = rb1.position - gripPosition;
+			objectOffset.y = 0;
+			if (objectOffset.magnitude >= radius)
+			{
+				rb2.AddForce( objectOffset * 100);
+			}
 		}
+
+		// control the carried object
+
 	}
 }
