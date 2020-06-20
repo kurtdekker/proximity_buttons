@@ -355,7 +355,7 @@ MonoBehaviour:
   m_Script: {fileID: 1980459831, guid: f70555f144d8491a825f0804e09c671c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_UiScaleMode: 0
+  m_UiScaleMode: 1
   m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
   m_ReferenceResolution: {x: 800, y: 600}
@@ -2107,7 +2107,9 @@ MonoBehaviour:
     m_LineSpacing: 1
   m_Text: 'W A S D and Arrows for two players.
 
-    Click the Lift/Drop buttons when available.'
+    Click the Lift/Drop buttons when available.
+
+    See on youtube at: https://youtu.be/MvhKUNF9rII'
 --- !u!222 &1881999453
 CanvasRenderer:
   m_ObjectHideFlags: 0
