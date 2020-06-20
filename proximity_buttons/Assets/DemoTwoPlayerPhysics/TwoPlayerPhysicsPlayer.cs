@@ -51,6 +51,7 @@ public class TwoPlayerPhysicsPlayer : MonoBehaviour
 		BaseMoveSpeed = 5.0f;
 	}
 
+	Rigidbody rb;
 	VAButton vabMove;
 
 	void CreateVABs()
@@ -76,6 +77,8 @@ public class TwoPlayerPhysicsPlayer : MonoBehaviour
 
 	void Start ()
 	{
+		rb = GetComponent<Rigidbody>();
+
 		// enforce only 0 or 1 player index
 		PlayerIndex &= 1;
 
@@ -84,6 +87,7 @@ public class TwoPlayerPhysicsPlayer : MonoBehaviour
 		OrientationChangeSensor.Create( transform, () => { CreateVABs(); });
 
 		controls.SetActionButtonActive(false);
+		controls.SetCallback( OnButtonAction);
 	}
 
 	Vector3 LastPlayerMotion = Vector3.zero;
@@ -99,7 +103,7 @@ public class TwoPlayerPhysicsPlayer : MonoBehaviour
 				0,
 				v3Move.y) * currentSpeed;
 
-			transform.position += LastPlayerMotion * Time.deltaTime;
+			rb.MovePosition( transform.position + LastPlayerMotion * Time.deltaTime);
 
 			float angle = Mathf.Rad2Deg * Mathf.Atan2( LastPlayerMotion.x, LastPlayerMotion.z);
 			transform.rotation = Quaternion.Euler( 0, angle, 0);
@@ -176,27 +180,66 @@ public class TwoPlayerPhysicsPlayer : MonoBehaviour
 		}
 	}
 
-	IGrippable GrippedObject;
+	IGrippable GrippableObject;		// what you might be able to grab
+	IGrippable GrippedObject;		// what you have grabbed onto
+
+	void OnButtonAction()
+	{
+		// this must be a "drop"
+		if (GrippedObject != null)
+		{
+			var hj = gameObject.AddComponent<HingeJoint>();
+			if (hj)
+			{
+				Destroy(hj);
+			}
+
+			GrippedObject = null;
+
+			return;
+		}
+
+		// this must be a "lift"
+		if (GrippedObject == null)
+		{
+			if (GrippableObject != null)
+			{
+				GrippedObject = GrippableObject;
+
+				var hj = gameObject.AddComponent<HingeJoint>();
+				hj.connectedBody = GrippedObject.GetRigidbody();
+			}
+
+			return;
+		}
+	}
 
 	void UpdateGripping()
 	{
-		// this is piggish but I'm just gonna do it now for demo purposes;
-		// you can implement a central recording place for grippable objects
-		// if it turns out to be a bottleneck. (I doubt it will be very slow!)
-		var AllScripts = FindObjectsOfType<MonoBehaviour>();
-
-		List<IGrippable> AllGrippables = new List<IGrippable>();
-
-		foreach( var mb in AllScripts)
+		if (GrippedObject == null)
 		{
-			var ig = mb as IGrippable;
-			if (ig != null)
+			GrippableObject = GrippableManager.Instance.GetNearestGrippable(transform);
+
+			if (GrippableObject != null)
 			{
-				AllGrippables.Add(ig);
+				controls.SetActionButtonActive(true);
+				controls.SetText( "LIFT");
 			}
+			else
+			{
+				controls.SetActionButtonActive(false);
+			}
+
+			return;
 		}
 
+		if (GrippedObject != null)
+		{
+			controls.SetActionButtonActive(true);
+			controls.SetText( "DROP");
 
+			return;
+		}
 	}
 
 	void Update()

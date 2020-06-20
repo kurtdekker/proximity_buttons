@@ -37,6 +37,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(Rigidbody))]
 public class GrippableHandle : MonoBehaviour, IGrippable
 {
 	public float radius = 1.0f;
@@ -54,6 +55,14 @@ public class GrippableHandle : MonoBehaviour, IGrippable
 	public Rigidbody GetRigidbody ()
 	{
 		return GetComponent<Rigidbody>();
+	}
+
+	public bool IsWithinReach ( Transform player)
+	{
+		Vector3 delta = player.position - transform.position;
+		delta.y = 0;
+
+		return delta.magnitude < radius;
 	}
 
 	void OnEnable()

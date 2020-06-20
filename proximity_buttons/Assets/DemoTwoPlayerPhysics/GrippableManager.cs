@@ -68,4 +68,16 @@ public class GrippableManager : MonoBehaviour
 			TheRegistry.Remove( ig);
 		}
 	}
+
+	public	IGrippable	GetNearestGrippable( Transform player)
+	{
+		foreach( var ig in TheRegistry)
+		{
+			if (ig.IsWithinReach( player))
+			{
+				return ig;
+			}
+		}
+		return null;
+	}
 }

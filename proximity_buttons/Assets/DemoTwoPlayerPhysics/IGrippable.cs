@@ -42,4 +42,5 @@ public interface IGrippable
 {
 	float GetRadius();
 	Rigidbody GetRigidbody();
+	bool IsWithinReach( Transform player);
 }
