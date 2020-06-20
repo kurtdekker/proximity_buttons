@@ -37,38 +37,35 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GrippableHandle : MonoBehaviour, IGrippable
+public class GrippableManager : MonoBehaviour
 {
-	public float radius = 1.0f;
+	static GrippableManager _instance;
 
-	void OnDrawGizmos()
+	public static GrippableManager Instance
 	{
-		Gizmos.DrawWireSphere( transform.position, radius);
-	}
-
-	public float GetRadius ()
-	{
-		return radius;
-	}
-
-	public Rigidbody GetRigidbody ()
-	{
-		return GetComponent<Rigidbody>();
-	}
-
-	void OnEnable()
-	{
-		if (Application.isPlaying)
+		get
 		{
-			GrippableManager.Instance.Register(this);
+			if (!_instance)
+			{
+				_instance = new GameObject( "GrippableManager.Instance").
+					AddComponent<GrippableManager>();
+			}
+			return _instance;
 		}
 	}
 
-	void Disable()
+	HashSet<IGrippable> TheRegistry = new HashSet<IGrippable>();
+
+	public void Register( IGrippable ig)
 	{
-		if (Application.isPlaying)
+		TheRegistry.Add( ig);
+	}
+
+	public void Unregister( IGrippable ig)
+	{
+		if (TheRegistry.Contains( ig))
 		{
-			GrippableManager.Instance.Unregister(this);
+			TheRegistry.Remove( ig);
 		}
 	}
 }

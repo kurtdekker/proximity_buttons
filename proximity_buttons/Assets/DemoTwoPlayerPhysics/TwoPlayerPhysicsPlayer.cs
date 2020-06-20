@@ -74,6 +74,9 @@ public class TwoPlayerPhysicsPlayer : MonoBehaviour
 
 	void Start ()
 	{
+		// enforce only 0 or 1 player index
+		PlayerIndex &= 1;
+
 		CreateVABs();
 
 		OrientationChangeSensor.Create( transform, () => { CreateVABs(); });
@@ -169,6 +172,29 @@ public class TwoPlayerPhysicsPlayer : MonoBehaviour
 		}
 	}
 
+	IGrippable GrippedObject;
+
+	void UpdateGripping()
+	{
+		// this is piggish but I'm just gonna do it now for demo purposes;
+		// you can implement a central recording place for grippable objects
+		// if it turns out to be a bottleneck. (I doubt it will be very slow!)
+		var AllScripts = FindObjectsOfType<MonoBehaviour>();
+
+		List<IGrippable> AllGrippables = new List<IGrippable>();
+
+		foreach( var mb in AllScripts)
+		{
+			var ig = mb as IGrippable;
+			if (ig != null)
+			{
+				AllGrippables.Add(ig);
+			}
+		}
+
+
+	}
+
 	void Update()
 	{
 		UpdateGatherTouchInput();
@@ -176,5 +202,7 @@ public class TwoPlayerPhysicsPlayer : MonoBehaviour
 		UpdateGatherKeyboardInput();
 
 		UpdateMoving();
+
+		UpdateGripping();
 	}
 }

@@ -33,42 +33,13 @@
 	SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class GrippableHandle : MonoBehaviour, IGrippable
+// See also the GrippableManager; where you implement this interface you
+// are responsible for registering yourself with GrippableManager;
+
+public interface IGrippable
 {
-	public float radius = 1.0f;
-
-	void OnDrawGizmos()
-	{
-		Gizmos.DrawWireSphere( transform.position, radius);
-	}
-
-	public float GetRadius ()
-	{
-		return radius;
-	}
-
-	public Rigidbody GetRigidbody ()
-	{
-		return GetComponent<Rigidbody>();
-	}
-
-	void OnEnable()
-	{
-		if (Application.isPlaying)
-		{
-			GrippableManager.Instance.Register(this);
-		}
-	}
-
-	void Disable()
-	{
-		if (Application.isPlaying)
-		{
-			GrippableManager.Instance.Unregister(this);
-		}
-	}
+	float GetRadius();
+	Rigidbody GetRigidbody();
 }
