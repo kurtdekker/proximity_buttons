@@ -44,6 +44,8 @@ public class TwoPlayerPhysicsPlayer : MonoBehaviour
 	[Tooltip( "Just 0 or 1 for now...")]
 	public int PlayerIndex;
 
+	public	GrippingPlayerControlSet	controls;
+
 	void Reset()
 	{
 		BaseMoveSpeed = 5.0f;
@@ -55,7 +57,7 @@ public class TwoPlayerPhysicsPlayer : MonoBehaviour
 	{
 		if (vabMove) Destroy( vabMove);
 
-		float sz = MR.MINAXIS * 0.5f;
+		float sz = MR.MINAXIS * 0.67f;
 
 		vabMove = gameObject.AddComponent<VAButton>();
 		// default left side
@@ -80,6 +82,8 @@ public class TwoPlayerPhysicsPlayer : MonoBehaviour
 		CreateVABs();
 
 		OrientationChangeSensor.Create( transform, () => { CreateVABs(); });
+
+		controls.SetActionButtonActive(false);
 	}
 
 	Vector3 LastPlayerMotion = Vector3.zero;
