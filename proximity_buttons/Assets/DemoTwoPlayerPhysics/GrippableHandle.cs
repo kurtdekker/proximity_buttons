@@ -65,6 +65,21 @@ public class GrippableHandle : MonoBehaviour, IGrippable
 		return delta.magnitude < radius;
 	}
 
+	// if we pick this handle up, nobody else should see it
+	public void SetGripped (bool gripped)
+	{
+		if (gripped)
+		{
+			GrippableManager.Instance.Unregister(this);
+			return;
+		}
+		if (!gripped)
+		{
+			GrippableManager.Instance.Register(this);
+			return;
+		}
+	}
+
 	void OnEnable()
 	{
 		if (Application.isPlaying)

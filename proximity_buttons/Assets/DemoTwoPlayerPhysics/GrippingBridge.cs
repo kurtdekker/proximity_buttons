@@ -60,7 +60,15 @@ public class GrippingBridge : MonoBehaviour
 		bridge.rb1 = player;
 		bridge.ig = ig;
 
+		bridge.ig.SetGripped(true);
+
 		return bridge;
+	}
+
+	public	void		LetGo()
+	{
+		ig.SetGripped(false);
+		Destroy(this);
 	}
 
 	public void MyUpdate ()
@@ -71,7 +79,7 @@ public class GrippingBridge : MonoBehaviour
 
 		Vector3 gripPosition = rb2.position;
 
-		Vector3 standPosition = rb2.position + transform.forward * radius;
+		Vector3 standPosition = rb2.position + rb2.transform.forward * radius;
 
 		// control the player: if you get more than half a radius away from the
 		// optimal standpoint, really push you hard back there

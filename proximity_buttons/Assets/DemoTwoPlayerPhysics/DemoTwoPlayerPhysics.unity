@@ -1246,7 +1246,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ccad7246d9ea446a8b0bf29df4f2ba94, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  radius: 2
+  radius: 1
 --- !u!54 &1385498647
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -1777,7 +1777,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ccad7246d9ea446a8b0bf29df4f2ba94, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  radius: 1.5
+  radius: 1
 --- !u!54 &1903208073
 Rigidbody:
   m_ObjectHideFlags: 0
