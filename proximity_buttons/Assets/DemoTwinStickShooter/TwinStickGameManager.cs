@@ -1,7 +1,7 @@
 ﻿/*
 	The following license supersedes all notices in the source code.
 
-	Copyright (c) 2019 Kurt Dekker/PLBM Games All rights reserved.
+	Copyright (c) 2020 Kurt Dekker/PLBM Games All rights reserved.
 
 	http://www.twitter.com/kurtdekker
 
@@ -195,6 +195,7 @@ public class TwinStickGameManager : MonoBehaviour
 							ex.SetActive( false);
 							ex.transform.position = e.transform.position;
 							ex.SetActive( true);
+							TTL.Attach( ex, 2.0f);
 
 							DSM.Score.iValue += DSM.Wave.iValue;
 
