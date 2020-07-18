@@ -1,3 +1,14 @@
+10:35 AM 7/18/2020
+
+Courtesy of Devils Garage I placed some great lowpoly
+assets in here for various little tinker-around scenes.
+
+For more information, see license file or here:
+
+	devilsworkshop.itch.io
+
+Thanks Ajay!
+
 3:53 PM 1/5/2019
 
 Updated. There is a new ProximityButtonForUI class that
