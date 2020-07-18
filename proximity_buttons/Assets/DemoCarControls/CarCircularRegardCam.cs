@@ -36,11 +36,15 @@
 using UnityEngine;
 using System.Collections;
 
-public class CarChaseCam : MonoBehaviour, IMyUpdateable
+// This variant of camera control does not try to be behind the
+// target until the target tries to go away, to allow you to do
+// fun local movement without a lot of camera shifting.
+public class CarCircularRegardCame : MonoBehaviour, IMyUpdateable
 {
 	public Transform target;
 
-	public float DistanceBehind;
+	public float MinimumRadius;
+	public float MaximumRadius;
 	public float DistanceAbove;
 
 	Vector3 lookpoint;
@@ -51,16 +55,16 @@ public class CarChaseCam : MonoBehaviour, IMyUpdateable
 
 	public void MyUpdate ()
 	{
-		// where the camera should BE
-		Vector3 newBe = target.position + target.forward * DistanceBehind + Vector3.up * DistanceAbove;	
-
-		// where the camera should look
-		Vector3 newLook = target.position;
-
-		bepoint = Vector3.Lerp( bepoint, newBe, snapBe * Time.deltaTime);
-		lookpoint = Vector3.Lerp( lookpoint, newLook, snapLook * Time.deltaTime);
-
-		transform.position = bepoint;
-		transform.LookAt (lookpoint);
+//		// where the camera should BE
+//		Vector3 newBe = target.position + target.forward * DistanceBehind + Vector3.up * DistanceAbove;	
+//
+//		// where the camera should look
+//		Vector3 newLook = target.position;
+//
+//		bepoint = Vector3.Lerp( bepoint, newBe, snapBe * Time.deltaTime);
+//		lookpoint = Vector3.Lerp( lookpoint, newLook, snapLook * Time.deltaTime);
+//
+//		transform.position = bepoint;
+//		transform.LookAt (lookpoint);
 	}
 }

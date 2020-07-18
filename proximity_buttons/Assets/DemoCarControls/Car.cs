@@ -53,11 +53,16 @@ public partial class Car : MonoBehaviour
 
 	Rigidbody rb;
 
+	IMyUpdateable CameraUpdater;
+
 	void Start()
 	{
 		rb = GetComponent<Rigidbody>();
 
 		if (isMobile) StartMobile();
+
+		var cam = Camera.main;
+		CameraUpdater = cam.GetComponent<IMyUpdateable>();
 	}
 	
 	void Update()
@@ -99,6 +104,8 @@ public partial class Car : MonoBehaviour
 		speed -= speed * 0.5f * Time.deltaTime;
 
 		rb.MovePosition( pos);
+
+		CameraUpdater.MyUpdate();
 	}
 	
 	void UpdateMeshesPositions()
