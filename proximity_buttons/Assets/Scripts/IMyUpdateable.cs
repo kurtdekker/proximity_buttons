@@ -1,5 +1,5 @@
 ﻿
 public interface IMyUpdateable
 {
-	void MyUpdate();
+	void MyUpdate( bool firstTime);
 }

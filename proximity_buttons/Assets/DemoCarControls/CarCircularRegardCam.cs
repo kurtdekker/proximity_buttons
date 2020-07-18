@@ -64,8 +64,14 @@ public class CarCircularRegardCam : MonoBehaviour, IMyUpdateable
 		DistanceAbove = 5.0f;
 	}
 
-	public void MyUpdate ()
+	public void MyUpdate ( bool firstTime)
 	{
+		if ( firstTime)
+		{
+			bepoint = target.position + target.forward * -MaximumRadius + Vector3.up * DistanceAbove;
+			transform.position = bepoint;
+		}
+
 		// presume camera does not have to move
 		Vector3 newBe = transform.position;
 		newBe.y = target.position.y + DistanceAbove;

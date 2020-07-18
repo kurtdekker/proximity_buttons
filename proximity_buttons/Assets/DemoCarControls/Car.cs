@@ -106,6 +106,7 @@ public partial class Car : MonoBehaviour
 		}
 	}
 
+	bool firstTime = true;
 	void FixedUpdate()
 	{
 		steer = Input.GetAxisRaw("Horizontal");
@@ -141,7 +142,8 @@ public partial class Car : MonoBehaviour
 
 		rb.MovePosition( pos);
 
-		CameraUpdater.MyUpdate();
+		CameraUpdater.MyUpdate( firstTime);
+		firstTime = false;
 
 		FixedUpdateJetpack();
 	}

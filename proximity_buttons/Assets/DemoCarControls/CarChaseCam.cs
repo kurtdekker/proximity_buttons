@@ -49,7 +49,7 @@ public class CarChaseCam : MonoBehaviour, IMyUpdateable
 	const float snapBe = 5.0f;
 	const float snapLook = 10.0f;
 
-	public void MyUpdate ()
+	public void MyUpdate ( bool firstTime)
 	{
 		// where the camera should BE
 		Vector3 newBe = target.position + target.forward * DistanceBehind + Vector3.up * DistanceAbove;	
