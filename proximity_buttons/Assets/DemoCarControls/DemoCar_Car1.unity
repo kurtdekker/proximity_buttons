@@ -3904,6 +3904,7 @@ Transform:
   m_Children:
   - {fileID: 379025714}
   - {fileID: 279109764}
+  - {fileID: 2049501781}
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -4067,10 +4068,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5177eca0c2de3489d9accfe303efc596, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  target: {fileID: 1071348549}
+  target: {fileID: 2049501781}
   MinimumRadius: 3
   MaximumRadius: 7
-  DistanceAbove: 5
+  DistanceAbove: 3
 --- !u!1 &1895928488
 GameObject:
   m_ObjectHideFlags: 0
@@ -7393,3 +7394,31 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   SpawnName: PlayerSpawn
   Target: {fileID: 1071348540}
+--- !u!1 &2049501780
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 2049501781}
+  m_Layer: 0
+  m_Name: CameraRegardPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2049501781
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 2049501780}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 3, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1071348549}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
