@@ -70,7 +70,9 @@ public partial class Car : MonoBehaviour
 		UpdateMeshesPositions();
 	}
 
+	// inputs
 	float steer, accelerate, brake;
+	bool jetpacking;
 
 	float speed;
 	const float acceleration = 1.0f;
@@ -110,6 +112,8 @@ public partial class Car : MonoBehaviour
 		accelerate = Input.GetAxisRaw("Vertical");
 		brake = Input.GetKey (KeyCode.Space) ? 1.0f : 0.0f;
 
+		jetpacking = Input.GetKey( KeyCode.Tab);
+
 		if (isMobile) FixedUpdateMobile();
 
 		ApplyMutuallyExclusiveDeadband();
@@ -138,6 +142,8 @@ public partial class Car : MonoBehaviour
 		rb.MovePosition( pos);
 
 		CameraUpdater.MyUpdate();
+
+		FixedUpdateJetpack();
 	}
 	
 	void UpdateMeshesPositions()

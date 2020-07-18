@@ -68,6 +68,7 @@ public class CarCircularRegardCam : MonoBehaviour, IMyUpdateable
 	{
 		// presume camera does not have to move
 		Vector3 newBe = transform.position;
+		newBe.y = target.position.y + DistanceAbove;
 
 		Vector3 flatDelta = target.position - transform.position;
 		flatDelta.y = 0;
