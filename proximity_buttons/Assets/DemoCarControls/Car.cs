@@ -53,7 +53,7 @@ public partial class Car : MonoBehaviour
 	{
 		rb = GetComponent<Rigidbody>();
 
-		if (MyPlatform.HasTouch) StartTouchControls();
+		if (MyPlatform.IsMobile) StartTouchControls();
 
 		var cam = Camera.main;
 		CameraUpdater = cam.GetComponent<IMyUpdateable>();
@@ -103,7 +103,7 @@ public partial class Car : MonoBehaviour
 
 		jetpacking = Input.GetKey( KeyCode.Tab);
 
-		if (MyPlatform.HasTouch) FixedUpdateTouchControls();
+		if (MyPlatform.IsMobile) FixedUpdateTouchControls();
 
 		ApplyMutuallyExclusiveDeadband();
 

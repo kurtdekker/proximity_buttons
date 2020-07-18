@@ -9,6 +9,4 @@ public static class MyPlatform
 		Application.platform == RuntimePlatform.Android ||
 		Application.platform == RuntimePlatform.IPhonePlayer);
 		}}
-
-	public static bool HasTouch { get { return true; }}
 }

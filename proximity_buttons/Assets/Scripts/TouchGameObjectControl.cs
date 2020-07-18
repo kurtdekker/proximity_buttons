@@ -37,7 +37,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MobileGameObjectControl : MonoBehaviour
+public class TouchGameObjectControl : MonoBehaviour
 {
 	public GameObject[] EnableOnMobile;
 
