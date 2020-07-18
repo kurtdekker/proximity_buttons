@@ -14,3 +14,12 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/DemoSpaceShooter/DemoSpaceShooter.unity
     guid: f2b5f089f09b94097ac1f7e1bd0dc54e
+  - enabled: 1
+    path: Assets/DemoCarControls/DemoCarMasterScene.unity
+    guid: bbd86ac94c7bf4be59359d0f13694a41
+  - enabled: 1
+    path: Assets/DemoCarControls/DemoCar_City1.unity
+    guid: 27578032eaa6b4d5fbc4629ad56e84e9
+  - enabled: 1
+    path: Assets/DemoCarControls/DemoCar_Car1.unity
+    guid: 83eba4950a822467c9e135eba937e62b
