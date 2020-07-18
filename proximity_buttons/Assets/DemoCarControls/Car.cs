@@ -45,12 +45,6 @@ public partial class Car : MonoBehaviour
 
 	public Transform[] tireMeshes = new Transform[4];
 	
-	bool isMobile { get { return (
-		Application.isEditor ||
-		Application.platform == RuntimePlatform.Android ||
-		Application.platform == RuntimePlatform.IPhonePlayer);
-		}}
-
 	Rigidbody rb;
 
 	IMyUpdateable CameraUpdater;
@@ -59,14 +53,14 @@ public partial class Car : MonoBehaviour
 	{
 		rb = GetComponent<Rigidbody>();
 
-		if (isMobile) StartMobile();
+		if (MyPlatform.HasTouch) StartTouchControls();
 
 		var cam = Camera.main;
 		CameraUpdater = cam.GetComponent<IMyUpdateable>();
 	}
 	
 	// inputs
-	float steer, accelerate, brake;
+	float steer, accelerate;
 	bool jetpacking;
 
 	float speed;
@@ -106,11 +100,10 @@ public partial class Car : MonoBehaviour
 	{
 		steer = Input.GetAxisRaw("Horizontal");
 		accelerate = Input.GetAxisRaw("Vertical");
-		brake = Input.GetKey (KeyCode.Space) ? 1.0f : 0.0f;
 
 		jetpacking = Input.GetKey( KeyCode.Tab);
 
-		if (isMobile) FixedUpdateMobile();
+		if (MyPlatform.HasTouch) FixedUpdateTouchControls();
 
 		ApplyMutuallyExclusiveDeadband();
 

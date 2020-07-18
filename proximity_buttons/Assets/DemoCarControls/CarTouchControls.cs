@@ -53,32 +53,26 @@ public partial class Car
 		vab.minMagnitude = 0.2f;
 	}
 
-	void StartMobile()
+	void StartTouchControls()
 	{
 		CreateVAB();
 		OrientationChangeSensor.Create( transform, CreateVAB);
 	}
 
-	void FixedUpdateMobile()
+	void FixedUpdateTouchControls()
 	{
 		Vector3 output = vab.output;
 
-		if (Input.touches.Length > 1)
+		if (Input.touches.Length == 2)
 		{
-			brake = 1.0f;
-			return;
+			jetpacking = true;
 		}
-			
+
 		if( vab.fingerDown)
 		{
 			accelerate += output.y;
 
 			steer += output.x;
-		}
-
-		if (Input.touches.Length == 2)
-		{
-			jetpacking = true;
 		}
 	}
 }
