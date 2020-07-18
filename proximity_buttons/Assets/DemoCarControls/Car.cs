@@ -109,7 +109,7 @@ public partial class Car : MonoBehaviour
 
 		speed += acceleration * accelerate * Time.deltaTime;
 
-		float finalAngle = steer * 45f;
+		float finalAngle = steer * 15f;
 
 		SteeredAngle = Mathf.MoveTowards( SteeredAngle, finalAngle, MaxRateOfSteerAngleChange * Time.deltaTime);
 
