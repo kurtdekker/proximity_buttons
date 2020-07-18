@@ -75,6 +75,35 @@ public partial class Car : MonoBehaviour
 	float speed;
 	const float acceleration = 1.0f;
 
+	// if your controls are primarily forward/ahead,
+	// make a center deadband in the steering.
+	// If you are turning more, make a deadband in
+	// the fore/aft control
+	void ApplyMutuallyExclusiveDeadband()
+	{
+		const float margin = 1.5f;
+		const float powerDeadband = 0.15f;
+		const float steeringDeadband = 0.25f;
+
+		if (Mathf.Abs( steer) > Mathf.Abs( accelerate) * margin)
+		{
+			var sign = Mathf.Sign( accelerate);
+			accelerate = Mathf.Abs( accelerate) - powerDeadband;
+			if (accelerate < 0) accelerate = 0;
+			accelerate = sign * accelerate * (1.0f - powerDeadband);	// re-expand to 0-1
+			return;
+		}
+
+		if (Mathf.Abs( accelerate) > Mathf.Abs( steer) * margin)
+		{
+			var sign = Mathf.Sign( steer);
+			steer = Mathf.Abs( steer) - steeringDeadband;
+			if (steer < 0) steer = 0;
+			steer = sign * steer * (1.0f - steeringDeadband);	// re-expand to 0-1
+			return;
+		}
+	}
+
 	void FixedUpdate()
 	{
 		steer = Input.GetAxisRaw("Horizontal");
@@ -82,6 +111,8 @@ public partial class Car : MonoBehaviour
 		brake = Input.GetKey (KeyCode.Space) ? 1.0f : 0.0f;
 
 		if (isMobile) FixedUpdateMobile();
+
+		ApplyMutuallyExclusiveDeadband();
 
 		speed += acceleration * accelerate * Time.deltaTime;
 
@@ -101,7 +132,8 @@ public partial class Car : MonoBehaviour
 		// move
 		var pos = transform.position + transform.forward * speed;
 
-		speed -= speed * 0.5f * Time.deltaTime;
+		// always be slowing you, more slowing the harder you turn
+		speed -= speed * (2.5f + 0.02f * Mathf.Abs( SteeredAngle)) * Time.deltaTime;
 
 		rb.MovePosition( pos);
 

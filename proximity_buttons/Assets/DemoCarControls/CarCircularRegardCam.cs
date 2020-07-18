@@ -39,7 +39,11 @@ using System.Collections;
 // This variant of camera control does not try to be behind the
 // target until the target tries to go away, to allow you to do
 // fun local movement without a lot of camera shifting.
-public class CarCircularRegardCame : MonoBehaviour, IMyUpdateable
+//
+// It does this by maintaining a radius from the car between
+// the min and max values, and regarding the car always.
+//
+public class CarCircularRegardCam : MonoBehaviour, IMyUpdateable
 {
 	public Transform target;
 
@@ -53,18 +57,50 @@ public class CarCircularRegardCame : MonoBehaviour, IMyUpdateable
 	const float snapBe = 5.0f;
 	const float snapLook = 10.0f;
 
+	void Reset()
+	{
+		MinimumRadius = 3.0f;
+		MaximumRadius = 7.0f;
+		DistanceAbove = 5.0f;
+	}
+
 	public void MyUpdate ()
 	{
-//		// where the camera should BE
-//		Vector3 newBe = target.position + target.forward * DistanceBehind + Vector3.up * DistanceAbove;	
-//
-//		// where the camera should look
-//		Vector3 newLook = target.position;
-//
-//		bepoint = Vector3.Lerp( bepoint, newBe, snapBe * Time.deltaTime);
-//		lookpoint = Vector3.Lerp( lookpoint, newLook, snapLook * Time.deltaTime);
-//
-//		transform.position = bepoint;
-//		transform.LookAt (lookpoint);
+		// presume camera does not have to move
+		Vector3 newBe = transform.position;
+
+		Vector3 flatDelta = target.position - transform.position;
+		flatDelta.y = 0;
+
+		float distance = flatDelta.magnitude;
+
+		float snapBeToUse = snapBe;
+
+		// cam is too far, try to be behind the car
+		if (distance > MaximumRadius)
+		{
+			float overage = distance - MaximumRadius;
+			snapBeToUse += 10 * overage;
+
+			newBe = target.position + target.forward * -MaximumRadius + Vector3.up * DistanceAbove;
+		}
+
+		// cam is too close, try to get away from the car
+		if (distance < MinimumRadius)
+		{
+			newBe = target.position - flatDelta.normalized * MinimumRadius + Vector3.up * DistanceAbove;
+		}
+
+		// where the camera should BE
+		newBe = Vector3.Lerp( transform.position, newBe, snapBeToUse * Time.deltaTime);
+
+		// where the camera should look
+		Vector3 newLook = target.position;
+
+		bepoint = Vector3.Lerp( bepoint, newBe, snapBe * Time.deltaTime);
+		lookpoint = Vector3.Lerp( lookpoint, newLook, snapLook * Time.deltaTime);
+
+		transform.position = bepoint;
+		transform.LookAt (lookpoint);
 	}
 }

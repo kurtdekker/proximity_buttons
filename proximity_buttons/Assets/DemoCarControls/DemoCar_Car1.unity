@@ -823,12 +823,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 1809901142}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4ec9c32f915df426899cde0f426b1d19, type: 3}
+  m_Script: {fileID: 11500000, guid: 5177eca0c2de3489d9accfe303efc596, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 1071348549}
-  DistanceBehind: -10
-  DistanceAbove: 6
+  MinimumRadius: 3
+  MaximumRadius: 7
+  DistanceAbove: 5
 --- !u!1 &1944537459
 GameObject:
   m_ObjectHideFlags: 0
