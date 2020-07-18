@@ -65,11 +65,6 @@ public partial class Car : MonoBehaviour
 		CameraUpdater = cam.GetComponent<IMyUpdateable>();
 	}
 	
-	void Update()
-	{
-		UpdateMeshesPositions();
-	}
-
 	// inputs
 	float steer, accelerate, brake;
 	bool jetpacking;
@@ -146,18 +141,5 @@ public partial class Car : MonoBehaviour
 		firstTime = false;
 
 		FixedUpdateJetpack();
-	}
-	
-	void UpdateMeshesPositions()
-	{
-		for(int i = 0; i < 4; i++)
-		{
-			Quaternion quat;
-//			Vector3 pos;
-//			wheelColliders[i].GetWorldPose(out pos, out quat);
-			
-//			tireMeshes[i].position = pos;
-//			tireMeshes[i].rotation = quat;
-		}
 	}
 }

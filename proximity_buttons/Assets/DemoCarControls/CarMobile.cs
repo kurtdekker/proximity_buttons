@@ -47,7 +47,7 @@ public partial class Car
 
 		vab = gameObject.AddComponent<VAButton>();
 
-		vab.r_downable = MR.SR( 0, 0, 1, 1);
+		vab.r_downable = MR.SR( 0, 0.2f, 1, 0.8f);
 		vab.doClamp = true;
 		vab.doNormalize = false;
 		vab.minMagnitude = 0.2f;

@@ -153,3 +153,4 @@ MonoBehaviour:
   ComponentScenesToLoad:
   - DemoCar_City1
   - DemoCar_Car1
+  - DemoCar_Instructions

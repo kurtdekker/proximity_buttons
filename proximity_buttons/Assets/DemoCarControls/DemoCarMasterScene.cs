@@ -39,11 +39,34 @@ using UnityEngine;
 
 public class DemoCarMasterScene : MonoBehaviour
 {
-	[Tooltip("First scene will be marked as Active.")]
+	[Header("First scene will be marked as Active.")]
 	public	string[]	ComponentScenesToLoad;
 
 	void Start ()
 	{
 		StartCoroutine(SceneUtility.LoadAdditionalScenes( ComponentScenesToLoad));
+	}
+
+	void OnUserIntent( Datasack ds)
+	{
+		switch( ds.Value)
+		{
+		case "ButtonReload" :
+			UnityEngine.SceneManagement.SceneManager.LoadScene( "DemoCarMasterScene");
+			break;
+
+		case "ButtonWebsite" :
+			Application.OpenURL( "https://www.github.com/kurtdekker/proximity_buttons");
+			break;
+		}
+	}
+
+	void OnEnable()
+	{
+		DSM.UserIntent.OnChanged += OnUserIntent;
+	}
+	void OnDisable()
+	{
+		DSM.UserIntent.OnChanged -= OnUserIntent;
 	}
 }
