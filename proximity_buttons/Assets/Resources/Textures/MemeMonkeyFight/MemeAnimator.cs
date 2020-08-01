@@ -48,8 +48,6 @@ public class MemeAnimator : MonoBehaviour
 
 			iframe = ((int)frameno) & 3;		// 0-3 only
 
-			iframe += 4 * Dir4;
-
 			table = Directions[Dir4];
 		}
 
