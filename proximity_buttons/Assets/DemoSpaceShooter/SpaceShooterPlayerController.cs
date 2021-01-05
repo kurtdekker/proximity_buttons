@@ -60,7 +60,7 @@ public class SpaceShooterPlayerController : MonoBehaviour
 	ProximityButtonSet.ProximityButton pbFire1;
 	ProximityButtonSet.ProximityButton pbFire2;
 
-	void CreateVABs()
+	void CreateControls()
 	{
 		if (vabMove) Destroy( vabMove);
 		if (pbsWeapons) Destroy(pbsWeapons);
@@ -80,9 +80,9 @@ public class SpaceShooterPlayerController : MonoBehaviour
 
 	void Start ()
 	{
-		CreateVABs();
+		CreateControls();
 
-		OrientationChangeSensor.Create( transform, () => { CreateVABs(); });
+		OrientationChangeSensor.Create( transform, () => { CreateControls(); });
 
 		if (Bullet1Prefab.activeInHierarchy)
 		{
