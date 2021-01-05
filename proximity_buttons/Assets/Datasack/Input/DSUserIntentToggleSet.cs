@@ -33,47 +33,57 @@
 	SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#if UNITY_EDITOR
-
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEditor;
+using UnityEngine.UI;
 
-// This is just a handy script to let you bulk-create
-// a large number of Datasacks, such as when you are
-// replicating a particular namespaced structure.
-//
-// To use:
-//	1. fill out the names in the array below
-//	2. update the destination path folder
-//	3. enable the [MenuItem...] decorator
-//	4. goto your Unity editor menu 'Assets' and run it
-
-public static class DatasackEditorUtils
+[RequireComponent( typeof( Toggle))]
+public class DSUserIntentToggleSet : MonoBehaviour
 {
-	// 2. update the destination path folder (or just use this one)
-	const string DestinationFolderPath = "Assets/Datasack/Resources/Datasacks/";
+	[Tooltip("Defaults to UserIntent datasack if none supplied.")]
+	public Datasack dsUI;
 
-	// 3. uncomment this [MenuItem...] decorator
-//	[MenuItem( "Assets/Create bulk datasacks")]
-	static void CreateBulkDatasacks()
+	[Tooltip("Leave blank to set Toggle GameObject name")]
+	public string ValueToSet;
+
+	public bool SignalOnTrue;
+	public bool SignalOnFalse;
+
+	private	Toggle toggle;
+
+	void Reset()
 	{
-		// 1. fill out these names (or load them from a file?)	
-		string[] names = new string[] {
-			"DatasackName1",
-			"DatasackName2",
-			"DatasackName3",
-		};
+		SignalOnTrue = true;
+	}
 
-		foreach( var nm in names)
+	void	OnToggleChanged( bool isOn)
+	{
+		var doSignal = false;
+
+		if (isOn && SignalOnTrue) doSignal = true;
+		if (!isOn && SignalOnFalse) doSignal = true;
+
+		if (doSignal)
 		{
-			var ds = ScriptableObject.CreateInstance<Datasack>();
-			ds.name = nm;
+			var ds = DSM.UserIntent;
+			if (dsUI) ds = dsUI;
 
-			AssetDatabase.CreateAsset( ds, DestinationFolderPath + nm + ".asset");
+			string signalledOutput = gameObject.name;
+			if (ValueToSet != null && ValueToSet.Length > 0) signalledOutput = ValueToSet;
+
+			ds.Value = signalledOutput;
 		}
 	}
-}
 
-#endif
+	void	OnEnable()
+	{
+		toggle = GetComponent<Toggle> ();
+
+		toggle.onValueChanged.AddListener (OnToggleChanged);
+	}
+	void	OnDisable()
+	{
+		toggle.onValueChanged.RemoveListener (OnToggleChanged);
+	}
+}
