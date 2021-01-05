@@ -1,7 +1,7 @@
 /*
 	The following license supersedes all notices in the source code.
 
-	Copyright (c) 2019 Kurt Dekker/PLBM Games All rights reserved.
+	Copyright (c) 2020 Kurt Dekker/PLBM Games All rights reserved.
 
 	http://www.twitter.com/kurtdekker
 
@@ -42,6 +42,7 @@ public class ProximityButtonSet : MonoBehaviour
 	public class ProximityButton
 	{
 		public string label;
+		public Vector2 labelSize;
 		public Vector2 position;
 		public bool fingerDown;
 		public bool fingerTouched;
@@ -49,6 +50,11 @@ public class ProximityButtonSet : MonoBehaviour
 		public bool enabled;
 
 		public Color labelColor = new Color( 0.7f, 0.7f, 0.7f, 0.7f);
+
+		public Texture2D texture;
+		public float textureAngle;
+		public Vector2 textureSize;
+		public Color textureColor = Color.white;
 
 		// Warning: if you use this property, you should also
 		// enable manual updating and call it in a consistently
@@ -61,11 +67,17 @@ public class ProximityButtonSet : MonoBehaviour
 			}
 		}
 
+		public void SetPosition( Vector2 newPosition)
+		{
+			position = newPosition;
+		}
+
 		public ProximityButton( string label, Vector2 position)
 		{
 			this.enabled = true;
-			this.label = label;
 			this.position = position;
+			this.label = label;
+			this.labelSize = new Vector2(Screen.width * 0.10f, Screen.height * 0.10f);
 		}
 	}
 
@@ -127,7 +139,7 @@ public class ProximityButtonSet : MonoBehaviour
 				if (distance < diameter)
 				{
 					if ((pbClosest == null) ||
-					    (distance < distClosest))
+						(distance < distClosest))
 					{
 						pbClosest = pb;
 						distClosest = distance;
@@ -155,10 +167,24 @@ public class ProximityButtonSet : MonoBehaviour
 		{
 			if (pb.enabled)
 			{
-				GUI.color = pb.labelColor;
-				Rect r = new Rect( 0, 0, Screen.width * 0.10f, Screen.height * 0.05f);
-				r.center = pb.position;
-				GUI.Label ( r, pb.label, OurStyles.LABELCJ(10));
+				if (pb.label != null)
+				{
+					GUI.color = pb.labelColor;
+					Rect r = new Rect(0, 0, Screen.width * 0.10f, Screen.height * 0.05f);
+					r.center = pb.position;
+					GUI.Label(r, pb.label, OurStyles.LABELCJ(10));
+				}
+				if (pb.texture != null)
+				{
+					GUI.color = pb.textureColor;
+					GUI.matrix = Matrix4x4.identity;
+					GUIUtility.RotateAroundPivot(pb.textureAngle, pb.position);
+					Rect r = new Rect();
+					r.size = pb.textureSize;
+					r.center = pb.position;
+					GUI.DrawTexture(r, pb.texture);
+					GUI.matrix = Matrix4x4.identity;
+				}
 			}
 		}
 	}
