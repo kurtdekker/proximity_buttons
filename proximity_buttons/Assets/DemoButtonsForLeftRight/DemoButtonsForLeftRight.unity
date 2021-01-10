@@ -184,7 +184,7 @@ MonoBehaviour:
     You may slide your finger or mouse from button to button like a Joystick.
 
 
-    Moveable area is quite large, as a fraction of screen height.'
+    The touchable area is quite large, 35% of the screen height is the radius.'
 --- !u!222 &29478677
 CanvasRenderer:
   m_ObjectHideFlags: 0
