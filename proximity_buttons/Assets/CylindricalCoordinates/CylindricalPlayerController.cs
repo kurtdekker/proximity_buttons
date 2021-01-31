@@ -8,7 +8,7 @@ public class CylindricalPlayerController : MonoBehaviour
 	CylindricalPosition cp;
 
 	// degrees per second
-	const float PlayerMoveSpeed = 50.0f;
+	public float PlayerMoveSpeed = 200.0f;
 
 	void Start ()
 	{
