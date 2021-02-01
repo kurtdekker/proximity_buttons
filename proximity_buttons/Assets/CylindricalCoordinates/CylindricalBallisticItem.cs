@@ -34,6 +34,33 @@ public class CylindricalBallisticItem : MonoBehaviour
 		return cbi;
 	}
 
+	// optionally supply a target it will check against
+	// how close do you have to be?
+	const float AngleToHit = 10;
+	const float DepthToHit = 10;
+	CylindricalPosition target;
+	System.Action OnTargetHit;
+	public void SetOptionalTargetToHit( CylindricalPosition _target, System.Action _OnTargetHit)
+	{
+		target = _target;
+		OnTargetHit = _OnTargetHit;
+	}
+	void UpdateCheckTarget()
+	{
+		if (target)
+		{
+			float deltaAngle = Mathf.DeltaAngle( position.Angle, target.Angle);
+			if (Mathf.Abs( deltaAngle) < AngleToHit)
+			{
+				float deltaDepth = Mathf.Abs( position.Depth - target.Depth);
+				if (deltaDepth < DepthToHit)
+				{
+					OnTargetHit();
+				}
+			}
+		}
+	}
+
 	CylindricalPosition position;
 
 	CylindricalPosition velocity;
@@ -55,6 +82,8 @@ public class CylindricalBallisticItem : MonoBehaviour
 	void Update()
 	{
 		UpdateMovement();
+
+		UpdateCheckTarget();
 
 		// project us onto the cylinder
 		CylindricalMapper.Instance.ProjectCylindricalToWorld3D( position, transform);

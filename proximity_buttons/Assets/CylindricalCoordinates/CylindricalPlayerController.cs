@@ -5,6 +5,8 @@ using UnityEngine;
 [RequireComponent( typeof( CylindricalPosition))]
 public class CylindricalPlayerController : MonoBehaviour
 {
+	public CylindricalPosition TheEnemy;
+
 	CylindricalPosition cp;
 
 	// degrees per second
@@ -55,6 +57,18 @@ public class CylindricalPlayerController : MonoBehaviour
 			var ballistic = CylindricalBallisticItem.Attach( copy, cp,
 				angleVelocity: 0,		// our shots don't curve!
 				depthVelocity: CylindricalPosition.FullDepth * 4);
+
+
+			// if you hit the enemy, give you a point and kill off the shot
+			ballistic.SetOptionalTargetToHit(
+				TheEnemy,
+				() => {
+					// don't forget to update the score table!
+					CylindricalScoreTracker.Instance.AddPoints( 1);
+					Destroy(ballistic.gameObject);
+				}
+			);
+
 		}
 
 		prevShoot = Shoot;

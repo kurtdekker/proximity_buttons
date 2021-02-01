@@ -70,6 +70,16 @@ public class CylindricalEnemyShip : MonoBehaviour
 			var ballistic = CylindricalBallisticItem.Attach( copy, cp,
 				angleVelocity: aimDirection.x,
 				depthVelocity: aimDirection.y);
+
+			// if you hit the player, take away points and kill off the shot
+			ballistic.SetOptionalTargetToHit(
+				ThePlayer,
+				() => {
+					// don't forget to update the score table!
+					CylindricalScoreTracker.Instance.AddPoints( -3);
+					Destroy(ballistic.gameObject);
+				}
+			);
 		}
 	}
 
