@@ -134,7 +134,7 @@ Transform:
   m_GameObject: {fileID: 396098095}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 5, y: 5, z: 5}
+  m_LocalScale: {x: 5, y: 5, z: 10}
   m_Children:
   - {fileID: 835299388}
   m_Father: {fileID: 0}
@@ -152,7 +152,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Radius: 5
-  Length: 5
+  Length: 10
 --- !u!1 &551444778
 GameObject:
   m_ObjectHideFlags: 0
@@ -301,7 +301,6 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 824865956}
-  - component: {fileID: 824865957}
   m_Layer: 0
   m_Name: TemplatePlayerShot
   m_TagString: Untagged
@@ -323,19 +322,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &824865957
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 824865955}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 54671d43a3e244220ab212f30af35eac, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Angle: 0
-  Depth: 0
 --- !u!1 &826725528
 GameObject:
   m_ObjectHideFlags: 0
@@ -739,7 +725,6 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 1614536948}
-  - component: {fileID: 1614536949}
   m_Layer: 0
   m_Name: TemplateEnemyShot
   m_TagString: Untagged
@@ -761,19 +746,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1614536949
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1614536947}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 54671d43a3e244220ab212f30af35eac, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Angle: 0
-  Depth: 0
 --- !u!1 &1798391782
 GameObject:
   m_ObjectHideFlags: 0
@@ -898,6 +870,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f9a4e117ffb04391aa4b640fc8df31b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ThePlayer: {fileID: 551444781}
+  TemplateEnemyShot: {fileID: 1614536947}
 --- !u!114 &1811791412
 MonoBehaviour:
   m_ObjectHideFlags: 0
