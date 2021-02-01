@@ -14,12 +14,15 @@ public class CylindricalPlayerController : MonoBehaviour
 
 	void Start ()
 	{
+		// turn it off; we'll turn on each copy we make
 		TemplatePlayerShot.SetActive( false);
 
 		cp = GetComponent<CylindricalPosition>();
 
+		// start at bottom
 		cp.Angle = 0;
-		cp.Depth = -0.9f * CylindricalPosition.FullDepth;
+		// right near nearest edge
+		cp.Depth = -0.95f * CylindricalPosition.FullDepth;
 	}
 
 	void UpdateMovement()
@@ -47,10 +50,11 @@ public class CylindricalPlayerController : MonoBehaviour
 		{
 			var copy = Instantiate<GameObject>(TemplatePlayerShot);
 			copy.SetActive( true);
+
+			// set speed going up the tube
 			var ballistic = CylindricalBallisticItem.Attach( copy, cp,
 				angleVelocity: 0,		// our shots don't curve!
 				depthVelocity: CylindricalPosition.FullDepth * 4);
-			copy.AddComponent<TTL>().ageLimit = 0.5f;
 		}
 
 		prevShoot = Shoot;

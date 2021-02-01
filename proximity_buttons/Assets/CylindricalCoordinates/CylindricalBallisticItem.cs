@@ -16,12 +16,12 @@ public class CylindricalBallisticItem : MonoBehaviour
 		var cbi = go.AddComponent<CylindricalBallisticItem>();
 
 		// this one is for position, as usual
-		cbi.cp = go.AddComponent<CylindricalPosition>();
+		cbi.position = go.AddComponent<CylindricalPosition>();
 
 		// don't copy the CylindricalPosition, that's on another
 		// GameObject! Just copy its internal values
-		cbi.cp.Angle = sourcePosition.Angle;
-		cbi.cp.Depth = sourcePosition.Depth;
+		cbi.position.Angle = sourcePosition.Angle;
+		cbi.position.Depth = sourcePosition.Depth;
 
 		// this one is for velocity
 		cbi.velocity = go.AddComponent<CylindricalPosition>();
@@ -34,15 +34,22 @@ public class CylindricalBallisticItem : MonoBehaviour
 		return cbi;
 	}
 
-	CylindricalPosition cp;
+	CylindricalPosition position;
 
 	CylindricalPosition velocity;
 
 	void UpdateMovement()
 	{
 		// move in cylindrical space
-		cp.Depth += velocity.Depth * Time.deltaTime;
-		cp.Angle += velocity.Angle * Time.deltaTime;
+		position.Depth += velocity.Depth * Time.deltaTime;
+		position.Angle += velocity.Angle * Time.deltaTime;
+
+		// kill it when it goes 10% beyond tube
+		if ((position.Depth >= 1.1f * CylindricalPosition.FullDepth) ||
+			(position.Depth <= -1.1f * CylindricalPosition.FullDepth))
+		{
+			Destroy(gameObject);
+		}
 	}
 
 	void Update()
@@ -50,6 +57,6 @@ public class CylindricalBallisticItem : MonoBehaviour
 		UpdateMovement();
 
 		// project us onto the cylinder
-		CylindricalMapper.Instance.ProjectCylindricalToWorld3D( cp, transform);
+		CylindricalMapper.Instance.ProjectCylindricalToWorld3D( position, transform);
 	}
 }

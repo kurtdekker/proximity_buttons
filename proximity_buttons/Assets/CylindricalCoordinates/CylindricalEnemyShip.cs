@@ -12,8 +12,10 @@ public class CylindricalEnemyShip : MonoBehaviour
 	float age;
 	float phase;		// drives the sine wave
 
-	// how quickly in and out it goes
-	const float PhaseRate = 3.0f;
+	// how quick around the tube he goes
+	const float EnemyAngularRotation = 20;
+	// how quickly in and out it goes on the sine wave pattern
+	const float EnemyPhaseInOutRate = 1.0f;
 
 	const float EnemyShotSpeed = 100;
 
@@ -21,6 +23,7 @@ public class CylindricalEnemyShip : MonoBehaviour
 
 	void Start ()
 	{
+		// turn it off; we'll turn on each copy we make
 		TemplateEnemyShot.SetActive( false);
 
 		cp = GetComponent<CylindricalPosition>();
@@ -33,11 +36,11 @@ public class CylindricalEnemyShip : MonoBehaviour
 	{
 		age += Time.deltaTime;
 
-		cp.Angle = age * 100;
+		cp.Angle = age * EnemyAngularRotation;
 
-		phase += Time.deltaTime * PhaseRate;
+		phase += Time.deltaTime * EnemyPhaseInOutRate;
 
-		cp.Depth = (0.5f + Mathf.Sin( phase) * 0.4f) * CylindricalPosition.FullDepth;
+		cp.Depth = (0.3f + Mathf.Sin( phase) * 0.7f) * CylindricalPosition.FullDepth;
 	}
 
 	float timeToShootYet;
@@ -55,8 +58,8 @@ public class CylindricalEnemyShip : MonoBehaviour
 			copy.SetActive( true);
 
 			// MAGIC SAUCE: the aiming is just 2D delta!
-			float deltaAngle = Mathf.DeltaAngle( ThePlayer.Angle, cp.Angle);
-			float deltaDepth = ThePlayer.Depth - cp.Angle;
+			float deltaAngle = Mathf.DeltaAngle( cp.Angle, ThePlayer.Angle);
+			float deltaDepth = ThePlayer.Depth - cp.Depth;
 
 			// make vector to normalize it
 			Vector2 aimDirection = new Vector2( deltaAngle, deltaDepth).normalized;
@@ -67,8 +70,6 @@ public class CylindricalEnemyShip : MonoBehaviour
 			var ballistic = CylindricalBallisticItem.Attach( copy, cp,
 				angleVelocity: aimDirection.x,
 				depthVelocity: aimDirection.y);
-
-			copy.AddComponent<TTL>().ageLimit = 3.0f;
 		}
 	}
 
