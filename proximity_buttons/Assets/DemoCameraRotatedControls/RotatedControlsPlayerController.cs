@@ -1,7 +1,7 @@
 ﻿/*
 	The following license supersedes all notices in the source code.
 
-	Copyright (c) 2020 Kurt Dekker/PLBM Games All rights reserved.
+	Copyright (c) 2021 Kurt Dekker/PLBM Games All rights reserved.
 
 	http://www.twitter.com/kurtdekker
 
@@ -60,6 +60,9 @@ public class RotatedControlsPlayerController : MonoBehaviour
 
 	const float CameraInfluence = 10.0f;
 	const float VerticalCameraAttenuation = 0.1f;
+
+	// how much must the controls be deflected before we turn to face?
+	const float MinimumInputForRotation = 0.1f;
 
 	void CreateVABs()
 	{
@@ -135,8 +138,8 @@ public class RotatedControlsPlayerController : MonoBehaviour
 			transform.position += motion;
 		}
 
-		// turn to face our motion
-		if (RotatedMoveInputs.magnitude >= 0.1)
+		// turn to face our motion if we're moving "enough"
+		if (RotatedMoveInputs.magnitude >= MinimumInputForRotation)
 		{
 			float controlsFacing = Mathf.Atan2(RotatedMoveInputs.x, RotatedMoveInputs.z) * Mathf.Rad2Deg;
 
