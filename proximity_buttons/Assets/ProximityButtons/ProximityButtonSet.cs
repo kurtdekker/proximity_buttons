@@ -1,7 +1,7 @@
 /*
 	The following license supersedes all notices in the source code.
 
-	Copyright (c) 2020 Kurt Dekker/PLBM Games All rights reserved.
+	Copyright (c) 2021 Kurt Dekker/PLBM Games All rights reserved.
 
 	http://www.twitter.com/kurtdekker
 
@@ -41,7 +41,11 @@ public class ProximityButtonSet : MonoBehaviour
 {
 	public class ProximityButton
 	{
+		// static text label
 		public string label;
+		// provide this in lieu of a static label
+		public System.Func<string> GetLabel;
+
 		public Vector2 labelSize;
 		public Vector2 position;
 		public bool fingerDown;
@@ -167,12 +171,19 @@ public class ProximityButtonSet : MonoBehaviour
 		{
 			if (pb.enabled)
 			{
-				if (pb.label != null)
+				string label = pb.label;
+
+				if (pb.GetLabel != null)
+				{
+					label = pb.GetLabel();
+				}
+
+				if (label != null)
 				{
 					GUI.color = pb.labelColor;
 					Rect r = new Rect(0, 0, Screen.width * 0.10f, Screen.height * 0.05f);
 					r.center = pb.position;
-					GUI.Label(r, pb.label, OurStyles.LABELCJ(10));
+					GUI.Label(r, label, OurStyles.LABELCJ(10));
 				}
 				if (pb.texture != null)
 				{
