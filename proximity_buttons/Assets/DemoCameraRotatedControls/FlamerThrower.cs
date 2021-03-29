@@ -12,10 +12,7 @@ public class FlamerThrower : MonoBehaviour
 
 		emit = Input.GetKey( KeyCode.F);
 
-		if (emit)
-		{
-			int count = (int)Mathf.Round (Random.Range( 100,150) * Time.deltaTime);
-			ps.Emit( count);
-		}
+		var em = ps.emission;
+		em.enabled = emit;
 	}
 }
