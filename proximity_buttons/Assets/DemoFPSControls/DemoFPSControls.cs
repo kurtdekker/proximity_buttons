@@ -1,7 +1,7 @@
 ﻿/*
 	The following license supersedes all notices in the source code.
 
-	Copyright (c) 2020 Kurt Dekker/PLBM Games All rights reserved.
+	Copyright (c) 2021 Kurt Dekker/PLBM Games All rights reserved.
 
 	http://www.twitter.com/kurtdekker
 
@@ -39,6 +39,30 @@ using UnityEngine;
 
 public class DemoFPSControls : MonoBehaviour
 {
+	[Header( "Warning: works only on flat for simplicity.")]
+
+	[Tooltip( "Meters / second")]
+	public float WalkSpeed = 10;
+	public float StrafeSpeed = 10;
+
+	[Tooltip( "Degrees / second")]
+	public float LookHeadingRate = 100;
+
+	[Tooltip( "Degrees / second")]
+	public float LookUpDownRate = 50;
+
+	[Tooltip( "Degrees")]
+	public float MinLookUpDown = -60.0f;
+	public float MaxLookUpDown = 70.0f;
+
+	[Tooltip( "We'll grab this camera and parent it at our eye height.")]
+	public Camera CameraToGrab;
+
+	public bool InvertXLook;
+	public bool InvertYLook;
+
+	public float EyeHeight = 1.8f;
+
 	VAButton vabMove;
 	VAButton vabFire;
 
@@ -56,7 +80,7 @@ public class DemoFPSControls : MonoBehaviour
 		vabMove.doNormalize = false;
 
 		vabFire = gameObject.AddComponent<VAButton>();
-		vabFire.r_downable = new Rect(Screen.width, Screen.height - sz, sz, sz);
+		vabFire.r_downable = new Rect(Screen.width - sz, Screen.height - sz, sz, sz);
 		vabFire.label = "look";
 		vabFire.doClamp = true;
 		vabFire.doNormalize = false;
@@ -64,13 +88,30 @@ public class DemoFPSControls : MonoBehaviour
 		// TODO: if you want left-handed, swap the rectangles above right now...
 	}
 
+	float heading;
+	float upDown;
+
 	void Start ()
 	{
 		CreateVABs();
 		OrientationChangeSensor.Create(transform, CreateVABs);
+
+		upDown = 0;
+		heading = transform.eulerAngles.y;
+
+		if (!CameraToGrab)
+		{
+			Debug.LogWarning( "Grabbing main camera; set one if you want another camera!");
+			CameraToGrab = Camera.main;
+		}
+
+		// grab the camera, bolt it up to our eye height
+		CameraToGrab.transform.SetParent( transform);
+		CameraToGrab.transform.localRotation = Quaternion.identity;
+		CameraToGrab.transform.localPosition = Vector3.up * EyeHeight;
 	}
 
-	// input
+	// accepted input
 	Vector3 MoveInput;
 	Vector3 LookInput;
 
@@ -88,14 +129,36 @@ public class DemoFPSControls : MonoBehaviour
 		{
 			LookInput = vabFire.output;
 		}
+
+		if (InvertXLook)
+		{
+			LookInput.x = -LookInput.x;
+		}
+		if (InvertYLook)
+		{
+			LookInput.y = -LookInput.y;
+		}
 	}
 
 	private void UpdateProcessLook()
 	{
+		heading += LookInput.x * LookHeadingRate * Time.deltaTime;
+
+		upDown += LookInput.y * LookUpDownRate * Time.deltaTime;
+
+		upDown = Mathf.Clamp( upDown, MinLookUpDown, MaxLookUpDown);
+
+		transform.rotation = Quaternion.Euler( 0, heading, 0);
+
+		CameraToGrab.transform.localRotation = Quaternion.Euler( -upDown, 0, 0);
 	}
 
 	private void UpdateProcessMove()
 	{
+		Vector3 move = transform.forward * MoveInput.y * WalkSpeed +
+			transform.right * MoveInput.x * StrafeSpeed;
+
+		transform.position += move * Time.deltaTime;
 	}
 
 	private void Update()
