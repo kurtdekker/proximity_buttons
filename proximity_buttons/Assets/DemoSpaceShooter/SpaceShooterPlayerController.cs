@@ -1,7 +1,7 @@
 ﻿/*
 	The following license supersedes all notices in the source code.
 
-	Copyright (c) 2020 Kurt Dekker/PLBM Games All rights reserved.
+	Copyright (c) 2021 Kurt Dekker/PLBM Games All rights reserved.
 
 	http://www.twitter.com/kurtdekker
 
@@ -75,14 +75,52 @@ public class SpaceShooterPlayerController : MonoBehaviour
 		pbsWeapons = ProximityButtonSet.Create(sz);
 		pbFire1 = pbsWeapons.AddButton("FIRE1", MR.SR(0.7f, 0.9f, 0, 0).center);
 		pbFire2 = pbsWeapons.AddButton("FIRE2", MR.SR(0.9f, 0.8f, 0, 0).center);
+	}
 
+	float playerLeftX;
+	float playerRightX;
+	float playerTopZ;
+	float playerBottomZ;
+	float bulletTopZ;
+	void CalculateScreenMetrics()
+	{
+		// should probably cache all this, but this lets us handle on-the-fly screen resolution / orientation changes
+		Plane p = new Plane( inNormal: Vector3.up, inPoint: Vector3.zero);
+
+		float edge = 0.05f;
+
+		Ray playerLeftRay = Camera.main.ViewportPointToRay( new Vector3( edge, 0));
+		Ray playerRightRay = Camera.main.ViewportPointToRay( new Vector3( 1.0f - edge, 0));
+		Ray playerTopRay = Camera.main.ViewportPointToRay( new Vector3( 0.0f, 0.50f));
+		Ray playerBottomRay = Camera.main.ViewportPointToRay( new Vector3( 0.0f, edge));
+		Ray bulletTopRay = Camera.main.ViewportPointToRay( new Vector3( 0.0f, 1.0f + edge));
+
+		float playerLeftEnter = 0;
+		float playerRightEnter = 0;
+		float playerTopEnter = 0;
+		float playerBottomEnter = 0;
+		float bulletTopEnter = 0;
+
+		p.Raycast( playerLeftRay, out playerLeftEnter);
+		p.Raycast( playerRightRay, out playerRightEnter);
+		p.Raycast( playerTopRay, out playerTopEnter);
+		p.Raycast( playerBottomRay, out playerBottomEnter);
+		p.Raycast( bulletTopRay, out bulletTopEnter);
+
+		playerLeftX = playerLeftRay.GetPoint( playerLeftEnter).x;
+		playerRightX = playerRightRay.GetPoint( playerRightEnter).x;
+		playerTopZ = playerTopRay.GetPoint( playerTopEnter).z;
+		playerBottomZ = playerBottomRay.GetPoint( playerBottomEnter).z;
+		bulletTopZ = bulletTopRay.GetPoint( bulletTopEnter).z;
 	}
 
 	void Start ()
 	{
 		CreateControls();
-
 		OrientationChangeSensor.Create( transform, () => { CreateControls(); });
+
+		CalculateScreenMetrics();
+		OrientationChangeSensor.Create( transform, () => { CalculateScreenMetrics(); });
 
 		if (Bullet1Prefab.activeInHierarchy)
 		{
@@ -107,7 +145,16 @@ public class SpaceShooterPlayerController : MonoBehaviour
 				0,
 				v3Move.y) * currentSpeed;
 
-			transform.position += LastPlayerMotion * Time.deltaTime;
+			Vector3 position = transform.position;
+
+			position += LastPlayerMotion * Time.deltaTime;
+
+			if (position.x < playerLeftX) position.x = playerLeftX;
+			if (position.x > playerRightX) position.x = playerRightX;
+			if (position.z > playerTopZ) position.z = playerTopZ;
+			if (position.z < playerBottomZ) position.z = playerBottomZ;
+
+			transform.position = position;
 		}
 
 		SpaceShooterGameManager.I.PlayerPosition = transform.position;
@@ -115,6 +162,20 @@ public class SpaceShooterPlayerController : MonoBehaviour
 
 	// fraction of player motion to add to bullets
 	const float PlayerMotionFraction = 0.5f;
+
+	void AddTopKillChecker( GameObject go)
+	{
+		var ct = ConstantTester.Create(
+			() => {
+				return go.transform.position.z > bulletTopZ;
+			},
+			() => {
+				Destroy(go);
+			}
+		);
+
+		ct.transform.SetParent( go.transform);
+	}
 
 	void UpdateShooting()
 	{
@@ -137,6 +198,7 @@ public class SpaceShooterPlayerController : MonoBehaviour
 				Bullet.transform.rotation = Quaternion.Euler( 0, angle, 0);
 				Ballistic.Attach( Bullet, velocity);
 				TTL.Attach( Bullet, 1.0f);
+				AddTopKillChecker( Bullet);
 				Bullet.SetActive( true);
 
 				SpaceShooterGameManager.I.AddBullet( Bullet);
@@ -159,6 +221,7 @@ public class SpaceShooterPlayerController : MonoBehaviour
 				Bullet.transform.rotation = Quaternion.Euler(0, angle, 0);
 				Ballistic.Attach(Bullet, velocity);
 				TTL.Attach(Bullet, 1.0f);
+				AddTopKillChecker( Bullet);
 				Bullet.SetActive(true);
 
 				SpaceShooterGameManager.I.AddBullet(Bullet);
