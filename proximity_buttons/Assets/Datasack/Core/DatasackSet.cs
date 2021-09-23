@@ -36,49 +36,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
-public class DSImageSetFilled : MonoBehaviour
+// Just a handy way of grouping a bunch of related Datasacks for consideration.
+
+[CreateAssetMenu]
+public class DatasackSet : ScriptableObject
 {
-	public	Datasack	dataSack;
+	public	Datasack[] Datasacks;
 
-	private	Image	image;
-
-	[Tooltip("What constitutes full deflection?")]
-	public float Full = 1.0f;
-	public	Datasack	dataSackFull;
-
-	void Start ()
-	{
-		OnChanged (dataSack);
-	}
-
-	void	OnChanged( Datasack ds)
-	{
-		var value = ds.fValue;
-		if (Full > 0)
-		{
-			value /= Full;
-		}
-		if (dataSackFull)
-		{
-			var x = dataSackFull.fValue;
-			if (x > 0)
-			{
-				value /= x;
-			}
-		}
-		image.fillAmount = value;
-	}
-
-	void	OnEnable()
-	{
-		image = GetComponent<Image> ();
-		dataSack.OnChanged += OnChanged;	
-		OnChanged(dataSack);
-	}
-	void	OnDisable()
-	{
-		dataSack.OnChanged -= OnChanged;	
-	}
+	[Multiline]
+	public	string		Comments;
 }
