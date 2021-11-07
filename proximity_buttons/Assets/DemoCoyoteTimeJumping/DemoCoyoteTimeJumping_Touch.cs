@@ -22,7 +22,7 @@ public partial class DemoCoyoteTimeJumping
 
 		pbs_Move = ProximityButtonSet.Create( sz);
 		pbLeft = pbs_Move.AddButton( "left", new Vector3( hsz, Screen.height - hsz));
-		pbRight = pbs_Move.AddButton( "left", new Vector3( hsz + sz, Screen.height - hsz));
+		pbRight = pbs_Move.AddButton( "right", new Vector3( hsz + sz, Screen.height - hsz));
 
 		pbs_Jump = ProximityButtonSet.Create( sz);
 		pbJump = pbs_Move.AddButton( "jump", new Vector3( Screen.width - hsz, Screen.height - hsz));

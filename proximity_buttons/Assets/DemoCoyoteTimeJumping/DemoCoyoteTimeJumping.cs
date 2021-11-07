@@ -38,7 +38,15 @@ public partial class DemoCoyoteTimeJumping : MonoBehaviour
 	public GameObject MarkerGroundedCoyote;
 	public Text TextJumpsAvailable;
 
+	[Header( "Audio Sources:")]
+	public AudioSource azz_Jump1;
+	public AudioSource azz_JumpNext;
+	public AudioSource azz_NoJump;
+	public AudioSource azz_Landed;
+
 	float PlayerHeight = 1.0f;
+	// set this larger if your ground is rough
+	float ToeFeelDistance = 0.1f;
 
 	Rigidbody2D rb2d;
 
@@ -86,6 +94,11 @@ public partial class DemoCoyoteTimeJumping : MonoBehaviour
 		if (preJumpIntent > 0)
 		{
 			preJumpIntent -= Time.deltaTime;
+
+			if (preJumpIntent <= 0)
+			{
+				azz_NoJump.Play();
+			}
 		}
 	}
 
@@ -108,35 +121,42 @@ public partial class DemoCoyoteTimeJumping : MonoBehaviour
 		UpdateAddMobileTouchButtons();
 	}
 
+	bool PrevActualGrounded;
 	bool ActualGrounded;
 
-	void OnCollisionStay2D( Collision2D collision)
-	{
-		foreach( var contact in collision.contacts)
-		{
-			var point = contact.point;
-
-			float dx = Mathf.Abs( point.x - transform.position.x);
-			float dy = Mathf.Abs( point.y - (transform.position.y - PlayerHeight / 2));
-
-			// contact pretty much has to be right below you
-			if (dx < 0.1f && dy < 0.2f)
-			{
-				ActualGrounded = true;
-			}
-		}
-	}
+	float[] RayXPositions = new float[] { -0.15f, 0.0f, 0.15f,};
 
 	void DoGroundChecks()
 	{
-		if (ActualGrounded)
+		if (rb2d.velocity.y < 0.01f)
 		{
-			if (GroundedTimer <= 0)
+			// cast a bunch, left to right, looking for ground
+			foreach( var xposition in RayXPositions)
 			{
+				RaycastHit2D hit = Physics2D.Raycast(
+					origin: transform.position + transform.right * xposition,
+					direction: Vector3.down,
+					distance: PlayerHeight / 2 + ToeFeelDistance,
+					layerMask: GroundMask);
+
+				if (hit.collider)
+				{
+					ActualGrounded = true;
+				}
+			}
+
+			if (ActualGrounded)
+			{
+				if (!PrevActualGrounded)
+				{
+					azz_Landed.Play();
+				}
+
+				GroundedTimer = OffLedgeStillJumpTime;
 				jumpCounter = 0;
 			}
 
-			GroundedTimer = OffLedgeStillJumpTime;
+			PrevActualGrounded = ActualGrounded;
 		}
 
 		MarkerGroundedActual.SetActive( ActualGrounded);
@@ -162,6 +182,15 @@ public partial class DemoCoyoteTimeJumping : MonoBehaviour
 			{
 				preJumpIntent = 0;		// consume any pending
 				GroundedTimer = 0;		// you can't be grounded; you jumped!
+
+				if (jumpCounter == 0)
+				{
+					azz_Jump1.Play();
+				}
+				else
+				{
+					azz_JumpNext.Play();
+				}
 
 				jumpCounter++;			// consume a jump
 
