@@ -73,7 +73,7 @@ public class DemoHoldForHigherJump : MonoBehaviour
 		MarkerGroundedActual = GameObject.Find("TextMarkerGroundedActual");
 		MarkerJumpHeldDown = GameObject.Find( "TextMarkerJumpButton");
 		var go = GameObject.Find( "TextMarkerLastJumpFrameCount");
-		MarkerLastJumpFrames = go.GetComponent<Text>();
+		if (go) MarkerLastJumpFrames = go.GetComponent<Text>();
 	}
 
 	Rigidbody2D rb2d;
@@ -98,12 +98,12 @@ public class DemoHoldForHigherJump : MonoBehaviour
 			jumpButtonHeldTimer += Time.deltaTime;
 		}
 
-		MarkerJumpHeldDown.SetActive( jumpButtonIsDown);
+		if (MarkerJumpHeldDown) MarkerJumpHeldDown.SetActive( jumpButtonIsDown);
 	}
 
 	void UpdateDebugIndicators()
 	{
-		MarkerGroundedActual.SetActive( isGrounded);
+		if (MarkerGroundedActual) MarkerGroundedActual.SetActive( isGrounded);
 	}
 
 	void Update()
@@ -127,7 +127,7 @@ public class DemoHoldForHigherJump : MonoBehaviour
 		{
 			jumpHeight = JumpTimeHeldHeightTable.Evaluate( jumpButtonHeldTimer);
 
-			MarkerLastJumpFrames.text = System.String.Format(
+			if (MarkerLastJumpFrames) MarkerLastJumpFrames.text = System.String.Format(
 				"Last Jump:\n{0:0.000}s\nheight: {1:0.0}m",
 				jumpButtonHeldTimer,
 				jumpHeight);
@@ -142,7 +142,7 @@ public class DemoHoldForHigherJump : MonoBehaviour
 			// look up frames held to find desired jump height
 			jumpHeight = JumpFrameCountHeightTable[jumpFrameCounter];
 
-			MarkerLastJumpFrames.text = System.String.Format(
+			if (MarkerLastJumpFrames) MarkerLastJumpFrames.text = System.String.Format(
 				"Last Jump:\n{0} Frames\nheight: {1:0.0}m",
 				jumpFrameCounter,
 				jumpHeight);
