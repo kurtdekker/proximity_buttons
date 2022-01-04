@@ -25,6 +25,19 @@ public partial class DSM
 
 	public static Datasack Score { get { return DSM.I.Get( "Score"); } }
 	public static Datasack Wave { get { return DSM.I.Get( "Wave"); } }
+
+// Datasacks from directory 'Assets/DemoJetpackKurtSpaceFlight/Datasacks/SpaceFlight'
+	public static partial class SpaceFlight
+	{
+
+		// Persistent (has .Save field checked in Datasack):
+		public static Datasack FirstPersonCamera { get { return DSM.I.Get( "SpaceFlight/FirstPersonCamera"); } }
+
+
+		// Persistent (has .Save field checked in Datasack):
+		public static Datasack InvertPitch { get { return DSM.I.Get( "SpaceFlight/InvertPitch"); } }
+
+	}
 }
 
-// Total of 7 datasacks found and processed.
+// Total of 9 datasacks found and processed.

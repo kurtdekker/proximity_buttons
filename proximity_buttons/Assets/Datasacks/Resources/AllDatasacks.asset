@@ -26,3 +26,7 @@ MonoBehaviour:
     Datasack: {fileID: 11400000, guid: df5b0d6d6a220455dbb9dadbbe692cff, type: 2}
   - Fullname: Wave
     Datasack: {fileID: 11400000, guid: 341ef8f0917ba4df7bcb848dd0e0e35a, type: 2}
+  - Fullname: SpaceFlight/FirstPersonCamera
+    Datasack: {fileID: 11400000, guid: 139465f88cbf04b0197d38d0f32e95b0, type: 2}
+  - Fullname: SpaceFlight/InvertPitch
+    Datasack: {fileID: 11400000, guid: e5001453fdb0842678536d2c8ab22440, type: 2}
