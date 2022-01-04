@@ -44,6 +44,11 @@ public class DemoJetpackKurtSpaceFlight : MonoBehaviour
 		return gravityMagnitude * rb.mass * BasicPowerMargin;
 	}
 
+	float GetNormalizedPowerSustainLevel()
+	{
+		return 1.0f / BasicPowerMargin;
+	}
+
 	// technically we should consider the inertial tensor
 	// to determine these, but I use .mass as a decent proxy.
 	float GetPitchAuthority()
@@ -81,6 +86,15 @@ public class DemoJetpackKurtSpaceFlight : MonoBehaviour
 		{
 			DSM.SpaceFlight.InvertPitch.bToggle();
 		}
+		if (Input.GetKeyDown( KeyCode.E))
+		{
+			DSM.SpaceFlight.SustainedEngine.bToggle();
+		}
+		if (Input.GetKeyDown( KeyCode.R))
+		{
+			UnityEngine.SceneManagement.SceneManager.LoadScene(
+				UnityEngine.SceneManagement.SceneManager.GetActiveScene().name);
+		}
 	}
 
 	void GatherInputs()
@@ -89,6 +103,11 @@ public class DemoJetpackKurtSpaceFlight : MonoBehaviour
 		yaw = 0;
 		roll = 0;
 		power = 0;
+
+		if (DSM.SpaceFlight.SustainedEngine.bValue)
+		{
+			power = GetNormalizedPowerSustainLevel();
+		}
 
 		// TODO: you can add/remove other input sources here:
 

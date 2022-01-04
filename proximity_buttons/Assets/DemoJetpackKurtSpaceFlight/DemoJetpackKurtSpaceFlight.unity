@@ -2046,10 +2046,14 @@ MonoBehaviour:
 
     Power: Space
 
+    Sustain Engine: E
+
 
     Camera Mode: C
 
-    Invert Pitch: I'
+    Invert Pitch: I
+
+    Reload: R'
 --- !u!222 &1648143687
 CanvasRenderer:
   m_ObjectHideFlags: 0

@@ -37,7 +37,8 @@ public partial class DSM
 		// Persistent (has .Save field checked in Datasack):
 		public static Datasack InvertPitch { get { return DSM.I.Get( "SpaceFlight/InvertPitch"); } }
 
+		public static Datasack SustainedEngine { get { return DSM.I.Get( "SpaceFlight/SustainedEngine"); } }
 	}
 }
 
-// Total of 9 datasacks found and processed.
+// Total of 10 datasacks found and processed.

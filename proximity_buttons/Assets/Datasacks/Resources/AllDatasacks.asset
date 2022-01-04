@@ -30,3 +30,5 @@ MonoBehaviour:
     Datasack: {fileID: 11400000, guid: 139465f88cbf04b0197d38d0f32e95b0, type: 2}
   - Fullname: SpaceFlight/InvertPitch
     Datasack: {fileID: 11400000, guid: e5001453fdb0842678536d2c8ab22440, type: 2}
+  - Fullname: SpaceFlight/SustainedEngine
+    Datasack: {fileID: 11400000, guid: 1f872581d70f440caa5ba81ceeea2184, type: 2}
