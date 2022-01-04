@@ -24,6 +24,9 @@ public class DemoJetpackKurtSpaceFlight : MonoBehaviour
 
 	public ParticleSystem EngineParticleSystem;
 
+	ProceduralEngineNoise engineNoise;
+	const float MasterFullVolume = 0.05f;
+
 	void Start ()
 	{
 		rb = GetComponent<Rigidbody>();
@@ -34,6 +37,10 @@ public class DemoJetpackKurtSpaceFlight : MonoBehaviour
 		Physics.gravity = Vector3.down * 2.0f;
 
 		gravityMagnitude = Physics.gravity.magnitude;
+
+		engineNoise = gameObject.AddComponent<ProceduralEngineNoise>();
+		engineNoise.PitchControl = 1.0f;
+		engineNoise.VolumeControl = MasterFullVolume;
 	}
 
 	// 1.0 is how much it takes to hover
@@ -63,7 +70,7 @@ public class DemoJetpackKurtSpaceFlight : MonoBehaviour
 
 	float GetYawAuthority()
 	{
-		return 0.25f * rb.mass;
+		return 0.10f * rb.mass;
 	}
 
 	// current inputs
@@ -86,7 +93,7 @@ public class DemoJetpackKurtSpaceFlight : MonoBehaviour
 		{
 			DSM.SpaceFlight.InvertPitch.bToggle();
 		}
-		if (Input.GetKeyDown( KeyCode.E))
+		if (Input.GetKeyDown( KeyCode.Tab))
 		{
 			DSM.SpaceFlight.SustainedEngine.bToggle();
 		}
@@ -118,11 +125,17 @@ public class DemoJetpackKurtSpaceFlight : MonoBehaviour
 		// simple filtering for yaw buttons
 		{
 			float desiredYaw = 0;
-			if (Input.GetKey( KeyCode.Alpha1))
+			if (
+				Input.GetKey( KeyCode.Alpha1) ||
+				Input.GetKey( KeyCode.Q) ||
+				false)
 			{
 				desiredYaw = -1.0f;
 			}
-			if (Input.GetKey( KeyCode.Alpha2))
+			if (
+				Input.GetKey( KeyCode.Alpha2) ||
+				Input.GetKey( KeyCode.E) ||
+				false)
 			{
 				desiredYaw = +1.0f;
 			}
@@ -160,8 +173,11 @@ public class DemoJetpackKurtSpaceFlight : MonoBehaviour
 		rb.AddTorque( rb.transform.forward * roll * GetRollAuthority());
 	}
 
-	void DriveEngineParticles()
+	void DriveEngineParticlesAndNoise()
 	{
+		engineNoise.PitchControl = 1.0f + power * 2.0f;
+		engineNoise.VolumeControl = power * MasterFullVolume;
+
 		float displayedPower = power;
 
 		// keep it from being visible in cockpit
@@ -180,6 +196,6 @@ public class DemoJetpackKurtSpaceFlight : MonoBehaviour
 
 		ApplyInputs();
 
-		DriveEngineParticles();
+		DriveEngineParticlesAndNoise();
 	}
 }

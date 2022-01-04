@@ -2164,11 +2164,11 @@ MonoBehaviour:
 
     Pitch / Roll: Arrows
 
-    Yaw: 1,2
+    Yaw: 1,2 (or W / E)
 
     Power: Space
 
-    Sustain Engine: E
+    Sustain Engine: TAB
 
 
     Camera Mode: C
