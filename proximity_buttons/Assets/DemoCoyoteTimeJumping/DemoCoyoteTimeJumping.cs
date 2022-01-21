@@ -90,6 +90,10 @@ public partial class DemoCoyoteTimeJumping : MonoBehaviour
 		if(GroundedTimer > 0)
 		{
 			GroundedTimer -= Time.deltaTime;
+			if (GroundedTimer <= 0)
+			{
+				jumpCounter++;			// consume a jump
+			}
 		}
 		if (preJumpIntent > 0)
 		{
