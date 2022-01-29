@@ -11,3 +11,6 @@ Temp
 x.x
 proximity_buttonsxc
 .vs
+.vsconfig
+packages-lock.json
+proximity_buttons/Logs/
