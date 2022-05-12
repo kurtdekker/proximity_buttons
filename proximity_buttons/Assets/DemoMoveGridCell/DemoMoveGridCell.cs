@@ -29,6 +29,10 @@ using UnityEngine;
 //
 //	- turn to face:
 //		- set the transform.forward to the direction vector when moving (not when stopped)
+//
+//	- constrain movement:
+//		- have a world controller script with a "Can I move here?" method
+//		- connect this script to use that before making each move.
 
 public class DemoMoveGridCell : MonoBehaviour
 {
@@ -44,7 +48,7 @@ public class DemoMoveGridCell : MonoBehaviour
 	[Header( "How fast do we move?")]
 	public float MovementSpeed;
 
-	[Header( "What cell are we in?")]
+	[Header( "What integer cell are we in?")]
 	[Header( "Set this to start off.")]
 	// you could use a Vector2Int here if you like
 	public Vector2 CellPosition;
@@ -104,29 +108,48 @@ public class DemoMoveGridCell : MonoBehaviour
 
 	void Update ()
 	{
+		// only consider the next move once we've arrived at the cell we're going to
 		if (DriveGridCellPositionToWorldPosition())
 		{
+			int xmove = 0;
+			int ymove = 0;
+
 			// we only need to change the cell; the above function
 			// will notice our world position is different
 			if (Input.GetKeyDown( KeyCode.W) ||
 				Input.GetKeyDown( KeyCode.UpArrow))
 			{
-				CellPosition.y++;
+				ymove = +1;
 			}
 			if (Input.GetKeyDown( KeyCode.S) ||
 				Input.GetKeyDown( KeyCode.DownArrow))
 			{
-				CellPosition.y--;
+				ymove = -1;
 			}
 			if (Input.GetKeyDown( KeyCode.A) ||
 				Input.GetKeyDown( KeyCode.LeftArrow))
 			{
-				CellPosition.x--;
+				xmove = -1;
 			}
 			if (Input.GetKeyDown( KeyCode.D) ||
 				Input.GetKeyDown( KeyCode.RightArrow))
 			{
-				CellPosition.x++;
+				xmove = +1;
+			}
+
+			// process the move, if any
+			if (xmove != 0 || ymove != 0)
+			{
+				Vector2 newCellPosition = CellPosition;
+
+				newCellPosition.x += xmove;
+				newCellPosition.y += ymove;
+
+				// TODO: here would be where we check if we can
+				// legally move to the proposed new cell location.
+				// if we cannot, then assign back the old position
+
+				CellPosition = newCellPosition;
 			}
 		}
 	}
