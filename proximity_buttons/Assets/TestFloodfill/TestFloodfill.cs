@@ -1,7 +1,7 @@
 ﻿/*
 	The following license supersedes all notices in the source code.
 
-	Copyright (c) 2018 Kurt Dekker/PLBM Games All rights reserved.
+	Copyright (c) 2022 Kurt Dekker/PLBM Games All rights reserved.
 
 	http://www.twitter.com/kurtdekker
 
@@ -39,8 +39,11 @@ using UnityEngine;
 
 public class TestFloodfill : MonoBehaviour
 {
+	[Header( "Change this:")]
 	public Texture2D sourceTexture;
 
+	[Header( "This is only for the Unlit material; the texture")]
+	[Header( "specified will be replaced with the filled one.")]
 	public Material material;
 
 	GameObject quad;
@@ -51,6 +54,8 @@ public class TestFloodfill : MonoBehaviour
 	{
 		material = new Material( material);
 
+		material.mainTexture = sourceTexture;
+
 		quad = GameObject.CreatePrimitive( PrimitiveType.Quad);
 		quad.GetComponent<Renderer>().material = material;
 
@@ -60,7 +65,7 @@ public class TestFloodfill : MonoBehaviour
 			return Input.GetKeyDown( KeyCode.Space);
 		});
 
-		ImageUtils.FloodFill( sourceTexture, workTexture, Color.red, Color.black, 10, 10);
+		ImageUtils.FloodFill( sourceTexture, workTexture, Color.red, Color.black, 1, 1);
 
 		material.mainTexture = workTexture;
 		quad.GetComponent<Renderer>().material = material;
