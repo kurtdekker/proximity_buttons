@@ -41,7 +41,11 @@ public class SimpleCameraDrag : MonoBehaviour
 
 					// we do not update the lastWorldPosition, since the camera takes care of that
 
-					Camera.main.transform.position -= delta;
+					Vector3 position = Camera.main.transform.position;
+
+					position -= delta;
+
+					Camera.main.transform.position = position;
 				}
 			}
 		}

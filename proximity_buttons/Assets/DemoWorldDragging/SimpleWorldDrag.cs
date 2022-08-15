@@ -83,7 +83,11 @@ public class SimpleWorldDrag : MonoBehaviour
 						lastWorldPosition = worldPosition;
 
 						// move yourself however you must (eg, rigidbody, or whatever)
-						transform.position += delta;
+						Vector3 position = transform.position;
+
+						position += delta;
+
+						transform.position = position;
 
 						break;
 					}
