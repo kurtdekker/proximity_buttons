@@ -1,7 +1,7 @@
 ﻿/*
 	The following license supersedes all notices in the source code.
 
-	Copyright (c) 2021 Kurt Dekker/PLBM Games All rights reserved.
+	Copyright (c) 2022 Kurt Dekker/PLBM Games All rights reserved.
 
 	http://www.twitter.com/kurtdekker
 
@@ -50,13 +50,10 @@ public class CameraFollowPureOffset : MonoBehaviour
 
 	public float Snappiness;
 
-	public Vector3 DeadZone;
-
 	void Reset()
 	{
 		Offset = new Vector3( 0, 0, -10);
 		Snappiness = 8.0f;
-		DeadZone = new Vector3( 3, 2, 0);
 	}
 
 	Vector3 positionAccumulator;
