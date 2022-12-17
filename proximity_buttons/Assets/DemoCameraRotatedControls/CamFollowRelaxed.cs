@@ -76,7 +76,8 @@ public class CamFollowRelaxed : MonoBehaviour, IPushable
 	void LateUpdate ()
 	{
 		Vector3 delta = Target.position - transform.position;
-		delta.y = 0;
+
+		delta.y = 0;			// flatten
 
 		float distance = delta.magnitude;
 

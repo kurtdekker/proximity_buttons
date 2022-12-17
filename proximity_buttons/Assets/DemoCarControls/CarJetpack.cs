@@ -45,7 +45,7 @@ public partial class Car
 	{
 		foreach( var ps in JetpackParticleSystems)
 		{
-			var em = ps.emission;
+			ParticleSystem.EmissionModule em = ps.emission;
 			em.enabled = jetpacking;
 		}
 

@@ -121,13 +121,13 @@ public class RotatedControlsPlayerController : MonoBehaviour
 
 		AddKeyboardMovementControls(ref RawMovementInputs);
 
-		var cameraHeading = TheCamera.transform.eulerAngles.y;
+		float cameraHeading = TheCamera.transform.eulerAngles.y;
 
-		var controlRotation = Quaternion.Euler(0, cameraHeading, 0);
+		Quaternion controlRotation = Quaternion.Euler(0, cameraHeading, 0);
 
-		var RotatedMoveInputs = controlRotation * RawMovementInputs;
+		Vector3 RotatedMoveInputs = controlRotation * RawMovementInputs;
 
-		var motion = RotatedMoveInputs * BaseMoveSpeed * Time.deltaTime;
+		Vector3 motion = RotatedMoveInputs * BaseMoveSpeed * Time.deltaTime;
 
 		if (cc)
 		{
@@ -180,13 +180,13 @@ public class RotatedControlsPlayerController : MonoBehaviour
 
 			AddKeyboardCameraControls(ref RawCameraInputs);
 
-			var cameraHeading = TheCamera.transform.eulerAngles.y;
+			float cameraHeading = TheCamera.transform.eulerAngles.y;
 
-			var controlRotation = Quaternion.Euler(0, cameraHeading, 0);
+			Quaternion controlRotation = Quaternion.Euler(0, cameraHeading, 0);
 
-			var RotatedMoveInputs = controlRotation * RawCameraInputs;
+			Vector3 RotatedMoveInputs = controlRotation * RawCameraInputs;
 
-			var motion = RotatedMoveInputs * CameraInfluence * Time.deltaTime;
+			Vector3 motion = RotatedMoveInputs * CameraInfluence * Time.deltaTime;
 
 			pushable.Push(motion);
 		}

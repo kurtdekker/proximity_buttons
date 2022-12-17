@@ -55,7 +55,7 @@ public partial class Car : MonoBehaviour
 
 		if (MyPlatform.IsMobile) StartTouchControls();
 
-		var cam = Camera.main;
+		Camera cam = Camera.main;
 		CameraUpdater = cam.GetComponent<IMyUpdateable>();
 	}
 	
@@ -78,7 +78,7 @@ public partial class Car : MonoBehaviour
 
 		if (Mathf.Abs( steer) > Mathf.Abs( accelerate) * margin)
 		{
-			var sign = Mathf.Sign( accelerate);
+			float sign = Mathf.Sign( accelerate);
 			accelerate = Mathf.Abs( accelerate) - powerDeadband;
 			if (accelerate < 0) accelerate = 0;
 			accelerate = sign * accelerate * (1.0f - powerDeadband);	// re-expand to 0-1
@@ -87,7 +87,7 @@ public partial class Car : MonoBehaviour
 
 		if (Mathf.Abs( accelerate) > Mathf.Abs( steer) * margin)
 		{
-			var sign = Mathf.Sign( steer);
+			float sign = Mathf.Sign( steer);
 			steer = Mathf.Abs( steer) - steeringDeadband;
 			if (steer < 0) steer = 0;
 			steer = sign * steer * (1.0f - steeringDeadband);	// re-expand to 0-1
@@ -123,7 +123,7 @@ public partial class Car : MonoBehaviour
 		rb.MoveRotation(rot);
 
 		// move
-		var pos = transform.position + transform.forward * speed;
+		Vector3 pos = transform.position + transform.forward * speed;
 
 		// always be slowing you, more slowing the harder you turn
 		speed -= speed * (2.5f + 0.02f * Mathf.Abs( SteeredAngle)) * Time.deltaTime;
