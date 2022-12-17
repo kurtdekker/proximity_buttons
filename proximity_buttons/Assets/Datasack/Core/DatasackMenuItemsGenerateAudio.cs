@@ -1,7 +1,7 @@
-﻿/*
+/*
 	The following license supersedes all notices in the source code.
 
-	Copyright (c) 2021 Kurt Dekker/PLBM Games All rights reserved.
+	Copyright (c) 2022 Kurt Dekker/PLBM Games All rights reserved.
 
 	http://www.twitter.com/kurtdekker
 
@@ -33,71 +33,67 @@
 	SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-// Purpose: uses a Datasack's floating point value to control the rotation
-// of a GameObject, either local or global. Has scale and base offsets.
-
+#if UNITY_EDITOR
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEditor;
 
-public class DSRotationSetAxis : MonoBehaviour
+public static partial class DatasackMenuItems
 {
-	public	Datasack	dataSack;
-
-	public	bool		LocalCoordinates;
-
-	public	DSAxis		Axis;
-
-	public	float		BaseValue;
-	public	float		Scale;
-
-	void Reset()
+	// To use: select all the AudioClip(s) you want first, then hit this
+	[MenuItem("Assets/GenerateAudioDatasacks")]
+	static void GenerateAudioDatasacks()
 	{
-		Axis = DSAxis.Z;
-		BaseValue = 0.0f;
-		Scale = 360.0f;
-	}
-
-	void Start ()
-	{
-		OnChanged (dataSack);
-	}
-
-	void	OnChanged( Datasack ds)
-	{
-		float angle = BaseValue + dataSack.fValue * Scale;
-
-		Quaternion q = Quaternion.identity;
-
-		switch(Axis)
+		foreach (var asset in Selection.objects)
 		{
-		case DSAxis.X :
-			q = Quaternion.Euler( angle, 0, 0);
-			break;
-		case DSAxis.Y :
-			q = Quaternion.Euler( 0, angle, 0);
-			break;
-		case DSAxis.Z :
-			q = Quaternion.Euler( 0, 0, angle);
-			break;
+			var clip = asset as AudioClip;
+
+			// open the AudioClip asset
+			if (clip)
+			{
+				// get its name
+				var nm = clip.name;
+
+				Debug.Log("Processing asset named '" + nm + "'...");
+
+				var path = AssetDatabase.GetAssetPath(clip);
+
+				Debug.Log( "path = '" + path + "'");
+
+				var directory = System.IO.Path.GetDirectoryName( path);
+
+				// make a Datasack by that name
+				var ds = ScriptableObject.CreateInstance<Datasack>();
+				ds.name = nm;
+				var nmAsset = nm + ".asset";
+				var dsPath = System.IO.Path.Combine( directory, nmAsset);
+				AssetDatabase.CreateAsset( ds, dsPath);
+
+				// make a GameObject with:
+				//	- AudioSource
+				//	- hook up the AudioClip
+				//	- add a DSAudioPlay
+				//	- connect the Datasack
+				var go = new GameObject( nm);
+				var azz = go.AddComponent<AudioSource>();
+				azz.clip = clip;
+				azz.bypassListenerEffects = true;
+				azz.playOnAwake = false;
+				var play = go.AddComponent<DSAudioPlay>();
+				play.dataSack = ds;
+
+				// TODO:
+				// dirty the scene
+				// trigger a codegen directly!
+			}
+			else
+			{
+				Debug.LogError( "Warning: asset '" + asset.name + "' was NOT an AudioClip!");
+			}
 		}
 
-		if (LocalCoordinates)
-		{
-			transform.localRotation = q;
-		}
-		else
-		{
-			transform.rotation = q;
-		}
-	}
-
-	void	OnEnable()
-	{
-		dataSack.OnChanged += OnChanged;	
-	}
-	void	OnDisable()
-	{
-		dataSack.OnChanged -= OnChanged;	
+		AssetDatabase.Refresh();
 	}
 }
+#endif

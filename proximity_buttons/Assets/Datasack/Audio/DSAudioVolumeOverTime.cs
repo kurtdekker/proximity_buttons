@@ -33,116 +33,100 @@
 	SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
-#if UNITY_EDITOR
-using UnityEditor;
-#endif
+// Purpose: for setting volumes (instantly from your perspective)
+// but having them traverse up/down gradually over time (fading)
 
-public class DSAudioPlay : MonoBehaviour
+public class DSAudioVolumeOverTime : MonoBehaviour
 {
 	public	Datasack	dataSack;
 
+	[Header("How rapidly it slews 100% span (0 == instant)")]
+	public float FadeUpRate;
+	public float FadeDownRate;
+
+	public bool DisregardInitialVolume;
+
 	private AudioSource[] azzs;
+	private float[] initialVolumes;
 
-	public enum PlayStrategy
+	// this gets moved slowly towards the datasack
+	float currentVolume;
+	// set by the datasack
+	float desiredVolume;
+
+	private void Reset()
 	{
-		RANDOM,
-		SEQUENCE,
-		ALLATONCE,
-		SHUFFLE,
-	}
-	public PlayStrategy Strategy;
-
-	private int lastPlayed;
-
-	void	OnChanged( Datasack ds)
-	{
-		// NOTE: does nothing with ds!!
-
-		if (Strategy == PlayStrategy.ALLATONCE)
-		{
-			foreach( var az in azzs)
-			{
-				az.Play();
-			}
-			return;
-		}
-
-		if (Strategy == PlayStrategy.RANDOM)
-		{
-			lastPlayed = Random.Range( 0, azzs.Length);
-		}
-
-		azzs[lastPlayed].Play();
-
-		// done after the .Play() so we get 0 played first
-		if ((Strategy == PlayStrategy.SEQUENCE) ||
-			(Strategy == PlayStrategy.SHUFFLE))
-		{
-			lastPlayed++;
-			if (lastPlayed >= azzs.Length)
-			{
-				lastPlayed = 0;
-				if (Strategy == PlayStrategy.SHUFFLE)
-				{
-					Shuffle();
-				}
-			}
-		}
+		// instantaneous
+		FadeUpRate = 0.0f;
+		// will slew full range in 1/2 a second
+		FadeDownRate = 2.0f;
 	}
 
-	void	Shuffle()
+	void Start ()
 	{
+		OnChanged (dataSack);
+
+		currentVolume = desiredVolume;
+
+		SendCurrentVolumeToAudioSources();
+	}
+
+	void	SendCurrentVolumeToAudioSources()
+	{
+		var volume = currentVolume;
 		for (int i = 0; i < azzs.Length; i++)
 		{
-			int j = Random.Range( i, azzs.Length);
-			if (i != j)
-			{
-				var t = azzs[i];
-				azzs[i] = azzs[j];
-				azzs[j] = t;
-			}
+			var az = azzs[i];
+			az.volume = DisregardInitialVolume ? volume : volume * initialVolumes[i];
 		}
+	}
+
+	private void Update()
+	{
+		bool changed = false;
+
+		if (currentVolume < desiredVolume)
+		{
+			if (FadeUpRate <= 0) currentVolume = desiredVolume;
+
+			currentVolume = Mathf.MoveTowards(currentVolume, desiredVolume, FadeUpRate * Time.deltaTime);
+			changed = true;
+		}
+		if (currentVolume > desiredVolume)
+		{
+			if (FadeDownRate <= 0) currentVolume = desiredVolume;
+
+			currentVolume = Mathf.MoveTowards(currentVolume, desiredVolume, FadeDownRate * Time.deltaTime);
+			changed = true;
+		}
+
+		if (changed)
+		{
+			SendCurrentVolumeToAudioSources();
+		}
+	}
+
+	void OnChanged(Datasack ds)
+	{
+		desiredVolume = ds.fValue;
 	}
 
 	void	OnEnable()
 	{
 		azzs = GetComponentsInChildren<AudioSource>();
-		dataSack.OnChanged += OnChanged;
 
-		if (Strategy == PlayStrategy.SHUFFLE)
+		initialVolumes = new float[azzs.Length];
+		for (int i = 0; i < azzs.Length; i++)
 		{
-			Shuffle();
+			initialVolumes[i] = azzs[i].volume;
 		}
+
+		dataSack.OnChanged += OnChanged;	
 	}
 	void	OnDisable()
 	{
 		dataSack.OnChanged -= OnChanged;	
 	}
-
-#if UNITY_EDITOR
-	[CustomEditor( typeof( DSAudioPlay)), CanEditMultipleObjects]
-	public class DSAudioPlayEditor : Editor
-	{
-		public override void OnInspectorGUI()
-		{
-			var play = (DSAudioPlay)target;
-
-			DrawDefaultInspector();
-
-			EditorGUILayout.BeginVertical();
-
-			if (GUILayout.Button( " PLAY AUDIO "))
-			{
-				play.OnChanged(null);
-			}
-
-			EditorGUILayout.EndVertical();
-		}
-	}
-#endif
 }

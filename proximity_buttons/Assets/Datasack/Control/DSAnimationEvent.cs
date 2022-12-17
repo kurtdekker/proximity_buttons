@@ -33,116 +33,20 @@
 	SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
+// Purpose: lets you control a single property name of an
+// animator with the quantity in this Datasack.
+
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
-#if UNITY_EDITOR
-using UnityEditor;
-#endif
-
-public class DSAudioPlay : MonoBehaviour
+public class DSAnimationEvent : MonoBehaviour
 {
+	[Tooltip( "Datasack that will be Poke()d")]
 	public	Datasack	dataSack;
 
-	private AudioSource[] azzs;
-
-	public enum PlayStrategy
+	public void Poke()
 	{
-		RANDOM,
-		SEQUENCE,
-		ALLATONCE,
-		SHUFFLE,
+		dataSack.Poke();
 	}
-	public PlayStrategy Strategy;
-
-	private int lastPlayed;
-
-	void	OnChanged( Datasack ds)
-	{
-		// NOTE: does nothing with ds!!
-
-		if (Strategy == PlayStrategy.ALLATONCE)
-		{
-			foreach( var az in azzs)
-			{
-				az.Play();
-			}
-			return;
-		}
-
-		if (Strategy == PlayStrategy.RANDOM)
-		{
-			lastPlayed = Random.Range( 0, azzs.Length);
-		}
-
-		azzs[lastPlayed].Play();
-
-		// done after the .Play() so we get 0 played first
-		if ((Strategy == PlayStrategy.SEQUENCE) ||
-			(Strategy == PlayStrategy.SHUFFLE))
-		{
-			lastPlayed++;
-			if (lastPlayed >= azzs.Length)
-			{
-				lastPlayed = 0;
-				if (Strategy == PlayStrategy.SHUFFLE)
-				{
-					Shuffle();
-				}
-			}
-		}
-	}
-
-	void	Shuffle()
-	{
-		for (int i = 0; i < azzs.Length; i++)
-		{
-			int j = Random.Range( i, azzs.Length);
-			if (i != j)
-			{
-				var t = azzs[i];
-				azzs[i] = azzs[j];
-				azzs[j] = t;
-			}
-		}
-	}
-
-	void	OnEnable()
-	{
-		azzs = GetComponentsInChildren<AudioSource>();
-		dataSack.OnChanged += OnChanged;
-
-		if (Strategy == PlayStrategy.SHUFFLE)
-		{
-			Shuffle();
-		}
-	}
-	void	OnDisable()
-	{
-		dataSack.OnChanged -= OnChanged;	
-	}
-
-#if UNITY_EDITOR
-	[CustomEditor( typeof( DSAudioPlay)), CanEditMultipleObjects]
-	public class DSAudioPlayEditor : Editor
-	{
-		public override void OnInspectorGUI()
-		{
-			var play = (DSAudioPlay)target;
-
-			DrawDefaultInspector();
-
-			EditorGUILayout.BeginVertical();
-
-			if (GUILayout.Button( " PLAY AUDIO "))
-			{
-				play.OnChanged(null);
-			}
-
-			EditorGUILayout.EndVertical();
-		}
-	}
-#endif
 }
