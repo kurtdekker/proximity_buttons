@@ -1,7 +1,7 @@
 ﻿/*
 	The following license supersedes all notices in the source code.
 
-	Copyright (c) 2019 Kurt Dekker/PLBM Games All rights reserved.
+	Copyright (c) 2023 Kurt Dekker/PLBM Games All rights reserved.
 
 	http://www.twitter.com/kurtdekker
 
@@ -156,11 +156,16 @@ public class TwinStickPlayerController : MonoBehaviour
 		}
 	}
 
+	// we have movement input
 	bool bMove;
+	// this is the movement input vector
 	Vector3 v3Move;
+	// we have shooting input
 	bool bShoot;
+	// this is the shooting input vector
 	Vector3 v3Shoot;
 
+	// add touch inputs
 	void UpdateGatherTouchInput()
 	{
 		bMove = vabMove.fingerDown;
@@ -170,6 +175,7 @@ public class TwinStickPlayerController : MonoBehaviour
 		v3Shoot = vabShoot.outputRaw;
 	}
 
+	// add keyboard inputs
 	void UpdateGatherKeyboardInput()
 	{
 		// move
@@ -224,6 +230,9 @@ public class TwinStickPlayerController : MonoBehaviour
 			Destroy( gameObject);
 			return;
 		}
+
+		// this demo gathers input from all sources. You would normally
+		// only gather input for the sources on your platform / target.
 
 		UpdateGatherTouchInput();
 
