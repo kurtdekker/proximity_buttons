@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0, g: 0, b: 0, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657868, g: 0.49641263, b: 0.57481706, a: 1}
 --- !u!157 &3
 LightmapSettings:
   m_ObjectHideFlags: 0
@@ -216,6 +216,7 @@ GameObject:
   - component: {fileID: 280813540}
   - component: {fileID: 280813539}
   - component: {fileID: 280813544}
+  - component: {fileID: 280813541}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -237,6 +238,22 @@ Behaviour:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 280813538}
   m_Enabled: 1
+--- !u!114 &280813541
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 280813538}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b987ae7d6640e4bf2aa9177f33c73dfa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cam: {fileID: 0}
+  WidestFOV: 60
+  TightestFOV: 30
+  ControlKeycode: 9
+  Snappiness: 5
 --- !u!20 &280813542
 Camera:
   m_ObjectHideFlags: 0
@@ -365,7 +382,10 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Click and drag to move camera
+  m_Text: 'Click and drag to move camera. Touchscreen or Mouse.
+
+
+    TAB to control zoom'
 --- !u!222 &1018043042
 CanvasRenderer:
   m_ObjectHideFlags: 0
