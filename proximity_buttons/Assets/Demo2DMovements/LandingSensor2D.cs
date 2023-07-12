@@ -27,6 +27,16 @@ public class LandingSensor2D : MonoBehaviour
 		}
 	}
 
+	void DriveIndicatorIfPresent()
+	{
+		IBaseCapturedIndicator indicator = GetComponent<IBaseCapturedIndicator>();
+
+		if (indicator != null)
+		{
+			indicator.SetCapturedStatus( captured);
+		}
+	}
+
 	void FixedUpdate()
 	{
 		bool touching = false;
@@ -47,7 +57,10 @@ public class LandingSensor2D : MonoBehaviour
 				if (captureTimer >= 1.0f)
 				{
 					captured = true;
+
 					Debug.Log( "Captured!");
+
+					DriveIndicatorIfPresent();
 				}
 			}
 		}
@@ -56,6 +69,8 @@ public class LandingSensor2D : MonoBehaviour
 			captureTimer = 0.0f;
 
 			captured = false;
+
+			DriveIndicatorIfPresent();
 		}
 	}
 }
