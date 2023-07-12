@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+// @kurtdekker - ultra simple 2D space flight controls with audio and particles
+
 public class SpaceShip2D : MonoBehaviour
 {
 	public float RateOfTurn;
@@ -43,10 +45,18 @@ public class SpaceShip2D : MonoBehaviour
 		// set to zero if you want not gravity
 		rb2d.gravityScale = 0.1f;
 
-		originalAudioVolume = EngineAudioLoop.volume;
-		originalAudioPitch = EngineAudioLoop.pitch;
+		rb2d.sleepMode = RigidbodySleepMode2D.NeverSleep;
 
-		originalParticleEmissionRate = EngineParticleSystem.emission.rateOverTimeMultiplier;
+		if (EngineAudioLoop)
+		{
+			originalAudioVolume = EngineAudioLoop.volume;
+			originalAudioPitch = EngineAudioLoop.pitch;
+		}
+
+		if (EngineParticleSystem)
+		{
+			originalParticleEmissionRate = EngineParticleSystem.emission.rateOverTimeMultiplier;
+		}
 
 		currentEngineLevel = 0;
 		desiredEngineLevel = 0;
@@ -85,6 +95,9 @@ public class SpaceShip2D : MonoBehaviour
 	{
 		if (inputSteer != 0)
 		{
+			// lets you keep tumbling until you command input
+			rb2d.angularVelocity = 0;
+
 			float angle = rb2d.rotation;
 
 			angle += inputSteer * RateOfTurn * Time.deltaTime;
@@ -126,25 +139,31 @@ public class SpaceShip2D : MonoBehaviour
 
 	void UpdateEngineAudio()
 	{
-		float pitch = 1.0f + currentEngineLevel / 2.0f;
+		if (EngineAudioLoop)
+		{
+			float pitch = 1.0f + currentEngineLevel / 2.0f;
 
-		float volume = currentEngineLevel;
+			float volume = currentEngineLevel;
 
-		// apply the authored terms from the scene
-		pitch *= originalAudioPitch;
-		volume *= originalAudioVolume;
+			// apply the authored terms from the scene
+			pitch *= originalAudioPitch;
+			volume *= originalAudioVolume;
 
-		EngineAudioLoop.pitch = pitch;
-		EngineAudioLoop.volume = volume;
+			EngineAudioLoop.pitch = pitch;
+			EngineAudioLoop.volume = volume;
+		}
 	}
 
 	void UpdateEngineParticles()
 	{
-		float rate = currentEngineLevel * originalParticleEmissionRate;
+		if (EngineParticleSystem)
+		{
+			float rate = currentEngineLevel * originalParticleEmissionRate;
 
-		var em = EngineParticleSystem.emission;
+			var em = EngineParticleSystem.emission;
 
-		em.rateOverTimeMultiplier = rate;
+			em.rateOverTimeMultiplier = rate;
+		}
 	}
 
 	void FixedUpdate ()
