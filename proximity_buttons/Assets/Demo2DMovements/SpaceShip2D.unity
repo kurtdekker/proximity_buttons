@@ -539,7 +539,11 @@ MonoBehaviour:
   m_Text: 'Ultra simple Rigidbody2D asteroids / lunar lander spaceship controls.
 
 
-    Up/Down/Left/Right
+    Left/Right rotate
+
+    Up / LeftCtrl - fire thruster
+
+    Down - level craft for landing
 
 
     Can you capture the base?

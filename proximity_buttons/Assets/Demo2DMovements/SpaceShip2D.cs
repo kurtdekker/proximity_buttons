@@ -64,16 +64,30 @@ public class SpaceShip2D : MonoBehaviour
 		UpdateEngineAudio();
 	}
 
+	// inputs
 	float inputSteer;
 	bool inputThrust;
+	bool inputCenter;
 
 	void UpdateGatherInput()
 	{
 		inputSteer = 0;
 		inputThrust = false;
+		inputCenter = false;
 
 		inputSteer += -Input.GetAxisRaw( "Horizontal");
-		if (Mathf.Abs( Input.GetAxisRaw( "Vertical")) > 0.5f)
+		float inputY = Input.GetAxisRaw( "Vertical");
+		if ( inputY > 0.25f)
+		{
+			inputThrust = true;
+		}
+		if ( inputY < -0.25f)
+		{
+			inputCenter = true;
+		}
+
+		// specific keys
+		if (Input.GetKey( KeyCode.LeftControl))
 		{
 			inputThrust = true;
 		}
@@ -89,6 +103,12 @@ public class SpaceShip2D : MonoBehaviour
 		{
 			inputSteer = Mathf.Sign( inputSteer);
 		}
+
+		// first the center intent is used to generate a steer
+		if (inputCenter)
+		{
+			inputSteer = -Mathf.Sign( rb2d.rotation);
+		}
 	}
 
 	void UpdateSteering()
@@ -100,7 +120,19 @@ public class SpaceShip2D : MonoBehaviour
 
 			float angle = rb2d.rotation;
 
+			float prevAngle = angle;
+
 			angle += inputSteer * RateOfTurn * Time.deltaTime;
+
+			// second the center intent is used to stop zero-crossings
+			if (inputCenter)
+			{
+				// crossing zero while Centering intent is on causes stop at zero
+				if (Mathf.Sign( angle) != Mathf.Sign( prevAngle))
+				{
+					angle = 0;
+				}
+			}
 
 			rb2d.MoveRotation( angle);
 		}
