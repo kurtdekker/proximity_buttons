@@ -546,9 +546,9 @@ MonoBehaviour:
     Down - level craft for landing
 
 
-    Can you capture the base?
+    Can you capture the bases?
 
-    Base will reset when you leave.'
+    Bases will reset when you leave.'
 --- !u!222 &216199432
 CanvasRenderer:
   m_ObjectHideFlags: 0

@@ -24,7 +24,7 @@ public class SpaceShip2D : MonoBehaviour
 
 	float originalParticleEmissionRate;
 
-	const float engineSnappiness = 12.0f;
+	const float engineSnappiness = 2.0f;
 	const float engineNullingTerm = 1.0f;
 	float currentEngineLevel;
 	float desiredEngineLevel;
@@ -149,24 +149,29 @@ public class SpaceShip2D : MonoBehaviour
 		if (inputThrust)
 		{
 			desiredEngineLevel = 1;
-
-			velocity += (forward * Acceleration * Time.deltaTime);
-
-			if (velocity.magnitude > MaxSpeed)
-			{
-				velocity = velocity.normalized * MaxSpeed;
-			}
 		}
-
-		velocity -= velocity * Damping * Time.deltaTime;
-
-		rb2d.velocity = velocity;
 
 		// fractional term
 		currentEngineLevel = Mathf.Lerp( currentEngineLevel, desiredEngineLevel, engineSnappiness * Time.deltaTime);
 
 		// additive term
 		currentEngineLevel = Mathf.MoveTowards( currentEngineLevel, desiredEngineLevel, engineNullingTerm * Time.deltaTime);
+
+		if (inputThrust)
+		{
+			float impulse = currentEngineLevel * Acceleration * Time.deltaTime;
+
+			velocity += forward * impulse;
+		}
+
+		if (velocity.magnitude > MaxSpeed)
+		{
+			velocity = velocity.normalized * MaxSpeed;
+		}
+
+		velocity -= velocity * Damping * Time.deltaTime;
+
+		rb2d.velocity = velocity;
 	}
 
 	void UpdateEngineAudio()
