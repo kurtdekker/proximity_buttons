@@ -689,6 +689,7 @@ MonoBehaviour:
   ToEnable: []
   ToDisable:
   - {fileID: 1033446237}
+  UseNotIsNullOrEmpty: 0
   IndexArray: []
   OperateOnChildren: 0
   selectionStrategy: 0
@@ -2071,7 +2072,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1266456723}
   - component: {fileID: 1266456722}
-  - component: {fileID: 1266456720}
   - component: {fileID: 1266456719}
   m_Layer: 0
   m_Name: Main Camera
@@ -2082,13 +2082,6 @@ GameObject:
   m_IsActive: 1
 --- !u!81 &1266456719
 AudioListener:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1266456718}
-  m_Enabled: 1
---- !u!124 &1266456720
-Behaviour:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
