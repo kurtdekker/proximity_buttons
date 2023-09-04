@@ -104,10 +104,22 @@ public class SpaceShip2D : MonoBehaviour
 			inputSteer = Mathf.Sign( inputSteer);
 		}
 
+		// kinda weird having this in GatherInputs, but the reason
+		// is because we rely on storing the authoritative angle in
+		// the Rigidbody2D, and we need to sanitize it
+		{
+			float angle = rb2d.rotation;
+			if (angle < -180) angle += 360;
+			if (angle > +180) angle -= 360;
+			rb2d.rotation = angle;
+		}
+
 		// first the center intent is used to generate a steer
 		if (inputCenter)
 		{
-			inputSteer = -Mathf.Sign( rb2d.rotation);
+			float angle = rb2d.rotation;
+
+			inputSteer = -Mathf.Sign( angle);
 		}
 	}
 
