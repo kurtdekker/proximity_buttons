@@ -1,7 +1,7 @@
 ﻿/*
 	The following license supersedes all notices in the source code.
 
-	Copyright (c) 2022 Kurt Dekker/PLBM Games All rights reserved.
+	Copyright (c) 2023 Kurt Dekker/PLBM Games All rights reserved.
 
 	http://www.twitter.com/kurtdekker
 
@@ -69,6 +69,15 @@ public class TestFloodfill : MonoBehaviour
 		collider = quad.GetComponent<Collider>();
 	}
 
+	static Color ColorVeryDark = Color.black;
+	bool TestIfVeryDark( Color c)
+	{
+		if (c.r > 0.05f) return false;
+		if (c.g > 0.05f) return false;
+		if (c.b > 0.05f) return false;
+		return true;
+	}
+
 	void Update()
 	{
 		var mts = MicroTouch.GatherMicroTouches();
@@ -99,20 +108,8 @@ public class TestFloodfill : MonoBehaviour
 
 					Debug.Log( System.String.Format( "{0},{1}", x, y));
 
-					ImageUtils.FloodFill( sourceTexture, workTexture, Color.red, Color.black, x, y);
+					ImageUtils.FloodFill( sourceTexture, workTexture, Color.red, ColorVeryDark, x, y, TestIfVeryDark);
 				}
-
-//				Vector2 worldPosition = cam.ScreenToWorldPoint( mousePosition);
-//
-//				int x = (int)worldPosition.x;
-//				int y = (int)worldPosition.y;
-//
-//				Debug.Log( System.String.Format( "{0},{1}", x, y));
-//
-//				if (x >= 0 && x < sourceTexture.width && y >= 0 && y < sourceTexture.height)
-//				{
-//					ImageUtils.FloodFill( sourceTexture, workTexture, Color.red, Color.black, x, y);
-//				}
 			}
 		}
 	}

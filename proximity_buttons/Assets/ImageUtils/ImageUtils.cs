@@ -1,7 +1,7 @@
 ﻿/*
 	The following license supersedes all notices in the source code.
 
-	Copyright (c) 2018 Kurt Dekker/PLBM Games All rights reserved.
+	Copyright (c) 2023 Kurt Dekker/PLBM Games All rights reserved.
 
 	http://www.twitter.com/kurtdekker
 
@@ -44,7 +44,16 @@ public static class ImageUtils
 	// areas in it), you may need to increase this number.
 	const int FILL_STACKMAX = 10240;
 
-	public static void FloodFill( Texture2D readTexture, Texture2D writeTexture, Color fill_color, Color stopColor, int x, int y)
+	// instead of a hard stop color (which must be absolutely precise numerically),
+	// you may supply a TestStopColor delegate.
+	//
+	// WARNING: in that case you must still supply a stopColor that WOULD test for true in your delegate
+	//
+	public static void FloodFill(
+		Texture2D readTexture, Texture2D writeTexture,
+		Color fill_color, Color stopColor,
+		int x, int y,
+		System.Func<Color,bool> TestStopColor = null)
 	{
 		Color[] readColors = readTexture.GetPixels();
 		int width = readTexture.width;
@@ -88,18 +97,29 @@ public static class ImageUtils
 			writeColors[ XYADDR( xxx, yyy)] = fill_color;
 		};
 
+		if (TestStopColor == null)
+		{
+			TestStopColor = (c1) => { return c1 == stopColor; };
+		}
+
 		Color fill_prevcolor = readColors[ XYADDR( x, y)];
+
+		if (TestStopColor( fill_prevcolor))
+		{
+			return;
+		}
+
 		if (fill_color != fill_prevcolor)
 		{
 			while(true)
 			{
 				Color pixelBelow = GETPIXEL( x, y + 1);
-				if (pixelBelow != stopColor && pixelBelow != fill_color)
+				if ((TestStopColor( pixelBelow) == false) && (pixelBelow != fill_color))
 				{
 					PUSH( x, y + 1);
 				}
 				Color pixelAbove = GETPIXEL( x, y - 1);
-				if (pixelAbove != stopColor && pixelAbove != fill_color)
+				if ((TestStopColor( pixelAbove) == false) && (pixelAbove != fill_color))
 				{
 					PUSH( x, y - 1);
 				}
@@ -116,20 +136,20 @@ public static class ImageUtils
 
 					do
 					{
-						if (GETPIXEL( x1, y) != stopColor)
+						if (TestStopColor( GETPIXEL( x1, y)) == false)
 						{
 							SETPIXEL( x1, y);
 						}
-						if (colorAbove == stopColor)
+						if (TestStopColor(colorAbove))
 						{
-							if (GETPIXEL( x1, yAbove) != stopColor)
+							if (TestStopColor( GETPIXEL( x1, yAbove)) == false)
 							{
 								PUSH( x1, yAbove);
 							}
 						}
-						if (colorBelow == stopColor)
+						if (TestStopColor( colorBelow))
 						{
-							if (GETPIXEL( x1, yBelow) != stopColor)
+							if (TestStopColor( GETPIXEL( x1, yBelow)) == false)
 							{
 								PUSH( x1, yBelow);
 							}
@@ -138,7 +158,7 @@ public static class ImageUtils
 						colorBelow = GETPIXEL( x1, yBelow);
 						x1 += direction;
 					}
-					while( GETPIXEL( x1, y) != stopColor);
+					while( TestStopColor( GETPIXEL( x1, y)) == false);
 				}
 
 				if (fill_stackptr > 0)
