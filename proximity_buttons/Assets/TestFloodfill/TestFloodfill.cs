@@ -50,7 +50,9 @@ public class TestFloodfill : MonoBehaviour
 
 	Texture2D workTexture;
 
-	IEnumerator Start ()
+	Collider collider;
+
+	void Start ()
 	{
 		material = new Material( material);
 
@@ -61,13 +63,57 @@ public class TestFloodfill : MonoBehaviour
 
 		workTexture = Instantiate<Texture2D>( sourceTexture);
 
-		yield return new WaitUntil( () => {
-			return Input.GetKeyDown( KeyCode.Space);
-		});
-
-		ImageUtils.FloodFill( sourceTexture, workTexture, Color.red, Color.black, 1, 1);
-
 		material.mainTexture = workTexture;
 		quad.GetComponent<Renderer>().material = material;
+
+		collider = quad.GetComponent<Collider>();
+	}
+
+	void Update()
+	{
+		var mts = MicroTouch.GatherMicroTouches();
+
+		if (mts.Length == 1)
+		{
+			var mt = mts[0];
+
+			if (mt.phase == TouchPhase.Began)
+			{
+				Vector3 mousePosition = mt.position;
+
+				// assumes ortho!!
+				Camera cam = Camera.main;
+
+				Ray ray = cam.ScreenPointToRay( mousePosition);
+
+				RaycastHit hit;
+				if (collider.Raycast( ray, out hit, 1000))
+				{
+					var coord = hit.textureCoord;
+
+					int width = workTexture.width;
+					int height = workTexture.height;
+
+					int x = (int)(coord.x * width);
+					int y = (int)(coord.y * height);
+
+					Debug.Log( System.String.Format( "{0},{1}", x, y));
+
+					ImageUtils.FloodFill( sourceTexture, workTexture, Color.red, Color.black, x, y);
+				}
+
+//				Vector2 worldPosition = cam.ScreenToWorldPoint( mousePosition);
+//
+//				int x = (int)worldPosition.x;
+//				int y = (int)worldPosition.y;
+//
+//				Debug.Log( System.String.Format( "{0},{1}", x, y));
+//
+//				if (x >= 0 && x < sourceTexture.width && y >= 0 && y < sourceTexture.height)
+//				{
+//					ImageUtils.FloodFill( sourceTexture, workTexture, Color.red, Color.black, x, y);
+//				}
+			}
+		}
 	}
 }
