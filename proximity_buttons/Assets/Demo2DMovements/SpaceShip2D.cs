@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 
 // @kurtdekker - ultra simple 2D space flight controls with audio and particles
+//
+// Either see it fully setup in the ProximityButtons project, or else make a
+// sprite or a 3D cube / capsule (doesn't matter) and drop this on and press PLAY.
 
 public class SpaceShip2D : MonoBehaviour
 {
@@ -41,6 +44,16 @@ public class SpaceShip2D : MonoBehaviour
 
 	void Start()
 	{
+		// this code is purely to let you freely drop this on 3D objects with
+		// 3D Colliders, which must be removed to be used in Physics2D.
+		{
+			Collider[] colliders = GetComponentsInChildren<Collider>();
+			foreach( Collider collider in colliders)
+			{
+				DestroyImmediate(collider);		// must be immediate because we immediately add an RB2D below
+			}
+		}
+
 		rb2d = gameObject.AddComponent<Rigidbody2D>();
 		// set to zero if you want not gravity
 		rb2d.gravityScale = 0.1f;
