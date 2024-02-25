@@ -23,6 +23,12 @@ public class Demo3DSpacecraftPlayer : MonoBehaviour
 		pitch *= 20;
 		roll *= 20;
 
+		// make mouse-left roll to the left
+		roll *= -1;
+
+		// do you prefer pitch inverted? uncomment this!
+		// pitch *= -1;
+
 		transform.Rotate( Vector3.forward * roll);
 		transform.Rotate( Vector3.right * pitch);
 
