@@ -9,7 +9,7 @@
 //	- Enjoy
 // Barf bag located in the seat pocket in front of you.
 
-public class Demo3DSpacecraftPlayer : MonoBehaviour
+public class Demo3DMouseMoverPlayer : MonoBehaviour
 {
 	// increase if you feel the need
 	float speed = 5;
