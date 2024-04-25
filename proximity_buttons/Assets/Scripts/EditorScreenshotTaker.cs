@@ -66,7 +66,11 @@ public class EditorScreenshotTaker : MonoBehaviour
 				"{0}Screenshot-{1}-{2}.png",
 					prefix, appName, System.DateTime.Now.ToFileTime());
 			Debug.Log ( filename);
+#if UNITY_2018_1_OR_NEWER
+			ScreenCapture.CaptureScreenshot(filename);
+#else
 			Application.CaptureScreenshot( filename);
+#endif
 		}
 	}
 }
