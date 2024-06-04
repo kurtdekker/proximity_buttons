@@ -55,6 +55,8 @@ public partial class LineBulletShip : MonoBehaviour
 			}
 		}
 
+		float AudioVolume = 0.0f;
+
 		if (shotInProgress)
 		{
 			if ( gunHeat <= 0)
@@ -64,6 +66,13 @@ public partial class LineBulletShip : MonoBehaviour
 			}
 
 			shotInProgress.SetMuzzle( ShipMuzzle.position);
+
+			AudioVolume = 1.0f;
+		}
+
+		if (GunFiringAudioLoop)
+		{
+			GunFiringAudioLoop.volume = AudioVolume;
 		}
 	}
 }

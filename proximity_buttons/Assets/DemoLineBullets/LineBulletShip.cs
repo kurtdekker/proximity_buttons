@@ -11,12 +11,21 @@ public partial class LineBulletShip : MonoBehaviour
 	public Transform PlayerShip;
 	public Transform ShipMuzzle;
 
+	[Header( "Optional audio loop while gun fires.")]
+	public AudioSource GunFiringAudioLoop;
+	float initialAudio;
+
 	void Start ()
 	{
 		// if in scene, turn it off; (makes it work for prefabs or scene objects)
 		if (BulletPrefab.gameObject.activeInHierarchy)
 		{
 			BulletPrefab.gameObject.SetActive(false);
+		}
+
+		if (GunFiringAudioLoop)
+		{
+			initialAudio = GunFiringAudioLoop.volume;
 		}
 	}
 	
