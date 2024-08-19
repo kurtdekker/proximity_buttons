@@ -9,6 +9,7 @@ using UnityEngine;
 
 public class SpaceShip2D : MonoBehaviour
 {
+	[Header( "Spaceship handling characteristics:")]
 	public float RateOfTurn;
 
 	public float MaxSpeed;
