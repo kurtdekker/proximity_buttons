@@ -24,6 +24,7 @@ public partial class Spaceship3D : MonoBehaviour
 		if (rb == null) rb = gameObject.AddComponent<Rigidbody>();
 		rb.drag = 0;
 		rb.angularDrag = 0;
+		rb.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
 	}
 
 	void CreateLevel()
