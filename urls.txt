@@ -1,7 +1,5 @@
 proximity_buttons is presently hosted at these locations:
 
-https://bitbucket.org/kurtdekker/proximity_buttons
-
 https://github.com/kurtdekker/proximity_buttons
 
 https://gitlab.com/kurtdekker/proximity_buttons
@@ -12,8 +10,6 @@ https://sourceforge.net/projects/proximity-buttons/
 A frozen copy of Datasacks is present in this repo.
 
 The live Datasacks is presently hosted at these locations:
-
-https://bitbucket.org/kurtdekker/datasacks
 
 https://github.com/kurtdekker/datasacks
 
