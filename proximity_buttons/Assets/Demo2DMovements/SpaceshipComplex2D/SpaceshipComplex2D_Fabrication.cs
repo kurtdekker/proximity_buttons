@@ -28,6 +28,8 @@ public partial class SpaceshipComplex2D
 			Rigidbody2D currBody = currChunk.gameObject.AddComponent<Rigidbody2D>();
 
 			currBody.collisionDetectionMode = CollisionDetectionMode2D.Continuous;
+			currBody.drag = 0.0f;
+			currBody.angularDrag = 0.0f;
 
 			// connect them with fixed joints
 			if (i > 0)
