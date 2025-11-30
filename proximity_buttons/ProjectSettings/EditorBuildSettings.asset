@@ -17,3 +17,4 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/DemoCarControls/DemoCar_Instructions.unity
     guid: 4b570ea1fcbd5484c93fd7bb81941630
+  m_configObjects: {}

@@ -14,3 +14,4 @@ proximity_buttonsxc
 .vsconfig
 packages-lock.json
 proximity_buttons/Logs/
+proximity_buttons/obj/
