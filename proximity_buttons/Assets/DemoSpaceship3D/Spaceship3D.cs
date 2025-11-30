@@ -33,8 +33,11 @@ using UnityEngine;
 
 public partial class Spaceship3D : MonoBehaviour
 {
-	[Header( "Provide or we find/make!")]
+	[Header("Provide or we find/make!")]
 	public PhysicMaterial physicMaterial;
+
+	[Header("Provide or no shooting!")]
+	public GameObject BulletPrefab;
 
 	[Header("Adjust to suit...")]
 	public KeyCode keyRollLeft = KeyCode.LeftArrow;
@@ -47,7 +50,11 @@ public partial class Spaceship3D : MonoBehaviour
 	public KeyCode keyPower = KeyCode.Space;
 	public KeyCode keyBrake = KeyCode.Tab;
 
+	public KeyCode keyFire1 = KeyCode.LeftControl;
+
 	public bool invertPitch;
+
+	public const int PlayerLayer = 9;
 
 	Camera cam;
 	Rigidbody rb;
@@ -63,6 +70,14 @@ public partial class Spaceship3D : MonoBehaviour
 		SetupControlLawFilters();
 	}
 
+	private void Update()
+	{
+		if (Input.GetKeyDown(keyFire1))
+		{
+			fireRequested = true;
+		}
+	}
+
 	void FixedUpdate()
 	{
 		GatherTimeFilteredInputs();
@@ -70,6 +85,7 @@ public partial class Spaceship3D : MonoBehaviour
 		ProcessOrientation();
 		ProcessPower();
 		ProcessBrake();
+		ProcessShooting();
 	}
 
 	private void LateUpdate()

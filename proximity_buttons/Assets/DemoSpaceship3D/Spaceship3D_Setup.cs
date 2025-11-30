@@ -25,6 +25,8 @@ public partial class Spaceship3D : MonoBehaviour
 		rb.drag = 0;
 		rb.angularDrag = 0;
 		rb.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
+
+		gameObject.layer = PlayerLayer;
 	}
 
 	void CreateLevel()
@@ -56,6 +58,8 @@ public partial class Spaceship3D : MonoBehaviour
 				cube.AddComponent<Rigidbody>();
 				Collider collider = cube.GetComponent<Collider>();
 				collider.sharedMaterial = physicMaterial;
+
+				AsteroidHealth.Attach(cube);
 			}
 		}
 	}
