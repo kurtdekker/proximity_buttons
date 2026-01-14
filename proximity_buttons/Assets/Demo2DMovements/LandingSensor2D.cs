@@ -4,13 +4,15 @@ using UnityEngine;
 
 // @kurtdekker - cheesy landing sensor - put this on the base
 
-public class LandingSensor2D : MonoBehaviour
+public class LandingSensor2D : MonoBehaviour, IResettableLandingSite
 {
 	bool captured;
 
-	float  touchingTimer;
+	float touchingTimer;
 
 	float captureTimer;
+
+	const float TouchTimerStart = 0.1f;
 
 	void OnCollisionStay2D( Collision2D collision)
 	{
@@ -22,7 +24,7 @@ public class LandingSensor2D : MonoBehaviour
 		{
 			if (col.attachedRigidbody.velocity.magnitude < 0.1f)
 			{
-				touchingTimer = 0.1f;
+				touchingTimer = TouchTimerStart;
 			}
 		}
 	}
@@ -35,6 +37,11 @@ public class LandingSensor2D : MonoBehaviour
 		{
 			indicator.SetCapturedStatus( captured);
 		}
+	}
+
+	private void Start()
+	{
+		LandingSensorResetter.Register(this);
 	}
 
 	void FixedUpdate()
@@ -66,11 +73,38 @@ public class LandingSensor2D : MonoBehaviour
 		}
 		else
 		{
-			captureTimer = 0.0f;
-
-			captured = false;
-
-			DriveIndicatorIfPresent();
+			// we don't uncapture ourselves: see LandingSensorResetter.cs
+			//captureTimer = 0.0f;
+			//captured = false;
+			//DriveIndicatorIfPresent();
 		}
+	}
+
+	int IResettableLandingSite.GetIdentifier()
+	{
+		return GetInstanceID();
+	}
+
+	bool IResettableLandingSite.IsPlayerTouching()
+	{
+		if (touchingTimer > 0)
+		{
+			return true;
+		}
+		return false;
+	}
+
+	bool IResettableLandingSite.IsCaptured()
+	{
+		return captured;
+	}
+
+	void IResettableLandingSite.ResetMe()
+	{
+		captureTimer = 0.0f;
+
+		captured = false;
+
+		DriveIndicatorIfPresent();
 	}
 }

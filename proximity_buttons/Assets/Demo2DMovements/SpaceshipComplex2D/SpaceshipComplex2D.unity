@@ -895,7 +895,7 @@ MonoBehaviour:
 
     Can you capture the bases?
 
-    Bases will reset when you leave.
+    Bases will reset after capturing ALL.
 
 
     <color=#ff0000>Be gentle... the ship is fragile!</color>
@@ -1595,6 +1595,7 @@ GameObject:
   m_Component:
   - component: {fileID: 407070017}
   - component: {fileID: 407070018}
+  - component: {fileID: 407070019}
   m_Layer: 0
   m_Name: 0scripts
   m_TagString: Untagged
@@ -1644,6 +1645,18 @@ MonoBehaviour:
   RightEngineIndex: 8
   FlamePrefab: {fileID: 1232517417}
   Assets: {fileID: 19453559}
+--- !u!114 &407070019
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 407070016}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 68519875d0d4d47b59b3ea6ddcb719fd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &460050281
 GameObject:
   m_ObjectHideFlags: 0
