@@ -1,7 +1,7 @@
 ﻿/*
 	The following license supersedes all notices in the source code.
 
-	Copyright (c) 2021 Kurt Dekker/PLBM Games All rights reserved.
+	Copyright (c) 2024 Kurt Dekker/PLBM Games All rights reserved.
 
 	http://www.twitter.com/kurtdekker
 
@@ -33,54 +33,76 @@
 	SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
+// Purpose: injects the .colorValue from a Datasack into a colorable.
+
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class DSTextDisplayStringFormatted : MonoBehaviour
+// Based on the datasack (integer .iValue) matching
+// the sibling index (or a constant), tells the
+// colorable abstraction to be one of two colors.
+//
+// The intention is to show you are selected.
+
+public class DSColorByIndexMatch : MonoBehaviour
 {
 	public	Datasack	dataSack;
 
-	[Header("Provide using standard C# formatting syntax.")]
-	public	Datasack	formattingDatasack;
+	[Header("What do we have to match?")]
+	public	int			IndexToMatch;
 
-	private DSTextAbstraction _textAbstraction;
-	private DSTextAbstraction textAbstraction
+	[Header("Overrides the above index.")]
+	public	bool		UseSiblingIndex;
+
+	[Header( "Colors for non-match and match:")]
+	public	Color		NonMatchingColor;
+	public	Color		MatchingColor;
+
+	private	DSColorableAbstraction _colorable;
+	private	DSColorableAbstraction colorable
 	{
 		get
 		{
-			if (!_textAbstraction) _textAbstraction = DSTextAbstraction.Attach(this);
-			return _textAbstraction;
+			if (!_colorable) _colorable = DSColorableAbstraction.Attach( this);
+			return _colorable;
 		}
 	}
 
-	void	OnChangedData( Datasack ds)
+	void Start ()
 	{
-		if (!System.String.IsNullOrEmpty(formattingDatasack.Value))
+		OnChanged (dataSack);
+	}
+
+	void	OnChanged( Datasack ds)
+	{
+		int dsIndex = ds.iValue;
+
+		int ourIndex = IndexToMatch;
+
+		if (UseSiblingIndex)
 		{
-			textAbstraction.SetText( System.String.Format (
-				System.Globalization.CultureInfo.InvariantCulture,
-				formattingDatasack.Value, ds.Value));
-			return;
+			ourIndex = transform.GetSiblingIndex();
 		}
-		textAbstraction.SetText( ds.Value);
-	}
 
-	void OnChangedFormatting( Datasack fmt)
-	{
-		OnChangedData( dataSack);
+		Color c = NonMatchingColor;
+
+		if (ourIndex == dsIndex)
+		{
+			c = MatchingColor;
+		}
+
+		colorable.SetColor( c);
 	}
 
 	void	OnEnable()
 	{
-		dataSack.OnChanged += OnChangedData;
-		formattingDatasack.OnChanged += OnChangedFormatting;
-		OnChangedData( dataSack);
+		dataSack.OnChanged += OnChanged;	
+		OnChanged(dataSack);
 	}
 	void	OnDisable()
 	{
-		dataSack.OnChanged -= OnChangedData;	
-		formattingDatasack.OnChanged -= OnChangedFormatting;
+		dataSack.OnChanged -= OnChanged;	
 	}
 }

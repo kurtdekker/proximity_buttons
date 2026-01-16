@@ -1,7 +1,7 @@
 ﻿/*
 	The following license supersedes all notices in the source code.
 
-	Copyright (c) 2018 Kurt Dekker/PLBM Games All rights reserved.
+	Copyright (c) 2024 Kurt Dekker/PLBM Games All rights reserved.
 
 	http://www.twitter.com/kurtdekker
 
@@ -59,13 +59,19 @@ public class DSUserIntentKeyboard : MonoBehaviour
 	[Tooltip( "Leave blank to send the Keycode.ToString()")]
 	public	string		Output;
 
-	[Tooltip("Check box to Invoke button onClick")]
+	[Tooltip("Check box to Invoke Button onClick")]
 	public bool InvokeButtonOnClick;
+
+	[Tooltip("Check box to Invoke Toggle onValueChanged (with inverse)")]
+	public bool InvokeToggleOnClick;
 
 	[Header("... or ...")]
 
 	[Tooltip( "Check box to send GameObject.name")]
 	public	bool		SendGameObjectName;
+
+	[Tooltip("Bypass interactable check on Button / Toggle.")]
+	public bool BypassInteractableCheck;
 
 	void	Reset()
 	{
@@ -83,6 +89,11 @@ public class DSUserIntentKeyboard : MonoBehaviour
 		if (GetComponent<Button>())
 		{
 			InvokeButtonOnClick = true;
+		}
+
+		if (GetComponent<Toggle>())
+		{
+			InvokeToggleOnClick = true;
 		}
 	}
 
@@ -119,7 +130,22 @@ public class DSUserIntentKeyboard : MonoBehaviour
 			if (InvokeButtonOnClick)
 			{
 				var button = GetComponent<Button>();
-				button.onClick.Invoke();
+				if (button.interactable || BypassInteractableCheck)
+				{
+					button.onClick.Invoke();
+				}
+				return;
+			}
+
+			if (InvokeToggleOnClick)
+			{
+				var toggle = GetComponent<Toggle>();
+				bool isOn = toggle.isOn;
+				isOn = !isOn;
+				if (toggle.interactable || BypassInteractableCheck)
+				{
+					toggle.onValueChanged.Invoke(isOn);
+				}
 				return;
 			}
 

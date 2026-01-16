@@ -1,7 +1,7 @@
 ﻿/*
 	The following license supersedes all notices in the source code.
 
-	Copyright (c) 2021 Kurt Dekker/PLBM Games All rights reserved.
+	Copyright (c) 2025 Kurt Dekker/PLBM Games All rights reserved.
 
 	http://www.twitter.com/kurtdekker
 
@@ -33,54 +33,33 @@
 	SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
-public class DSTextDisplayStringFormatted : MonoBehaviour
+// This needs to have an Image or other Graphic-derived thing alongside it...
+public class DSUserIntentPointerDown :
+	MonoBehaviour,
+	UnityEngine.EventSystems.IPointerDownHandler
 {
-	public	Datasack	dataSack;
+	[Tooltip("Defaults to UserIntent datasack if none supplied.")]
+	public Datasack dsUI;
 
-	[Header("Provide using standard C# formatting syntax.")]
-	public	Datasack	formattingDatasack;
+	[Tooltip("Leave blank to set Button GameObject name")]
+	public string ValueToSet;
 
-	private DSTextAbstraction _textAbstraction;
-	private DSTextAbstraction textAbstraction
+	void OnPointerDown()
 	{
-		get
-		{
-			if (!_textAbstraction) _textAbstraction = DSTextAbstraction.Attach(this);
-			return _textAbstraction;
-		}
+		var ds = DSM.UserIntent;
+		if (dsUI) ds = dsUI;
+
+		string signalledOutput = gameObject.name;
+		if (ValueToSet != null && ValueToSet.Length > 0) signalledOutput = ValueToSet;
+
+		ds.Value = signalledOutput;
 	}
 
-	void	OnChangedData( Datasack ds)
+	public void OnPointerDown(PointerEventData eventData)
 	{
-		if (!System.String.IsNullOrEmpty(formattingDatasack.Value))
-		{
-			textAbstraction.SetText( System.String.Format (
-				System.Globalization.CultureInfo.InvariantCulture,
-				formattingDatasack.Value, ds.Value));
-			return;
-		}
-		textAbstraction.SetText( ds.Value);
-	}
-
-	void OnChangedFormatting( Datasack fmt)
-	{
-		OnChangedData( dataSack);
-	}
-
-	void	OnEnable()
-	{
-		dataSack.OnChanged += OnChangedData;
-		formattingDatasack.OnChanged += OnChangedFormatting;
-		OnChangedData( dataSack);
-	}
-	void	OnDisable()
-	{
-		dataSack.OnChanged -= OnChangedData;	
-		formattingDatasack.OnChanged -= OnChangedFormatting;
+		OnPointerDown();
 	}
 }

@@ -1,7 +1,7 @@
 ﻿/*
 	The following license supersedes all notices in the source code.
 
-	Copyright (c) 2020 Kurt Dekker/PLBM Games All rights reserved.
+	Copyright (c) 2023 Kurt Dekker/PLBM Games All rights reserved.
 
 	http://www.twitter.com/kurtdekker
 
@@ -36,6 +36,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+
+// This is for the Datasacks system to know all Datasacks.
+// It should not be created / used by users.
+//
+// See Datasack(s)Collection (plural) for runtime collections
 
 public class DatasackCollection : ScriptableObject
 {

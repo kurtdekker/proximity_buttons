@@ -1,7 +1,7 @@
 ﻿/*
 	The following license supersedes all notices in the source code.
 
-	Copyright (c) 2021 Kurt Dekker/PLBM Games All rights reserved.
+	Copyright (c) 2024 Kurt Dekker/PLBM Games All rights reserved.
 
 	http://www.twitter.com/kurtdekker
 
@@ -33,54 +33,42 @@
 	SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
+// Purpose: control a CanvasGroup, currently only its .alpha field.
+
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class DSTextDisplayStringFormatted : MonoBehaviour
+public class DSCanvasGroupControl : MonoBehaviour
 {
-	public	Datasack	dataSack;
+	public	Datasack	alphaDataSack;
 
-	[Header("Provide using standard C# formatting syntax.")]
-	public	Datasack	formattingDatasack;
+	// Future expansion: support for other Datasacks to control the
+	// other properties on a CanvasGroup using a different Datasack.
 
-	private DSTextAbstraction _textAbstraction;
-	private DSTextAbstraction textAbstraction
+	CanvasGroup group;
+
+	void Start ()
 	{
-		get
-		{
-			if (!_textAbstraction) _textAbstraction = DSTextAbstraction.Attach(this);
-			return _textAbstraction;
-		}
+		group = GetComponent<CanvasGroup> ();
+		OnChangedAlpha(alphaDataSack);
 	}
 
-	void	OnChangedData( Datasack ds)
+	void	OnChangedAlpha( Datasack ds)
 	{
-		if (!System.String.IsNullOrEmpty(formattingDatasack.Value))
+		if (group)
 		{
-			textAbstraction.SetText( System.String.Format (
-				System.Globalization.CultureInfo.InvariantCulture,
-				formattingDatasack.Value, ds.Value));
-			return;
+			group.alpha = ds.fValue;
 		}
-		textAbstraction.SetText( ds.Value);
-	}
-
-	void OnChangedFormatting( Datasack fmt)
-	{
-		OnChangedData( dataSack);
 	}
 
 	void	OnEnable()
 	{
-		dataSack.OnChanged += OnChangedData;
-		formattingDatasack.OnChanged += OnChangedFormatting;
-		OnChangedData( dataSack);
+		alphaDataSack.OnChanged += OnChangedAlpha;	
 	}
 	void	OnDisable()
 	{
-		dataSack.OnChanged -= OnChangedData;	
-		formattingDatasack.OnChanged -= OnChangedFormatting;
+		alphaDataSack.OnChanged -= OnChangedAlpha;	
 	}
 }

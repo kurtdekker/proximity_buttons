@@ -1,7 +1,7 @@
 ﻿/*
 	The following license supersedes all notices in the source code.
 
-	Copyright (c) 2021 Kurt Dekker/PLBM Games All rights reserved.
+	Copyright (c) 2023 Kurt Dekker/PLBM Games All rights reserved.
 
 	http://www.twitter.com/kurtdekker
 
@@ -33,54 +33,12 @@
 	SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
-public class DSTextDisplayStringFormatted : MonoBehaviour
+// This is for the user to make lists of Datasacks
+
+[CreateAssetMenu]
+public class DatasacksCollection : ScriptableObject
 {
-	public	Datasack	dataSack;
-
-	[Header("Provide using standard C# formatting syntax.")]
-	public	Datasack	formattingDatasack;
-
-	private DSTextAbstraction _textAbstraction;
-	private DSTextAbstraction textAbstraction
-	{
-		get
-		{
-			if (!_textAbstraction) _textAbstraction = DSTextAbstraction.Attach(this);
-			return _textAbstraction;
-		}
-	}
-
-	void	OnChangedData( Datasack ds)
-	{
-		if (!System.String.IsNullOrEmpty(formattingDatasack.Value))
-		{
-			textAbstraction.SetText( System.String.Format (
-				System.Globalization.CultureInfo.InvariantCulture,
-				formattingDatasack.Value, ds.Value));
-			return;
-		}
-		textAbstraction.SetText( ds.Value);
-	}
-
-	void OnChangedFormatting( Datasack fmt)
-	{
-		OnChangedData( dataSack);
-	}
-
-	void	OnEnable()
-	{
-		dataSack.OnChanged += OnChangedData;
-		formattingDatasack.OnChanged += OnChangedFormatting;
-		OnChangedData( dataSack);
-	}
-	void	OnDisable()
-	{
-		dataSack.OnChanged -= OnChangedData;	
-		formattingDatasack.OnChanged -= OnChangedFormatting;
-	}
+	public Datasack[] Datasacks;
 }

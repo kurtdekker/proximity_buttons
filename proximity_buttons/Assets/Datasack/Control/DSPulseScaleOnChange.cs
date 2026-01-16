@@ -1,7 +1,7 @@
 ﻿/*
 	The following license supersedes all notices in the source code.
 
-	Copyright (c) 2021 Kurt Dekker/PLBM Games All rights reserved.
+	Copyright (c) 2023 Kurt Dekker/PLBM Games All rights reserved.
 
 	http://www.twitter.com/kurtdekker
 
@@ -36,51 +36,70 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
-public class DSTextDisplayStringFormatted : MonoBehaviour
+// @kurtdekker - pulses the scale of underlying transform whenever the Datasack
+// is poked. Useful for making score readouts "pop/pulse" when they change.
+
+public class DSPulseScaleOnChange : MonoBehaviour
 {
-	public	Datasack	dataSack;
+	[Header( "Datasack to watch for change.")]
+	public Datasack dataSack;
 
-	[Header("Provide using standard C# formatting syntax.")]
-	public	Datasack	formattingDatasack;
+	[Header( "Curve of scale pulse +1")]
+	public AnimationCurve PulseCurve;
 
-	private DSTextAbstraction _textAbstraction;
-	private DSTextAbstraction textAbstraction
+	// zero means not operational
+	float timer;
+
+	private void Reset()
 	{
-		get
+		PulseCurve = new AnimationCurve();
+		PulseCurve.keys = new Keyframe[]
 		{
-			if (!_textAbstraction) _textAbstraction = DSTextAbstraction.Attach(this);
-			return _textAbstraction;
+			new Keyframe( 0.00f, 1.0f),
+			new Keyframe( 0.10f, 1.8f),
+			new Keyframe( 0.35f, 1.0f),
+		};
+	}
+
+	void Update ()
+	{
+		if (timer > 0)
+		{
+			var keys = PulseCurve.keys;
+
+			var last = keys[keys.Length - 1];
+
+			Vector3 scale = Vector3.one;
+
+			timer += Time.deltaTime;
+
+			if (timer <= last.time)
+			{
+				float sample = PulseCurve.Evaluate(timer);
+				scale *= sample;
+			}
+			else
+			{
+				timer = 0;
+			}
+
+			transform.localScale = scale;
 		}
 	}
 
-	void	OnChangedData( Datasack ds)
+	void OnValueChanged (Datasack ds)
 	{
-		if (!System.String.IsNullOrEmpty(formattingDatasack.Value))
-		{
-			textAbstraction.SetText( System.String.Format (
-				System.Globalization.CultureInfo.InvariantCulture,
-				formattingDatasack.Value, ds.Value));
-			return;
-		}
-		textAbstraction.SetText( ds.Value);
+		timer = Time.deltaTime;
 	}
 
-	void OnChangedFormatting( Datasack fmt)
+	void OnEnable()
 	{
-		OnChangedData( dataSack);
+		dataSack.OnChanged += OnValueChanged;
 	}
 
-	void	OnEnable()
+	void OnDisable()
 	{
-		dataSack.OnChanged += OnChangedData;
-		formattingDatasack.OnChanged += OnChangedFormatting;
-		OnChangedData( dataSack);
-	}
-	void	OnDisable()
-	{
-		dataSack.OnChanged -= OnChangedData;	
-		formattingDatasack.OnChanged -= OnChangedFormatting;
+		dataSack.OnChanged -= OnValueChanged;
 	}
 }

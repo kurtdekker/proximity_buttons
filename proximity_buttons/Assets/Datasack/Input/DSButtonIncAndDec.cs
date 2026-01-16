@@ -1,7 +1,7 @@
 ﻿/*
 	The following license supersedes all notices in the source code.
 
-	Copyright (c) 2021 Kurt Dekker/PLBM Games All rights reserved.
+	Copyright (c) 2024 Kurt Dekker/PLBM Games All rights reserved.
 
 	http://www.twitter.com/kurtdekker
 
@@ -38,49 +38,57 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class DSTextDisplayStringFormatted : MonoBehaviour
+// This is a bit more complicated control of a single
+// datasack using two up/down increment/decrement buttons.
+//
+// Here is what you need to stand it up:
+//
+//	- make the Datasack you want to control (change integer up / down)
+//
+//	- make a UI region thingy: box, whatever
+//	- put this script on that top level UI thingy
+//	- drag the Datasack reference into this script
+//
+//	- make two child Buttons
+//	- drag the Button references into this script's fields
+//	- set the Minimum / Maximum values up properly
+//
+//	- make a child Text within it to show the value
+//	- put a DSTextDisplayInt to display the Datasack
+//	- put formatting in that DSTextDisplayInt
+//
+
+public class DSButtonIncAndDec : MonoBehaviour
 {
-	public	Datasack	dataSack;
+	[Header( "You must drag these in.")]
+	public Button ButtonMinus;
+	public Button ButtonPlus;
 
-	[Header("Provide using standard C# formatting syntax.")]
-	public	Datasack	formattingDatasack;
+	public Datasack dataSack;
 
-	private DSTextAbstraction _textAbstraction;
-	private DSTextAbstraction textAbstraction
+	public int Minimum = 1;
+	public int Maximum = 5;
+
+	void Start ()
 	{
-		get
-		{
-			if (!_textAbstraction) _textAbstraction = DSTextAbstraction.Attach(this);
-			return _textAbstraction;
-		}
+		ButtonMinus.onClick.AddListener( delegate {
+			Change(-1);
+		});
+		ButtonPlus.onClick.AddListener( delegate {
+			Change(+1);
+		});
+
+		Change(0);
 	}
 
-	void	OnChangedData( Datasack ds)
+	void Change( int direction)
 	{
-		if (!System.String.IsNullOrEmpty(formattingDatasack.Value))
-		{
-			textAbstraction.SetText( System.String.Format (
-				System.Globalization.CultureInfo.InvariantCulture,
-				formattingDatasack.Value, ds.Value));
-			return;
-		}
-		textAbstraction.SetText( ds.Value);
-	}
+		int i = dataSack.iValue;
 
-	void OnChangedFormatting( Datasack fmt)
-	{
-		OnChangedData( dataSack);
-	}
+		i += direction;
 
-	void	OnEnable()
-	{
-		dataSack.OnChanged += OnChangedData;
-		formattingDatasack.OnChanged += OnChangedFormatting;
-		OnChangedData( dataSack);
-	}
-	void	OnDisable()
-	{
-		dataSack.OnChanged -= OnChangedData;	
-		formattingDatasack.OnChanged -= OnChangedFormatting;
+		i = Mathf.Clamp( i, Minimum, Maximum);
+
+		dataSack.iValue = i;
 	}
 }

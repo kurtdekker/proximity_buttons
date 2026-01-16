@@ -1,7 +1,7 @@
 ﻿/*
 	The following license supersedes all notices in the source code.
 
-	Copyright (c) 2021 Kurt Dekker/PLBM Games All rights reserved.
+	Copyright (c) 2024 Kurt Dekker/PLBM Games All rights reserved.
 
 	http://www.twitter.com/kurtdekker
 
@@ -36,51 +36,44 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
-public class DSTextDisplayStringFormatted : MonoBehaviour
+public class DSBlinkForTime : MonoBehaviour
 {
-	public	Datasack	dataSack;
+	[Header( "Put .fValue into this timer to reload it.")]
+	public Datasack refillTimerDatasack;
 
-	[Header("Provide using standard C# formatting syntax.")]
-	public	Datasack	formattingDatasack;
+	[Header("What we are controlling.")]
+	public GameObject Controlled;
+	bool wasOriginallyActive;
 
-	private DSTextAbstraction _textAbstraction;
-	private DSTextAbstraction textAbstraction
+	public float blinkIntervalPeriod = 0.3f;
+	public float blinkDutyCycle = 0.5f;
+
+	float dutyTimer;
+
+	private void Start()
 	{
-		get
+		wasOriginallyActive = Controlled.activeSelf;	
+	}
+
+	void Update()
+    {
+		float f = refillTimerDatasack.fValue;
+
+		bool active = wasOriginallyActive;
+
+		if (f >= 0)
 		{
-			if (!_textAbstraction) _textAbstraction = DSTextAbstraction.Attach(this);
-			return _textAbstraction;
+			f -= Time.deltaTime;
+
+			dutyTimer += Time.deltaTime;
+			dutyTimer %= blinkIntervalPeriod;
+
+			active = (dutyTimer / blinkIntervalPeriod) < blinkDutyCycle;
+
+			refillTimerDatasack.fValue = f;
 		}
-	}
 
-	void	OnChangedData( Datasack ds)
-	{
-		if (!System.String.IsNullOrEmpty(formattingDatasack.Value))
-		{
-			textAbstraction.SetText( System.String.Format (
-				System.Globalization.CultureInfo.InvariantCulture,
-				formattingDatasack.Value, ds.Value));
-			return;
-		}
-		textAbstraction.SetText( ds.Value);
-	}
-
-	void OnChangedFormatting( Datasack fmt)
-	{
-		OnChangedData( dataSack);
-	}
-
-	void	OnEnable()
-	{
-		dataSack.OnChanged += OnChangedData;
-		formattingDatasack.OnChanged += OnChangedFormatting;
-		OnChangedData( dataSack);
-	}
-	void	OnDisable()
-	{
-		dataSack.OnChanged -= OnChangedData;	
-		formattingDatasack.OnChanged -= OnChangedFormatting;
-	}
+		Controlled.SetActive(active);
+    }
 }

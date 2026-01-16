@@ -1,7 +1,7 @@
 ﻿/*
 	The following license supersedes all notices in the source code.
 
-	Copyright (c) 2021 Kurt Dekker/PLBM Games All rights reserved.
+	Copyright (c) 2024 Kurt Dekker/PLBM Games All rights reserved.
 
 	http://www.twitter.com/kurtdekker
 
@@ -36,14 +36,24 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
-public class DSTextDisplayStringFormatted : MonoBehaviour
+// Put this where there is a Text and when the
+// Datasack gets a string, it is sent here and
+// shown for a brief duration, then fades out.
+
+public class DSTextDisplayStringQuickFlash : MonoBehaviour
 {
 	public	Datasack	dataSack;
 
-	[Header("Provide using standard C# formatting syntax.")]
-	public	Datasack	formattingDatasack;
+	public float FlashInterval = 0.6f;
+
+	public bool RapidBlinking = true;
+
+	const float BlinkInterval = 0.2f;
+	const float BlinkOnDutyCycle = 0.1f;
+
+	// nonzero means we are flashing
+	float flashingTimer;
 
 	private DSTextAbstraction _textAbstraction;
 	private DSTextAbstraction textAbstraction
@@ -55,32 +65,42 @@ public class DSTextDisplayStringFormatted : MonoBehaviour
 		}
 	}
 
-	void	OnChangedData( Datasack ds)
+	private void Update()
 	{
-		if (!System.String.IsNullOrEmpty(formattingDatasack.Value))
+		if (flashingTimer > 0)
 		{
-			textAbstraction.SetText( System.String.Format (
-				System.Globalization.CultureInfo.InvariantCulture,
-				formattingDatasack.Value, ds.Value));
-			return;
+			bool onoff = (flashingTimer % BlinkInterval) < BlinkOnDutyCycle;
+
+			flashingTimer += Time.deltaTime;
+
+			if (!RapidBlinking)
+			{
+				onoff = true;
+			}
+
+			if (flashingTimer >= FlashInterval)
+			{
+				onoff = false;
+			}
+
+			string s = onoff ? dataSack.Value : "";
+			
+			textAbstraction.SetText(s);
 		}
-		textAbstraction.SetText( ds.Value);
 	}
 
-	void OnChangedFormatting( Datasack fmt)
+	void	OnChanged( Datasack ds)
 	{
-		OnChangedData( dataSack);
+		// don't actually set it; it will be blinked appropriately in Update()
+		flashingTimer = 0.001f;
 	}
 
 	void	OnEnable()
 	{
-		dataSack.OnChanged += OnChangedData;
-		formattingDatasack.OnChanged += OnChangedFormatting;
-		OnChangedData( dataSack);
+		dataSack.OnChanged += OnChanged;
 	}
 	void	OnDisable()
 	{
-		dataSack.OnChanged -= OnChangedData;	
-		formattingDatasack.OnChanged -= OnChangedFormatting;
+		dataSack.OnChanged -= OnChanged;	
 	}
 }

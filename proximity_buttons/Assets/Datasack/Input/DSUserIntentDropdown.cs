@@ -1,7 +1,7 @@
 ﻿/*
 	The following license supersedes all notices in the source code.
 
-	Copyright (c) 2021 Kurt Dekker/PLBM Games All rights reserved.
+	Copyright (c) 2024 Kurt Dekker/PLBM Games All rights reserved.
 
 	http://www.twitter.com/kurtdekker
 
@@ -38,49 +38,37 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class DSTextDisplayStringFormatted : MonoBehaviour
+[RequireComponent( typeof( Dropdown))]
+public class DSUserIntentDropdown : MonoBehaviour
 {
-	public	Datasack	dataSack;
+	public Datasack dataSack;
 
-	[Header("Provide using standard C# formatting syntax.")]
-	public	Datasack	formattingDatasack;
+	private	Dropdown dropdown;
 
-	private DSTextAbstraction _textAbstraction;
-	private DSTextAbstraction textAbstraction
+	void	OnDropdownChanged( int Value)
 	{
-		get
-		{
-			if (!_textAbstraction) _textAbstraction = DSTextAbstraction.Attach(this);
-			return _textAbstraction;
-		}
+		dataSack.fValue = Value;
 	}
 
-	void	OnChangedData( Datasack ds)
+	void	OnDatasackChanged( Datasack ds)
 	{
-		if (!System.String.IsNullOrEmpty(formattingDatasack.Value))
-		{
-			textAbstraction.SetText( System.String.Format (
-				System.Globalization.CultureInfo.InvariantCulture,
-				formattingDatasack.Value, ds.Value));
-			return;
-		}
-		textAbstraction.SetText( ds.Value);
-	}
-
-	void OnChangedFormatting( Datasack fmt)
-	{
-		OnChangedData( dataSack);
+		dropdown.value = ds.iValue;
 	}
 
 	void	OnEnable()
 	{
-		dataSack.OnChanged += OnChangedData;
-		formattingDatasack.OnChanged += OnChangedFormatting;
-		OnChangedData( dataSack);
+		dropdown = GetComponent<Dropdown> ();
+
+		dropdown.value = dataSack.iValue;
+
+		dropdown.onValueChanged.AddListener (OnDropdownChanged);
+
+		dataSack.OnChanged += OnDatasackChanged;
 	}
 	void	OnDisable()
 	{
-		dataSack.OnChanged -= OnChangedData;	
-		formattingDatasack.OnChanged -= OnChangedFormatting;
+		dropdown.onValueChanged.RemoveListener (OnDropdownChanged);
+
+		dataSack.OnChanged -= OnDatasackChanged;
 	}
 }
